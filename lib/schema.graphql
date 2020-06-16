@@ -1,0 +1,45 @@
+type Query {
+}
+
+type Mutation {
+    joinQuiz(quizId: ID!, name: String!): QuizInfo!
+    nextRound(quizId: ID!): Boolean!
+    nextQuestion(quizId: ID!): Boolean!
+    finishRound(quizId: ID!): Boolean!
+    nextAnswer(quizId: ID!): Boolean!
+}
+
+type Subscription {
+    nextRound(quizId: ID!): Round!
+    @aws_subscribe(mutations: ["nextRound"])
+    nextQuestion(quizId: ID!): Question!
+    @aws_subscribe(mutations: ["nextQuestion"])
+#    markRound(quizId: ID!, playerName: String!): MarkingAllocation!
+#    nextAnswer(quizId: ID!): Answer!
+}
+
+type QuizInfo {
+    name: String!
+}
+
+type Round {
+    roundNumber: Int!
+    roundName: String!
+}
+
+type Question {
+    roundNumber: Int!
+    questionNumber: Int!
+    question: String!
+}
+
+#type MarkingAllocation {
+#    roundNumber: Int!
+#    player: String!
+#}
+
+#type Answer {
+#    roundNumber: Int!
+#    questionNumber: Int!
+#    answer: String!
+#}
