@@ -1,6 +1,13 @@
 import * as cdk from '@aws-cdk/core';
-import { FieldLogLevel, GraphQLApi } from '@aws-cdk/aws-appsync';
+import {
+  FieldLogLevel,
+  GraphQLApi,
+  MappingTemplate,
+  PrimaryKey,
+  Values,
+} from '@aws-cdk/aws-appsync';
 import * as Path from 'path';
+import { BillingMode, Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 
 export class PubQuizBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -14,6 +21,28 @@ export class PubQuizBackendStack extends cdk.Stack {
       schemaDefinitionFile: Path.join(__dirname, './schema.graphql'),
     });
 
-    api.addNoneDataSource('None', 'Dummy data source');
+    const quizTable = new Table(this, 'QuizTable', {
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'id',
+        type: AttributeType.STRING,
+      },
+    });
+
+    const customerDS = api.addDynamoDbDataSource(
+      'Quiz',
+      'The quiz data source',
+      quizTable
+    );
+
+    customerDS.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'saveQuiz',
+      requestMappingTemplate: MappingTemplate.dynamoDbPutItem(
+        PrimaryKey.partition('id').auto(),
+        Values.projecting('input')
+      ),
+      responseMappingTemplate: MappingTemplate.fromString('true'),
+    });
   }
 }

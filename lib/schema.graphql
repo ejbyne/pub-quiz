@@ -27,7 +27,6 @@ input QuizInput {
 }
 
 input RoundInput {
-    roundNumber: Int!
     roundName: String!
     questions: [QuestionInput!]!
 }
