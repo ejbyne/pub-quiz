@@ -3,9 +3,9 @@ type Query {
 
 type Mutation {
     saveQuiz(input: QuizInput!): Boolean!
-    joinQuiz(quizId: ID!, name: String!): Boolean!
-    nextRound(quizId: ID!): Boolean!
-    nextQuestion(quizId: ID!): Boolean!
+    joinQuiz(input: JoinQuizInput!): Boolean!
+    nextRound(input: NextRoundInput!): Boolean!
+    nextQuestion(input: nextQuestionInput!): Boolean!
     # finishRound(quizId: ID!): Boolean!
     # nextAnswer(quizId: ID!): Boolean!
 }
@@ -34,6 +34,19 @@ input RoundInput {
 input QuestionInput {
     question: String!
     answer: String!
+}
+
+input JoinQuizInput {
+    quizId: ID!
+    playerName: String!
+}
+
+input NextRoundInput {
+    quizId: ID!
+}
+
+input nextQuestionInput {
+    quizId: ID!
 }
 
 type QuizSummary {

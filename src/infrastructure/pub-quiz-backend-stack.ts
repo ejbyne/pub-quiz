@@ -8,6 +8,8 @@ import {
 } from '@aws-cdk/aws-appsync';
 import * as Path from 'path';
 import { BillingMode, Table, AttributeType } from '@aws-cdk/aws-dynamodb';
+import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
+import { Runtime } from '@aws-cdk/aws-lambda';
 
 export class PubQuizBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -29,13 +31,13 @@ export class PubQuizBackendStack extends cdk.Stack {
       },
     });
 
-    const customerDS = api.addDynamoDbDataSource(
-      'Quiz',
-      'The quiz data source',
+    const quizDatabaseDataSource = api.addDynamoDbDataSource(
+      'QuizTable',
+      'Quiz Table DataSource',
       quizTable
     );
 
-    customerDS.createResolver({
+    quizDatabaseDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'saveQuiz',
       requestMappingTemplate: MappingTemplate.dynamoDbPutItem(
@@ -43,6 +45,32 @@ export class PubQuizBackendStack extends cdk.Stack {
         Values.projecting('input')
       ),
       responseMappingTemplate: MappingTemplate.fromString('true'),
+    });
+
+    const joinQuizLambda = new NodejsFunction(this, 'JoinQuizLambda', {
+      functionName: 'join-quiz-resolver',
+      entry: Path.join(__dirname, '../lambdas/joinQuiz.ts'),
+      handler: 'handler',
+      minify: true,
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        QUIZ_TABLE_NAME: quizTable.tableName,
+      },
+    });
+
+    quizTable.grantReadData(joinQuizLambda);
+
+    const joinQuizLambdaDataSource = api.addLambdaDataSource(
+      'JoinQuizLambda',
+      'Join Quiz Lambda DataSource',
+      joinQuizLambda
+    );
+
+    joinQuizLambdaDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'joinQuiz',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
     });
   }
 }
