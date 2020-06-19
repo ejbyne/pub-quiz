@@ -3,8 +3,6 @@ import {
   FieldLogLevel,
   GraphQLApi,
   MappingTemplate,
-  PrimaryKey,
-  Values,
 } from '@aws-cdk/aws-appsync';
 import * as Path from 'path';
 import { BillingMode, Table, AttributeType } from '@aws-cdk/aws-dynamodb';
@@ -26,31 +24,15 @@ export class PubQuizBackendStack extends cdk.Stack {
     const quizTable = new Table(this, 'QuizTable', {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
-        name: 'id',
+        name: 'quizId',
         type: AttributeType.STRING,
       },
     });
 
-    const quizDatabaseDataSource = api.addDynamoDbDataSource(
-      'QuizTable',
-      'Quiz Table DataSource',
-      quizTable
-    );
-
-    quizDatabaseDataSource.createResolver({
-      typeName: 'Mutation',
-      fieldName: 'saveQuiz',
-      requestMappingTemplate: MappingTemplate.dynamoDbPutItem(
-        PrimaryKey.partition('id').auto(),
-        Values.projecting('input')
-      ),
-      responseMappingTemplate: MappingTemplate.fromString('true'),
-    });
-
-    const joinQuizLambda = new NodejsFunction(this, 'JoinQuizLambda', {
-      functionName: 'join-quiz-resolver',
-      entry: Path.join(__dirname, '../lambdas/joinQuiz.ts'),
-      handler: 'handler',
+    const saveQuizLambda = new NodejsFunction(this, 'SaveQuizLambda', {
+      functionName: 'save-quiz-resolver',
+      entry: Path.join(__dirname, '../lambdas/saveQuiz.ts'),
+      handler: 'saveQuiz',
       minify: true,
       runtime: Runtime.NODEJS_12_X,
       environment: {
@@ -58,13 +40,38 @@ export class PubQuizBackendStack extends cdk.Stack {
       },
     });
 
-    quizTable.grantReadData(joinQuizLambda);
+    const joinQuizLambda = new NodejsFunction(this, 'JoinQuizLambda', {
+      functionName: 'join-quiz-resolver',
+      entry: Path.join(__dirname, '../lambdas/joinQuiz.ts'),
+      handler: 'joinQuiz',
+      minify: true,
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        QUIZ_TABLE_NAME: quizTable.tableName,
+      },
+    });
+
+    quizTable.grantReadWriteData(saveQuizLambda);
+    quizTable.grantReadWriteData(joinQuizLambda);
+
+    const saveQuizLambdaDataSource = api.addLambdaDataSource(
+      'SaveQuizLambda',
+      'Save Quiz Lambda DataSource',
+      saveQuizLambda
+    );
 
     const joinQuizLambdaDataSource = api.addLambdaDataSource(
       'JoinQuizLambda',
       'Join Quiz Lambda DataSource',
       joinQuizLambda
     );
+
+    saveQuizLambdaDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'saveQuiz',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    });
 
     joinQuizLambdaDataSource.createResolver({
       typeName: 'Mutation',

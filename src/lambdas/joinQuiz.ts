@@ -16,7 +16,7 @@ interface PlayerJoined {
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 
-export const handler: Handler<Event> = async (
+export const joinQuiz: Handler<Event> = async (
   event: Event
 ): Promise<PlayerJoined> => {
   const { quizId, playerName } = event.arguments.input;

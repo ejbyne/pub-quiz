@@ -54,6 +54,27 @@ type QuizSummary {
     quizId: ID!
     quizName: String!
     playerNames: [String!]!
+    status: QuizStatus!
+    currentRound: Round
+    currentQuestion: Question
+}
+
+enum QuizStatus {
+    NOT_YET_STARTED
+    IN_PROGRESS
+    FINISHED
+}
+
+type Round {
+    roundNumber: Int!
+    roundName: String!
+    numberOfQuestions: Int!
+}
+
+type Question {
+    roundNumber: Int!
+    questionNumber: Int!
+    text: String!
 }
 
 type PlayerJoined {
@@ -63,16 +84,12 @@ type PlayerJoined {
 
 type NextRound {
     quizId: ID!
-    roundNumber: Int!
-    roundName: String!
-    numberOfQuestions: Int!
+    round: Round!
 }
 
 type NextQuestion {
     quizId: ID!
-    roundNumber: Int!
-    questionNumber: Int!
-    text: String!
+    question: Question!
 }
 
 #type MarkingAllocation {
