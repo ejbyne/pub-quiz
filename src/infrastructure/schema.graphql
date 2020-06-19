@@ -1,28 +1,29 @@
 type Query {
+    quizSummary(quizId: ID!): QuizSummary!
 }
 
 type Mutation {
     saveQuiz(input: QuizInput!): Boolean!
-    joinQuiz(input: JoinQuizInput!): Boolean!
-    nextRound(input: NextRoundInput!): Boolean!
-    nextQuestion(input: nextQuestionInput!): Boolean!
+    joinQuiz(input: JoinQuizInput!): PlayerJoined!
+    nextRound(input: NextRoundInput!): NextRound!
+    nextQuestion(input: nextQuestionInput!): NextQuestion!
     # finishRound(quizId: ID!): Boolean!
     # nextAnswer(quizId: ID!): Boolean!
 }
 
 type Subscription {
-    playerJoined(quizId: ID!): QuizSummary!
+    playerJoined(quizId: ID!): PlayerJoined
     @aws_subscribe(mutations: ["joinQuiz"])
-    nextRound(quizId: ID!): Round!
+    nextRound(quizId: ID!): NextRound
     @aws_subscribe(mutations: ["nextRound"])
-    nextQuestion(quizId: ID!): Question!
+    nextQuestion(quizId: ID!): NextQuestion
     @aws_subscribe(mutations: ["nextQuestion"])
 #    markRound(quizId: ID!, playerName: String!): MarkingAllocation!
 #    nextAnswer(quizId: ID!): Answer!
 }
 
 input QuizInput {
-    name: String!
+    quizName: String!
     rounds: [RoundInput!]!
 }
 
@@ -50,16 +51,25 @@ input nextQuestionInput {
 }
 
 type QuizSummary {
-    name: String!
+    quizId: ID!
+    quizName: String!
+    playerNames: [String!]!
 }
 
-type Round {
+type PlayerJoined {
+    quizId: ID!
+    playerName: String!
+}
+
+type NextRound {
+    quizId: ID!
     roundNumber: Int!
     roundName: String!
     numberOfQuestions: Int!
 }
 
-type Question {
+type NextQuestion {
+    quizId: ID!
     roundNumber: Int!
     questionNumber: Int!
     text: String!
