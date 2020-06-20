@@ -1,13 +1,18 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { Quiz } from '../domain/types';
+import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 
 export class QuizRepository {
   private documentClient: DocumentClient;
 
   private tableName: string;
 
-  constructor(tableName: string) {
+  constructor(
+    tableName: string,
+    dynamoClientConfiguration?: ServiceConfigurationOptions
+  ) {
     this.documentClient = new DocumentClient({
+      ...dynamoClientConfiguration,
       apiVersion: '2012-10-08',
     });
     this.tableName = tableName;
