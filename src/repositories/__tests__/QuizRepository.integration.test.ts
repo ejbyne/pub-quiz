@@ -3,47 +3,81 @@ import { QuizRepository } from '../QuizRepository';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz, QuizStatus } from '../../domain/types';
 
+const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
+
+const exampleQuiz: Quiz = {
+  quizId: EXAMPLE_QUIZ_ID,
+  quizName: "Ed's quiz",
+  rounds: [
+    {
+      roundName: 'Round 1',
+      questions: [
+        {
+          question: 'A question',
+          answer: 'An answer',
+        },
+      ],
+    },
+  ],
+  status: QuizStatus.NOT_YET_STARTED,
+};
+
 describe('QuizRepository integration tests', () => {
-  let dynamoClientConfiguration: ServiceConfigurationOptions;
-  let tearDownDatabase: () => Promise<any>;
+  let databaseManager: {
+    dynamoClientConfiguration: ServiceConfigurationOptions;
+    tearDownDatabase: () => Promise<any>;
+  };
   let quizRepository: QuizRepository;
   const tableName = 'QuizTable';
 
   beforeAll(async () => {
-    const databaseHelper = await provisionDatabase();
-
-    dynamoClientConfiguration = databaseHelper.dynamoClientConfiguration;
-    tearDownDatabase = databaseHelper.tearDownDatabase;
-
-    await createTable('QuizTable', 'quizId', dynamoClientConfiguration);
-
-    quizRepository = new QuizRepository(tableName, dynamoClientConfiguration);
+    databaseManager = await provisionDatabase();
+    await createTable(
+      'QuizTable',
+      'quizId',
+      databaseManager.dynamoClientConfiguration
+    );
+    quizRepository = new QuizRepository(
+      tableName,
+      databaseManager.dynamoClientConfiguration
+    );
   });
 
-  afterAll(async () => await tearDownDatabase());
+  afterAll(async () => await databaseManager.tearDownDatabase());
 
   it('saves a quiz', async () => {
-    const newQuiz: Quiz = {
-      quizId: 'NEW_QUIZ_ID',
-      quizName: "Ed's quiz",
-      rounds: [
-        {
-          roundName: 'Round 1',
-          questions: [
-            {
-              question: 'A question',
-              answer: 'An answer',
-            },
-          ],
-        },
-      ],
-      status: QuizStatus.NOT_YET_STARTED,
-    };
+    await quizRepository.save(exampleQuiz);
 
-    await quizRepository.save(newQuiz);
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz).toEqual(exampleQuiz);
+  });
 
-    const savedQuiz = await quizRepository.get('NEW_QUIZ_ID');
+  it('adds the first player name', async () => {
+    await quizRepository.save(exampleQuiz);
 
-    expect(savedQuiz).toEqual(newQuiz);
+    await quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed');
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.playerNames?.values).toEqual(['Ed']);
+  });
+
+  it('adds additional player names', async () => {
+    await quizRepository.save(exampleQuiz);
+
+    await quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed');
+    await quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Henry');
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.playerNames?.values).toEqual(['Ed', 'Henry']);
+  });
+
+  it('throws an error if the player name already exists', async () => {
+    await quizRepository.save(exampleQuiz);
+
+    await quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed');
+
+    await expect(
+      quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed')
+    ).rejects.toEqual(new Error('Player name already exists'));
   });
 });

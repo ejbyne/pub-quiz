@@ -45,6 +45,14 @@ export class QuizRepository {
   }
 
   async addPlayerName(quizId: string, newPlayerName: string): Promise<void> {
+    const savedQuiz = await this.get(quizId);
+
+    const playerNames = savedQuiz.playerNames?.values;
+
+    if (Array.isArray(playerNames) && playerNames.includes(newPlayerName)) {
+      throw new Error('Player name already exists');
+    }
+
     await this.documentClient
       .update({
         TableName: this.tableName,
