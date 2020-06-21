@@ -18,12 +18,24 @@ export class QuizRepository {
     this.tableName = tableName;
   }
 
+  async get(quizId: string): Promise<Quiz> {
+    const { Item } = await this.documentClient
+      .get({
+        TableName: this.tableName,
+        Key: { quizId },
+        ConsistentRead: true,
+      })
+      .promise();
+
+    return Item as Quiz;
+  }
+
   async save(quiz: Quiz): Promise<void> {
     const params = {
       TableName: this.tableName,
       Item: {
         ...quiz,
-        playerNames: quiz.playerNames.length
+        playerNames: quiz.playerNames?.length
           ? this.documentClient.createSet(quiz.playerNames)
           : undefined,
       },

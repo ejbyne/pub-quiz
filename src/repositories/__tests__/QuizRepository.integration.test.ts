@@ -24,7 +24,7 @@ describe('QuizRepository integration tests', () => {
 
   it('saves a quiz', async () => {
     const newQuiz: Quiz = {
-      quizId: '1234',
+      quizId: 'NEW_QUIZ_ID',
       quizName: "Ed's quiz",
       rounds: [
         {
@@ -37,11 +37,13 @@ describe('QuizRepository integration tests', () => {
           ],
         },
       ],
-      playerNames: [],
       status: QuizStatus.NOT_YET_STARTED,
-      progress: null,
     };
 
     await quizRepository.save(newQuiz);
+
+    const savedQuiz = await quizRepository.get('NEW_QUIZ_ID');
+
+    expect(savedQuiz).toEqual(newQuiz);
   });
 });

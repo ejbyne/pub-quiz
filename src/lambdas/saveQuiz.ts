@@ -33,9 +33,7 @@ export const saveQuiz: Handler<Event> = async (
     quizId: uuid(),
     quizName,
     rounds,
-    playerNames: [],
     status: QuizStatus.NOT_YET_STARTED,
-    progress: null,
   };
 
   await quizRepository.save(newQuiz);

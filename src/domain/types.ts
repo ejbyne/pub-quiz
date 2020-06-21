@@ -2,12 +2,12 @@ export interface Quiz {
   quizId: string;
   quizName: string;
   rounds: Round[];
-  playerNames: string[];
+  playerNames?: string[];
   status: QuizStatus;
-  progress: {
+  progress?: {
     roundNumber: number;
     questionNumber: number;
-  } | null;
+  };
 }
 
 export enum QuizStatus {
