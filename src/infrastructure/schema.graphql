@@ -5,8 +5,7 @@ type Query {
 type Mutation {
     saveQuiz(input: QuizInput!): Boolean!
     joinQuiz(input: JoinQuizInput!): PlayerJoined!
-    nextRound(input: NextRoundInput!): NextRound!
-    nextQuestion(input: nextQuestionInput!): NextQuestion!
+    stepForward(input: StepForwardInput!): NextStep!
     # finishRound(quizId: ID!): Boolean!
     # nextAnswer(quizId: ID!): Boolean!
 }
@@ -14,12 +13,8 @@ type Mutation {
 type Subscription {
     playerJoined(quizId: ID!): PlayerJoined
     @aws_subscribe(mutations: ["joinQuiz"])
-    nextRound(quizId: ID!): NextRound
-    @aws_subscribe(mutations: ["nextRound"])
-    nextQuestion(quizId: ID!): NextQuestion
-    @aws_subscribe(mutations: ["nextQuestion"])
-#    markRound(quizId: ID!, playerName: String!): MarkingAllocation!
-#    nextAnswer(quizId: ID!): Answer!
+    nextStep(quizId: ID!): NextStep
+    @aws_subscribe(mutations: ["stepForward"])
 }
 
 input QuizInput {
@@ -42,11 +37,7 @@ input JoinQuizInput {
     playerName: String!
 }
 
-input NextRoundInput {
-    quizId: ID!
-}
-
-input nextQuestionInput {
+input StepForwardInput {
     quizId: ID!
 }
 
@@ -81,6 +72,8 @@ type PlayerJoined {
     quizId: ID!
     playerName: String!
 }
+
+union NextStep = NextRound | NextQuestion
 
 type NextRound {
     quizId: ID!
