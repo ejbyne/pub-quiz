@@ -80,4 +80,21 @@ describe('QuizRepository integration tests', () => {
       quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed')
     ).rejects.toEqual(new Error('Player name already exists'));
   });
+
+  it('updates the quiz progress', async () => {
+    await quizRepository.save(exampleQuiz);
+
+    await quizRepository.updateProgress(
+      EXAMPLE_QUIZ_ID,
+      QuizStatus.IN_PROGRESS,
+      {
+        roundNumber: 1,
+        questionNumber: 1,
+      }
+    );
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.status).toEqual(QuizStatus.IN_PROGRESS);
+    expect(savedQuiz.progress).toEqual({ roundNumber: 1, questionNumber: 1 });
+  });
 });

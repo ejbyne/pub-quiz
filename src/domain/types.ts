@@ -4,16 +4,18 @@ export interface Quiz {
   rounds: Round[];
   playerNames?: string[];
   status: QuizStatus;
-  progress?: {
-    roundNumber: number;
-    questionNumber: number;
-  };
+  progress?: QuizProgress;
 }
 
 export enum QuizStatus {
   NOT_YET_STARTED,
   IN_PROGRESS,
   FINISHED,
+}
+
+export interface QuizProgress {
+  roundNumber: number;
+  questionNumber: number;
 }
 
 export interface Round {
