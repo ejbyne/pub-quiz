@@ -1,97 +1,87 @@
 type Query {
-    quizSummary(quizId: ID!): QuizSummary!
+  quizSummary(quizId: ID!): QuizSummary!
 }
 
 type Mutation {
-    saveQuiz(input: QuizInput!): Boolean!
-    joinQuiz(input: JoinQuizInput!): PlayerJoined!
-    stepForward(input: StepForwardInput!): NextStep!
-    # finishRound(quizId: ID!): Boolean!
-    # nextAnswer(quizId: ID!): Boolean!
+  saveQuiz(input: SaveQuizInput!): Boolean!
+  joinQuiz(input: JoinQuizInput!): PlayerJoined!
+  nextQuizState(input: NextQuizStateInput!): QuizState!
 }
 
 type Subscription {
-    playerJoined(quizId: ID!): PlayerJoined
-    @aws_subscribe(mutations: ["joinQuiz"])
-    nextStep(quizId: ID!): NextStep
-    @aws_subscribe(mutations: ["stepForward"])
+  playerJoined(quizId: ID!): PlayerJoined
+  @aws_subscribe(mutations: ["joinQuiz"])
+  nextQuizState(quizId: ID!): QuizState
+  @aws_subscribe(mutations: ["nextQuizState"])
 }
 
-input QuizInput {
-    quizName: String!
-    rounds: [RoundInput!]!
+input SaveQuizInput {
+  quizName: String!
+  rounds: [RoundInput!]!
 }
 
 input RoundInput {
-    roundName: String!
-    questions: [QuestionInput!]!
+  roundName: String!
+  questions: [QuestionInput!]!
 }
 
 input QuestionInput {
-    question: String!
-    answer: String!
+  question: String!
+  answer: String!
 }
 
 input JoinQuizInput {
-    quizId: ID!
-    playerName: String!
+  quizId: ID!
+  playerName: String!
 }
 
-input StepForwardInput {
-    quizId: ID!
+input NextQuizStateInput {
+  quizId: ID!
 }
 
 type QuizSummary {
-    quizId: ID!
-    quizName: String!
-    playerNames: [String!]!
-    status: QuizStatus!
-    currentRound: Round
-    currentQuestion: Question
+  quizId: ID!
+  quizName: String!
+  playerNames: [String!]!
+  state: QuizState!
 }
 
 enum QuizStatus {
-    NOT_YET_STARTED
-    IN_PROGRESS
-    FINISHED
+  QUIZ_NOT_YET_STARTED
+  ROUND_STARTED
+  QUESTION_ASKED
+  QUIZ_FINISHED
 }
 
-type Round {
-    roundNumber: Int!
-    roundName: String!
-    numberOfQuestions: Int!
+union QuizState = QuizNotYetStarted | RoundStarted | QuestionAsked | QuizFinished
+
+type QuizNotYetStarted {
+  quizId: ID!
+  status: QuizStatus!
 }
 
-type Question {
-    roundNumber: Int!
-    questionNumber: Int!
-    text: String!
+type RoundStarted {
+  quizId: ID!
+  status: QuizStatus!
+  roundNumber: Int!
+  roundName: String!
+  numberOfQuestions: Int!
+}
+
+type QuestionAsked {
+  quizId: ID!
+  status: QuizStatus!
+  roundNumber: Int!
+  questionNumber: Int!
+  questionText: String!
+}
+
+type QuizFinished {
+  quizId: ID!
+  status: QuizStatus!
 }
 
 type PlayerJoined {
-    quizId: ID!
-    playerName: String!
+  quizId: ID!
+  playerName: String!
 }
-
-union NextStep = NextRound | NextQuestion
-
-type NextRound {
-    quizId: ID!
-    round: Round!
-}
-
-type NextQuestion {
-    quizId: ID!
-    question: Question!
-}
-
-#type MarkingAllocation {
-#    roundNumber: Int!
-#    player: String!
-#}
-
-#type Answer {
-#    roundNumber: Int!
-#    questionNumber: Int!
-#    answer: String!
-#}

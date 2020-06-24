@@ -1,14 +1,15 @@
 import { provisionDatabase, createTable } from './databaseSetup';
 import { QuizRepository } from '../QuizRepository';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
-import { Quiz, QuizStatus } from '../../domain/types';
+import { QuizStatus } from '../../domain/types';
+import { Quiz } from '../../domain/Quiz';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 
-const exampleQuiz: Quiz = {
-  quizId: EXAMPLE_QUIZ_ID,
-  quizName: "Ed's quiz",
-  rounds: [
+const exampleQuiz: Quiz = new Quiz(
+  EXAMPLE_QUIZ_ID,
+  "Ed's quiz",
+  [
     {
       roundName: 'Round 1',
       questions: [
@@ -19,8 +20,10 @@ const exampleQuiz: Quiz = {
       ],
     },
   ],
-  status: QuizStatus.NOT_YET_STARTED,
-};
+  {
+    status: QuizStatus.QUIZ_NOT_YET_STARTED,
+  }
+);
 
 describe('QuizRepository integration tests', () => {
   let databaseManager: {
@@ -81,20 +84,22 @@ describe('QuizRepository integration tests', () => {
     ).rejects.toEqual(new Error('Player name already exists'));
   });
 
-  it('updates the quiz progress', async () => {
+  it('updates the quiz state', async () => {
     await quizRepository.save(exampleQuiz);
 
-    await quizRepository.updateProgress(
-      EXAMPLE_QUIZ_ID,
-      QuizStatus.IN_PROGRESS,
-      {
-        roundNumber: 1,
-        questionNumber: 1,
-      }
-    );
+    await quizRepository.updateState(EXAMPLE_QUIZ_ID, {
+      status: QuizStatus.QUESTION_ASKED,
+      roundNumber: 1,
+      questionNumber: 1,
+      questionText: 'A question?',
+    });
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
-    expect(savedQuiz.status).toEqual(QuizStatus.IN_PROGRESS);
-    expect(savedQuiz.progress).toEqual({ roundNumber: 1, questionNumber: 1 });
+    expect(savedQuiz.state).toEqual({
+      status: QuizStatus.QUESTION_ASKED,
+      roundNumber: 1,
+      questionNumber: 1,
+      questionText: 'A question?',
+    });
   });
 });

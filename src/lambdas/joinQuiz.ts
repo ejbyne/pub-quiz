@@ -3,10 +3,7 @@ import { QuizRepository } from '../repositories/QuizRepository';
 
 interface Event {
   arguments: {
-    input: {
-      quizId: string;
-      playerName: string;
-    };
+    input: PlayerJoined;
   };
 }
 

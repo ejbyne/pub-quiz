@@ -1,5 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { Quiz, QuizStatus, QuizProgress } from '../domain/types';
+import { Quiz, QuizState } from '../domain/types';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 
 export class QuizRepository {
@@ -65,23 +65,17 @@ export class QuizRepository {
       .promise();
   }
 
-  async updateProgress(
-    quizId: string,
-    status: QuizStatus,
-    progress: QuizProgress
-  ): Promise<void> {
+  async updateState(quizId: string, state: QuizState): Promise<void> {
     await this.documentClient
       .update({
         TableName: this.tableName,
         Key: { quizId },
-        UpdateExpression: 'SET #status = :status, #progress = :progress',
+        UpdateExpression: 'SET #state = :state',
         ExpressionAttributeNames: {
-          '#status': 'status',
-          '#progress': 'progress',
+          '#state': 'state',
         },
         ExpressionAttributeValues: {
-          ':status': status,
-          ':progress': progress,
+          ':state': state,
         },
       })
       .promise();
