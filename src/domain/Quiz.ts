@@ -1,4 +1,11 @@
-import { QuizState, Round, QuizStatus } from './types';
+import {
+  QuizState,
+  Round,
+  QuizStatus,
+  QuizFinishedState,
+  RoundStartedState,
+  QuestionAskedState,
+} from './types';
 
 export class Quiz {
   quizId: string;
@@ -29,28 +36,22 @@ export class Quiz {
         );
 
         if (nextRoundWithQuestions === -1) {
-          return {
-            status: QuizStatus.QUIZ_FINISHED,
-          };
+          return new QuizFinishedState();
         }
 
-        return {
-          status: QuizStatus.ROUND_STARTED,
-          roundNumber: nextRoundWithQuestions,
-          roundName: this.rounds[nextRoundWithQuestions].roundName,
-          numberOfQuestions: this.rounds[nextRoundWithQuestions].questions
-            .length,
-        };
+        return new RoundStartedState(
+          nextRoundWithQuestions,
+          this.rounds[nextRoundWithQuestions].roundName,
+          this.rounds[nextRoundWithQuestions].questions.length
+        );
       }
 
       case QuizStatus.ROUND_STARTED:
-        return {
-          status: QuizStatus.QUESTION_ASKED,
-          roundNumber: this.state.roundNumber,
-          questionNumber: 0,
-          questionText: this.rounds[this.state.roundNumber].questions[0]
-            .question,
-        };
+        return new QuestionAskedState(
+          this.state.roundNumber,
+          0,
+          this.rounds[this.state.roundNumber].questions[0].question
+        );
 
       case QuizStatus.QUESTION_ASKED:
         if (
@@ -63,28 +64,23 @@ export class Quiz {
           );
 
           if (nextRoundWithQuestions === -1) {
-            return {
-              status: QuizStatus.QUIZ_FINISHED,
-            };
+            return new QuizFinishedState();
           }
 
-          return {
-            status: QuizStatus.ROUND_STARTED,
-            roundNumber: nextRoundWithQuestions,
-            roundName: this.rounds[nextRoundWithQuestions].roundName,
-            numberOfQuestions: this.rounds[nextRoundWithQuestions].questions
-              .length,
-          };
+          return new RoundStartedState(
+            nextRoundWithQuestions,
+            this.rounds[nextRoundWithQuestions].roundName,
+            this.rounds[nextRoundWithQuestions].questions.length
+          );
         }
 
-        return {
-          status: QuizStatus.QUESTION_ASKED,
-          roundNumber: this.state.roundNumber,
-          questionNumber: this.state.questionNumber + 1,
-          questionText: this.rounds[this.state.roundNumber].questions[
+        return new QuestionAskedState(
+          this.state.roundNumber,
+          this.state.questionNumber + 1,
+          this.rounds[this.state.roundNumber].questions[
             this.state.questionNumber + 1
-          ].question,
-        };
+          ].question
+        );
 
       default:
         return this.state;

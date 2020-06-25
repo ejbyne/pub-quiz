@@ -1,7 +1,11 @@
 import { provisionDatabase, createTable } from './databaseSetup';
 import { QuizRepository } from '../QuizRepository';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
-import { QuizStatus } from '../../domain/types';
+import {
+  QuizStatus,
+  QuizNotYetStartedState,
+  QuestionAskedState,
+} from '../../domain/types';
 import { Quiz } from '../../domain/Quiz';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
@@ -20,9 +24,7 @@ const exampleQuiz: Quiz = new Quiz(
       ],
     },
   ],
-  {
-    status: QuizStatus.QUIZ_NOT_YET_STARTED,
-  }
+  new QuizNotYetStartedState()
 );
 
 describe('QuizRepository integration tests', () => {
@@ -87,15 +89,13 @@ describe('QuizRepository integration tests', () => {
   it('updates the quiz state', async () => {
     await quizRepository.save(exampleQuiz);
 
-    await quizRepository.updateState(EXAMPLE_QUIZ_ID, {
-      status: QuizStatus.QUESTION_ASKED,
-      roundNumber: 1,
-      questionNumber: 1,
-      questionText: 'A question?',
-    });
+    await quizRepository.updateState(
+      EXAMPLE_QUIZ_ID,
+      new QuestionAskedState(1, 1, 'A question?')
+    );
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
-    expect(savedQuiz.state).toEqual({
+    expect(savedQuiz.state).toMatchObject({
       status: QuizStatus.QUESTION_ASKED,
       roundNumber: 1,
       questionNumber: 1,

@@ -2,6 +2,9 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { QuizState } from '../domain/types';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../domain/Quiz';
+import { QuizEntity } from './types';
+import { mapEntityStateToQuizState } from './mapEntityStateDataToQuizState';
+import { mapQuizStateToEntityState } from './mapQuizStateToEntityStateData';
 
 export class QuizRepository {
   private documentClient: DocumentClient;
@@ -28,18 +31,31 @@ export class QuizRepository {
       })
       .promise();
 
-    return Item as Quiz;
+    const { quizName, rounds, state, playerNames } = Item as QuizEntity;
+
+    return new Quiz(
+      quizId,
+      quizName,
+      rounds,
+      mapEntityStateToQuizState(state),
+      playerNames as string[] | undefined
+    );
   }
 
   async save(quiz: Quiz): Promise<void> {
+    const entity: QuizEntity = {
+      quizId: quiz.quizId,
+      quizName: quiz.quizName,
+      rounds: quiz.rounds,
+      state: mapQuizStateToEntityState(quiz.state),
+      playerNames: quiz.playerNames?.length
+        ? this.documentClient.createSet(quiz.playerNames)
+        : undefined,
+    };
+
     const params = {
       TableName: this.tableName,
-      Item: {
-        ...quiz,
-        playerNames: quiz.playerNames?.length
-          ? this.documentClient.createSet(quiz.playerNames)
-          : undefined,
-      },
+      Item: entity,
     };
 
     await this.documentClient.put(params).promise();
@@ -76,7 +92,7 @@ export class QuizRepository {
           '#state': 'state',
         },
         ExpressionAttributeValues: {
-          ':state': state,
+          ':state': mapQuizStateToEntityState(state),
         },
       })
       .promise();

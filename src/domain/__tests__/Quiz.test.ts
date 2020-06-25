@@ -1,5 +1,10 @@
 import { Quiz } from '../Quiz';
-import { QuizStatus } from '../types';
+import {
+  QuizStatus,
+  QuizNotYetStartedState,
+  RoundStartedState,
+  QuestionAskedState,
+} from '../types';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 
@@ -31,11 +36,14 @@ describe('Quiz', () => {
 
   describe('nextState', () => {
     it('should start the first round if the quiz has not yet started', () => {
-      const quiz = new Quiz(EXAMPLE_QUIZ_ID, "Ed's quiz", exampleRounds, {
-        status: QuizStatus.QUIZ_NOT_YET_STARTED,
-      });
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuizNotYetStartedState()
+      );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_STARTED,
         roundName: 'Round 1',
         roundNumber: 0,
@@ -44,14 +52,14 @@ describe('Quiz', () => {
     });
 
     it('should return the first question if the round has started', () => {
-      const quiz = new Quiz(EXAMPLE_QUIZ_ID, "Ed's quiz", exampleRounds, {
-        status: QuizStatus.ROUND_STARTED,
-        roundNumber: 0,
-        roundName: 'Round 1',
-        numberOfQuestions: 2,
-      });
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new RoundStartedState(0, 'Round 1', 2)
+      );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUESTION_ASKED,
         roundNumber: 0,
         questionNumber: 0,
@@ -60,14 +68,14 @@ describe('Quiz', () => {
     });
 
     it('should return the second question if the first question has been asked', () => {
-      const quiz = new Quiz(EXAMPLE_QUIZ_ID, "Ed's quiz", exampleRounds, {
-        status: QuizStatus.QUESTION_ASKED,
-        roundNumber: 0,
-        questionNumber: 0,
-        questionText: 'Question 1',
-      });
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAskedState(0, 0, 'Question 1')
+      );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUESTION_ASKED,
         roundNumber: 0,
         questionNumber: 1,
@@ -76,14 +84,14 @@ describe('Quiz', () => {
     });
 
     it('should move to the second round if the first round has finished', () => {
-      const quiz = new Quiz(EXAMPLE_QUIZ_ID, "Ed's quiz", exampleRounds, {
-        status: QuizStatus.QUESTION_ASKED,
-        roundNumber: 0,
-        questionNumber: 1,
-        questionText: 'Question 2',
-      });
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAskedState(0, 1, 'Question 2')
+      );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_STARTED,
         roundNumber: 1,
         roundName: 'Round 2',
@@ -92,24 +100,27 @@ describe('Quiz', () => {
     });
 
     it('should finish the quiz at the end of the last round', () => {
-      const quiz = new Quiz(EXAMPLE_QUIZ_ID, "Ed's quiz", exampleRounds, {
-        status: QuizStatus.QUESTION_ASKED,
-        roundNumber: 1,
-        questionNumber: 0,
-        questionText: 'Question 3',
-      });
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAskedState(1, 0, 'Question 3')
+      );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUIZ_FINISHED,
       });
     });
 
     it('should finish the game if there are no rounds at all', () => {
-      const quiz = new Quiz(EXAMPLE_QUIZ_ID, "Ed's quiz", [], {
-        status: QuizStatus.QUIZ_NOT_YET_STARTED,
-      });
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        [],
+        new QuizNotYetStartedState()
+      );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUIZ_FINISHED,
       });
     });
@@ -133,12 +144,10 @@ describe('Quiz', () => {
             ],
           },
         ],
-        {
-          status: QuizStatus.QUIZ_NOT_YET_STARTED,
-        }
+        new QuizNotYetStartedState()
       );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_STARTED,
         roundNumber: 1,
         roundName: 'Round 2',
@@ -169,15 +178,10 @@ describe('Quiz', () => {
             questions: [],
           },
         ],
-        {
-          status: QuizStatus.QUESTION_ASKED,
-          roundNumber: 0,
-          questionNumber: 1,
-          questionText: 'Question 2',
-        }
+        new QuestionAskedState(0, 1, 'Question 2')
       );
 
-      expect(quiz.nextState).toEqual({
+      expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUIZ_FINISHED,
       });
     });

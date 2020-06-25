@@ -1,3 +1,5 @@
+import { Quiz } from './Quiz';
+
 export interface Round {
   roundName: string;
   questions: Question[];
@@ -15,30 +17,82 @@ export enum QuizStatus {
   QUIZ_FINISHED = 'QUIZ_FINISHED',
 }
 
-export type QuizState =
-  | QuizNotYetStarted
-  | RoundStarted
-  | QuestionAsked
-  | Quiz_Finished;
-
-export interface QuizNotYetStarted {
-  status: QuizStatus.QUIZ_NOT_YET_STARTED;
+export interface BaseQuizState {
+  status: QuizStatus;
+  nextState(): QuizState;
 }
 
-export interface RoundStarted {
+export type QuizState =
+  | QuizNotYetStartedState
+  | RoundStartedState
+  | QuestionAskedState
+  | QuizFinishedState;
+
+export class QuizNotYetStartedState implements BaseQuizState {
+  status: QuizStatus.QUIZ_NOT_YET_STARTED;
+
+  constructor() {
+    this.status = QuizStatus.QUIZ_NOT_YET_STARTED;
+  }
+
+  nextState(): QuizState {
+    return this;
+  }
+}
+
+export class RoundStartedState implements BaseQuizState {
   status: QuizStatus.ROUND_STARTED;
+
   roundNumber: number;
   roundName: string;
   numberOfQuestions: number;
+
+  constructor(
+    roundNumber: number,
+    roundName: string,
+    numberOfQuestions: number
+  ) {
+    this.status = QuizStatus.ROUND_STARTED;
+    this.roundNumber = roundNumber;
+    this.roundName = roundName;
+    this.numberOfQuestions = numberOfQuestions;
+  }
+
+  nextState(): QuizState {
+    return this;
+  }
 }
 
-export interface QuestionAsked {
+export class QuestionAskedState implements BaseQuizState {
   status: QuizStatus.QUESTION_ASKED;
   roundNumber: number;
   questionNumber: number;
   questionText: string;
+
+  constructor(
+    roundNumber: number,
+    questionNumber: number,
+    questionText: string
+  ) {
+    this.status = QuizStatus.QUESTION_ASKED;
+    this.roundNumber = roundNumber;
+    this.questionNumber = questionNumber;
+    this.questionText = questionText;
+  }
+
+  nextState(): QuizState {
+    return this;
+  }
 }
 
-export interface Quiz_Finished {
+export class QuizFinishedState implements BaseQuizState {
   status: QuizStatus.QUIZ_FINISHED;
+
+  constructor() {
+    this.status = QuizStatus.QUIZ_FINISHED;
+  }
+
+  nextState(): QuizState {
+    return this;
+  }
 }
