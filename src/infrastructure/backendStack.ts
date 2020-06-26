@@ -62,9 +62,21 @@ export class PubQuizBackendStack extends cdk.Stack {
       },
     });
 
+    const quizSummaryLambda = new NodejsFunction(this, 'QuizSummaryLambda', {
+      functionName: 'quiz-summary-resolver',
+      entry: Path.join(__dirname, '../lambdas/quizSummary.ts'),
+      handler: 'quizSummary',
+      minify: true,
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        QUIZ_TABLE_NAME: quizTable.tableName,
+      },
+    });
+
     quizTable.grantReadWriteData(saveQuizLambda);
     quizTable.grantReadWriteData(joinQuizLambda);
     quizTable.grantReadWriteData(nextQuizStateLambda);
+    quizTable.grantReadWriteData(quizSummaryLambda);
 
     const saveQuizLambdaDataSource = api.addLambdaDataSource(
       'SaveQuizLambda',
@@ -84,6 +96,12 @@ export class PubQuizBackendStack extends cdk.Stack {
       nextQuizStateLambda
     );
 
+    const quizSummaryLambdaDataSource = api.addLambdaDataSource(
+      'QuizSummaryLambda',
+      'Quiz Summary Lambda DataSource',
+      quizSummaryLambda
+    );
+
     saveQuizLambdaDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'saveQuiz',
@@ -101,6 +119,13 @@ export class PubQuizBackendStack extends cdk.Stack {
     nextQuizStateLambdaDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'nextQuizState',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    });
+
+    quizSummaryLambdaDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'quizSummary',
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
     });
