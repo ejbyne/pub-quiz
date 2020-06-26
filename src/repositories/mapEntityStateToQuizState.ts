@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  QuizFinishedState,
-  QuizStatus,
-  QuizNotYetStartedState,
-  RoundStartedState,
-  QuizState,
-  QuestionAskedState,
-  Round,
-  RoundFinishedState,
-} from '../domain/types';
 import { QuizEntityState } from './types';
+import { Round } from '../domain/Quiz';
+import { QuizState, QuizStatus } from '../domain/state/QuizState';
+import { QuizNotYetStartedState } from '../domain/state/QuizNotYetStartedState';
+import { RoundStartedState } from '../domain/state/RoundStartedState';
+import { RoundFinishedState } from '../domain/state/RoundFinishedState';
+import { QuestionAskedState } from '../domain/state/QuestionAskedState';
+import { QuizFinishedState } from '../domain/state/QuizFinishedState';
 
 export const mapEntityStateToQuizState = (
   state: QuizEntityState,

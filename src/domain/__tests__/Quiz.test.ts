@@ -1,11 +1,9 @@
 import { Quiz } from '../Quiz';
-import {
-  QuizStatus,
-  QuizNotYetStartedState,
-  RoundStartedState,
-  QuestionAskedState,
-  RoundFinishedState,
-} from '../types';
+import { QuizNotYetStartedState } from '../state/QuizNotYetStartedState';
+import { QuizStatus } from '../state/QuizState';
+import { RoundStartedState } from '../state/RoundStartedState';
+import { QuestionAskedState } from '../state/QuestionAskedState';
+import { RoundFinishedState } from '../state/RoundFinishedState';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 

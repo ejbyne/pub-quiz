@@ -1,10 +1,10 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { QuizState } from '../domain/types';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../domain/Quiz';
 import { QuizEntity } from './types';
 import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
 import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
+import { QuizState } from '../domain/state/QuizState';
 
 export class QuizRepository {
   private documentClient: DocumentClient;

@@ -1,12 +1,11 @@
 import { provisionDatabase, createTable } from './databaseSetup';
 import { QuizRepository } from '../QuizRepository';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
-import {
-  QuizStatus,
-  QuizNotYetStartedState,
-  QuestionAskedState,
-} from '../../domain/types';
+
 import { Quiz } from '../../domain/Quiz';
+import { QuizNotYetStartedState } from '../../domain/state/QuizNotYetStartedState';
+import { QuestionAskedState } from '../../domain/state/QuestionAskedState';
+import { QuizStatus } from '../../domain/state/QuizState';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 

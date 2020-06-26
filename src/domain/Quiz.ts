@@ -1,11 +1,14 @@
-import {
-  QuizState,
-  Round,
-  QuizStatus,
-  QuizFinishedState,
-  RoundStartedState,
-  QuestionAskedState,
-} from './types';
+import { QuizState } from './state/QuizState';
+
+export interface Round {
+  roundName: string;
+  questions: Question[];
+}
+
+export interface Question {
+  question: string;
+  answer: string;
+}
 
 export class Quiz {
   quizId: string;
