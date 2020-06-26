@@ -40,7 +40,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuizNotYetStartedState()
+        new QuizNotYetStartedState(exampleRounds)
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -56,7 +56,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new RoundStartedState(0, 'Round 1', 2)
+        new RoundStartedState(exampleRounds, 0, 'Round 1', 2)
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -72,7 +72,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAskedState(0, 0, 'Question 1')
+        new QuestionAskedState(exampleRounds, 0, 0, 'Question 1')
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -88,7 +88,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAskedState(0, 1, 'Question 2')
+        new QuestionAskedState(exampleRounds, 0, 1, 'Question 2')
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -104,7 +104,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAskedState(1, 0, 'Question 3')
+        new QuestionAskedState(exampleRounds, 1, 0, 'Question 3')
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -117,7 +117,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         [],
-        new QuizNotYetStartedState()
+        new QuizNotYetStartedState([])
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -126,25 +126,27 @@ describe('Quiz', () => {
     });
 
     it('should skip the first round if there are no questions', () => {
+      const roundsWithNoQuestionsInFirstRound = [
+        {
+          roundName: 'Round 1',
+          questions: [],
+        },
+        {
+          roundName: 'Round 2',
+          questions: [
+            {
+              question: 'Question 3',
+              answer: 'Answer 3',
+            },
+          ],
+        },
+      ];
+
       const quiz = new Quiz(
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
-        [
-          {
-            roundName: 'Round 1',
-            questions: [],
-          },
-          {
-            roundName: 'Round 2',
-            questions: [
-              {
-                question: 'Question 3',
-                answer: 'Answer 3',
-              },
-            ],
-          },
-        ],
-        new QuizNotYetStartedState()
+        roundsWithNoQuestionsInFirstRound,
+        new QuizNotYetStartedState(roundsWithNoQuestionsInFirstRound)
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -156,29 +158,36 @@ describe('Quiz', () => {
     });
 
     it('should skip the second round if there are no questions', () => {
+      const roundsWithNoQuestionsInSecondRound = [
+        {
+          roundName: 'Round 1',
+          questions: [
+            {
+              question: 'Question 1',
+              answer: 'Answer 1',
+            },
+            {
+              question: 'Question 2',
+              answer: 'Answer 2',
+            },
+          ],
+        },
+        {
+          roundName: 'Round 2',
+          questions: [],
+        },
+      ];
+
       const quiz = new Quiz(
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
-        [
-          {
-            roundName: 'Round 1',
-            questions: [
-              {
-                question: 'Question 1',
-                answer: 'Answer 1',
-              },
-              {
-                question: 'Question 2',
-                answer: 'Answer 2',
-              },
-            ],
-          },
-          {
-            roundName: 'Round 2',
-            questions: [],
-          },
-        ],
-        new QuestionAskedState(0, 1, 'Question 2')
+        roundsWithNoQuestionsInSecondRound,
+        new QuestionAskedState(
+          roundsWithNoQuestionsInSecondRound,
+          0,
+          1,
+          'Question 2'
+        )
       );
 
       expect(quiz.nextState).toMatchObject({

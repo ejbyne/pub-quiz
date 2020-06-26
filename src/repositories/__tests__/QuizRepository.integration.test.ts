@@ -10,21 +10,23 @@ import { Quiz } from '../../domain/Quiz';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 
+const exampleRounds = [
+  {
+    roundName: 'Round 1',
+    questions: [
+      {
+        question: 'A question',
+        answer: 'An answer',
+      },
+    ],
+  },
+];
+
 const exampleQuiz: Quiz = new Quiz(
   EXAMPLE_QUIZ_ID,
   "Ed's quiz",
-  [
-    {
-      roundName: 'Round 1',
-      questions: [
-        {
-          question: 'A question',
-          answer: 'An answer',
-        },
-      ],
-    },
-  ],
-  new QuizNotYetStartedState()
+  exampleRounds,
+  new QuizNotYetStartedState(exampleRounds)
 );
 
 describe('QuizRepository integration tests', () => {
@@ -91,7 +93,7 @@ describe('QuizRepository integration tests', () => {
 
     await quizRepository.updateState(
       EXAMPLE_QUIZ_ID,
-      new QuestionAskedState(1, 1, 'A question?')
+      new QuestionAskedState(exampleRounds, 1, 1, 'A question?')
     );
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);

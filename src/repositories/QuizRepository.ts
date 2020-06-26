@@ -3,8 +3,8 @@ import { QuizState } from '../domain/types';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../domain/Quiz';
 import { QuizEntity } from './types';
-import { mapEntityStateToQuizState } from './mapEntityStateDataToQuizState';
-import { mapQuizStateToEntityState } from './mapQuizStateToEntityStateData';
+import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
+import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
 
 export class QuizRepository {
   private documentClient: DocumentClient;
@@ -37,7 +37,7 @@ export class QuizRepository {
       quizId,
       quizName,
       rounds,
-      mapEntityStateToQuizState(state),
+      mapEntityStateToQuizState(state, rounds),
       playerNames as string[] | undefined
     );
   }

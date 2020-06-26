@@ -6,30 +6,36 @@ import {
   RoundStartedState,
   QuizState,
   QuestionAskedState,
+  Round,
 } from '../domain/types';
 import { QuizEntityState } from './types';
 
-export const mapEntityStateToQuizState = (data: QuizEntityState): QuizState => {
-  switch (data.status) {
+export const mapEntityStateToQuizState = (
+  state: QuizEntityState,
+  rounds: Round[]
+): QuizState => {
+  switch (state.status) {
     case QuizStatus.QUIZ_NOT_YET_STARTED:
-      return new QuizNotYetStartedState();
+      return new QuizNotYetStartedState(rounds);
 
     case QuizStatus.ROUND_STARTED:
       return new RoundStartedState(
-        data.roundNumber!,
-        data.roundName!,
-        data.numberOfQuestions!
+        rounds,
+        state.roundNumber!,
+        state.roundName!,
+        state.numberOfQuestions!
       );
 
     case QuizStatus.QUESTION_ASKED:
       return new QuestionAskedState(
-        data.roundNumber!,
-        data.questionNumber!,
-        data.questionText!
+        rounds,
+        state.roundNumber!,
+        state.questionNumber!,
+        state.questionText!
       );
 
     case QuizStatus.QUIZ_FINISHED:
-      return new QuizFinishedState();
+      return new QuizFinishedState(rounds);
 
     default:
       throw new Error('Invalid quiz state provided');
