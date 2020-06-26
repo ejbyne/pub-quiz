@@ -4,6 +4,7 @@ import {
   QuizNotYetStartedState,
   RoundStartedState,
   QuestionAskedState,
+  RoundFinishedState,
 } from '../types';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
@@ -83,12 +84,28 @@ describe('Quiz', () => {
       });
     });
 
-    it('should move to the second round if the first round has finished', () => {
+    it('should finish the round if the there are no more questions', () => {
       const quiz = new Quiz(
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
         new QuestionAskedState(exampleRounds, 0, 1, 'Question 2')
+      );
+
+      expect(quiz.nextState).toMatchObject({
+        status: QuizStatus.ROUND_FINISHED,
+        roundNumber: 0,
+        roundName: 'Round 1',
+        numberOfQuestions: 2,
+      });
+    });
+
+    it('should move to the second round if the first round has finished', () => {
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new RoundFinishedState(exampleRounds, 0, 'Round 1', 2)
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -104,7 +121,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAskedState(exampleRounds, 1, 0, 'Question 3')
+        new RoundFinishedState(exampleRounds, 1, 'Round 2', 1)
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -182,11 +199,11 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         roundsWithNoQuestionsInSecondRound,
-        new QuestionAskedState(
+        new RoundFinishedState(
           roundsWithNoQuestionsInSecondRound,
           0,
-          1,
-          'Question 2'
+          'Round 1',
+          2
         )
       );
 

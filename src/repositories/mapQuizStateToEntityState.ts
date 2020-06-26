@@ -18,6 +18,14 @@ export const mapQuizStateToEntityState = (
         numberOfQuestions: state.numberOfQuestions,
       };
 
+    case QuizStatus.ROUND_FINISHED:
+      return {
+        status: QuizStatus.ROUND_FINISHED,
+        roundNumber: state.roundNumber,
+        roundName: state.roundName,
+        numberOfQuestions: state.numberOfQuestions,
+      };
+
     case QuizStatus.QUESTION_ASKED:
       return {
         status: QuizStatus.QUESTION_ASKED,

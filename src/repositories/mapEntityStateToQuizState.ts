@@ -7,6 +7,7 @@ import {
   QuizState,
   QuestionAskedState,
   Round,
+  RoundFinishedState,
 } from '../domain/types';
 import { QuizEntityState } from './types';
 
@@ -20,6 +21,14 @@ export const mapEntityStateToQuizState = (
 
     case QuizStatus.ROUND_STARTED:
       return new RoundStartedState(
+        rounds,
+        state.roundNumber!,
+        state.roundName!,
+        state.numberOfQuestions!
+      );
+
+    case QuizStatus.ROUND_FINISHED:
+      return new RoundFinishedState(
         rounds,
         state.roundNumber!,
         state.roundName!,

@@ -11,6 +11,7 @@ export interface Question {
 export enum QuizStatus {
   QUIZ_NOT_YET_STARTED = 'QUIZ_NOT_YET_STARTED',
   ROUND_STARTED = 'ROUND_STARTED',
+  ROUND_FINISHED = 'ROUND_FINISHED',
   QUESTION_ASKED = 'QUESTION_ASKED',
   QUIZ_FINISHED = 'QUIZ_FINISHED',
 }
@@ -24,6 +25,7 @@ export interface BaseQuizState {
 export type QuizState =
   | QuizNotYetStartedState
   | RoundStartedState
+  | RoundFinishedState
   | QuestionAskedState
   | QuizFinishedState;
 
@@ -109,19 +111,11 @@ export class QuestionAskedState implements BaseQuizState {
       this.questionNumber ===
       this.rounds[this.roundNumber].questions.length - 1
     ) {
-      const nextRoundWithQuestions = this.rounds.findIndex(
-        (round, index) => index > this.roundNumber && round.questions.length > 0
-      );
-
-      if (nextRoundWithQuestions === -1) {
-        return new QuizFinishedState(this.rounds);
-      }
-
-      return new RoundStartedState(
+      return new RoundFinishedState(
         this.rounds,
-        nextRoundWithQuestions,
-        this.rounds[nextRoundWithQuestions].roundName,
-        this.rounds[nextRoundWithQuestions].questions.length
+        this.roundNumber,
+        this.rounds[this.roundNumber].roundName,
+        this.rounds[this.roundNumber].questions.length
       );
     }
 
@@ -130,6 +124,44 @@ export class QuestionAskedState implements BaseQuizState {
       this.roundNumber,
       this.questionNumber + 1,
       this.rounds[this.roundNumber].questions[this.questionNumber + 1].question
+    );
+  }
+}
+
+export class RoundFinishedState implements BaseQuizState {
+  status: QuizStatus.ROUND_FINISHED;
+  rounds: Round[];
+  roundNumber: number;
+  roundName: string;
+  numberOfQuestions: number;
+
+  constructor(
+    rounds: Round[],
+    roundNumber: number,
+    roundName: string,
+    numberOfQuestions: number
+  ) {
+    this.status = QuizStatus.ROUND_FINISHED;
+    this.rounds = rounds;
+    this.roundNumber = roundNumber;
+    this.roundName = roundName;
+    this.numberOfQuestions = numberOfQuestions;
+  }
+
+  nextState(): QuizState {
+    const nextRoundWithQuestions = this.rounds.findIndex(
+      (round, index) => index > this.roundNumber && round.questions.length > 0
+    );
+
+    if (nextRoundWithQuestions === -1) {
+      return new QuizFinishedState(this.rounds);
+    }
+
+    return new RoundStartedState(
+      this.rounds,
+      nextRoundWithQuestions,
+      this.rounds[nextRoundWithQuestions].roundName,
+      this.rounds[nextRoundWithQuestions].questions.length
     );
   }
 }
