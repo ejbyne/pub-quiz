@@ -51,8 +51,20 @@ export class PubQuizBackendStack extends cdk.Stack {
       },
     });
 
+    const nextQuizStateLambda = new NodejsFunction(this, 'NextQuizStateLamba', {
+      functionName: 'next-quiz-state-resolver',
+      entry: Path.join(__dirname, '../lambdas/nextQuizState.ts'),
+      handler: 'nextQuizState',
+      minify: true,
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        QUIZ_TABLE_NAME: quizTable.tableName,
+      },
+    });
+
     quizTable.grantReadWriteData(saveQuizLambda);
     quizTable.grantReadWriteData(joinQuizLambda);
+    quizTable.grantReadWriteData(nextQuizStateLambda);
 
     const saveQuizLambdaDataSource = api.addLambdaDataSource(
       'SaveQuizLambda',
@@ -66,6 +78,12 @@ export class PubQuizBackendStack extends cdk.Stack {
       joinQuizLambda
     );
 
+    const nextQuizStateLambdaDataSource = api.addLambdaDataSource(
+      'NextQuizStateLambda',
+      'Next Quiz State Lambda DataSource',
+      nextQuizStateLambda
+    );
+
     saveQuizLambdaDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'saveQuiz',
@@ -76,6 +94,13 @@ export class PubQuizBackendStack extends cdk.Stack {
     joinQuizLambdaDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'joinQuiz',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    });
+
+    nextQuizStateLambdaDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'nextQuizState',
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
     });

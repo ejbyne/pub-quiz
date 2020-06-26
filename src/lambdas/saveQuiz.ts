@@ -1,8 +1,8 @@
 import { Handler } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { QuizStatus, QuizNotYetStartedState } from '../domain/types';
 import { Quiz } from '../domain/Quiz';
+import { QuizNotYetStartedState } from '../domain/state/QuizNotYetStartedState';
 
 interface Event {
   arguments: {
@@ -27,14 +27,15 @@ export const saveQuiz: Handler<Event> = async (
   event: Event
 ): Promise<boolean> => {
   const { quizName, rounds } = event.arguments.input;
+  const quizId = uuid();
 
-  console.log(`Saving quiz: ${quizName}`);
+  console.log(`Saving quiz with name ${quizName} and id ${quizId}`);
 
   const newQuiz = new Quiz(
-    uuid(),
+    quizId,
     quizName,
     rounds,
-    new QuizNotYetStartedState()
+    new QuizNotYetStartedState(rounds)
   );
 
   await quizRepository.save(newQuiz);

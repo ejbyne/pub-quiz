@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { QuizState, QuizStatus } from '../domain/types';
+import { QuizStatus } from '../domain/state/QuizState';
 
 interface Event {
   arguments: {
@@ -32,6 +32,10 @@ export const nextState: Handler<Event> = async (
   const quiz = await quizRepository.get(quizId);
 
   const nextState = quiz.nextState;
+
+  console.log(
+    `Updating state for quiz with id ${quizId} to ${nextState.status}`
+  );
 
   await quizRepository.updateState(quizId, nextState);
 

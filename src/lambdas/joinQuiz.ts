@@ -3,11 +3,11 @@ import { QuizRepository } from '../repositories/QuizRepository';
 
 interface Event {
   arguments: {
-    input: PlayerJoined;
+    input: PlayerJoinedEvent;
   };
 }
 
-interface PlayerJoined {
+interface PlayerJoinedEvent {
   quizId: string;
   playerName: string;
 }
@@ -18,7 +18,7 @@ const quizRepository = new QuizRepository(quizTableName);
 
 export const joinQuiz: Handler<Event> = async (
   event: Event
-): Promise<PlayerJoined> => {
+): Promise<PlayerJoinedEvent> => {
   const { quizId, playerName } = event.arguments.input;
 
   console.log(`Player ${playerName} joining quiz with id ${quizId}`);

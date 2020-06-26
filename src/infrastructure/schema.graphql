@@ -10,9 +10,9 @@ type Mutation {
 
 type Subscription {
   playerJoined(quizId: ID!): PlayerJoined
-  @aws_subscribe(mutations: ["joinQuiz"])
+    @aws_subscribe(mutations: ["joinQuiz"])
   nextQuizState(quizId: ID!): QuizState
-  @aws_subscribe(mutations: ["nextQuizState"])
+    @aws_subscribe(mutations: ["nextQuizState"])
 }
 
 input SaveQuizInput {
@@ -50,10 +50,16 @@ enum QuizStatus {
   QUIZ_NOT_YET_STARTED
   ROUND_STARTED
   QUESTION_ASKED
+  ROUND_FINISHED
   QUIZ_FINISHED
 }
 
-union QuizState = QuizNotYetStarted | RoundStarted | QuestionAsked | QuizFinished
+union QuizState =
+    QuizNotYetStarted
+  | RoundStarted
+  | QuestionAsked
+  | RoundFinished
+  | QuizFinished
 
 type QuizNotYetStarted {
   quizId: ID!
@@ -74,6 +80,14 @@ type QuestionAsked {
   roundNumber: Int!
   questionNumber: Int!
   questionText: String!
+}
+
+type RoundFinished {
+  quizId: ID!
+  status: QuizStatus!
+  roundNumber: Int!
+  roundName: String!
+  numberOfQuestions: Int!
 }
 
 type QuizFinished {
