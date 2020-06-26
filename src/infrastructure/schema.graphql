@@ -42,7 +42,7 @@ input NextQuizStateInput {
 type QuizSummary {
   quizId: ID!
   quizName: String!
-  playerNames: [String!]!
+  playerNames: [String!]
   state: QuizState!
 }
 

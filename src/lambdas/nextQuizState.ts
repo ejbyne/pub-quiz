@@ -1,6 +1,7 @@
 import { Handler } from 'aws-lambda';
 import { QuizRepository } from '../repositories/QuizRepository';
 import { QuizStatus } from '../domain/state/QuizState';
+import { mapQuizStateToResponseState } from './mapQuizStateToResponseState';
 
 interface Event {
   arguments: {
@@ -10,7 +11,8 @@ interface Event {
   };
 }
 
-interface NextStateEvent {
+export interface NextStateEvent {
+  __typename: string;
   quizId: string;
   status: QuizStatus;
   roundNumber?: number;
@@ -24,7 +26,7 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 
 const quizRepository = new QuizRepository(quizTableName);
 
-export const nextState: Handler<Event> = async (
+export const nextQuizState: Handler<Event> = async (
   event: Event
 ): Promise<NextStateEvent> => {
   const { quizId } = event.arguments.input;
@@ -39,8 +41,5 @@ export const nextState: Handler<Event> = async (
 
   await quizRepository.updateState(quizId, nextState);
 
-  return {
-    quizId,
-    ...nextState,
-  };
+  return mapQuizStateToResponseState(quizId, nextState);
 };
