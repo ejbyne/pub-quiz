@@ -54,19 +54,17 @@ enum QuizStatus {
   QUIZ_FINISHED
 }
 
-union QuizState =
-    QuizNotYetStarted
-  | RoundStarted
-  | QuestionAsked
-  | RoundFinished
-  | QuizFinished
-
-type QuizNotYetStarted {
+interface QuizState {
   quizId: ID!
   status: QuizStatus!
 }
 
-type RoundStarted {
+type QuizNotYetStarted implements QuizState {
+  quizId: ID!
+  status: QuizStatus!
+}
+
+type RoundStarted implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundNumber: Int!
@@ -74,7 +72,7 @@ type RoundStarted {
   numberOfQuestions: Int!
 }
 
-type QuestionAsked {
+type QuestionAsked implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundNumber: Int!
@@ -82,7 +80,7 @@ type QuestionAsked {
   questionText: String!
 }
 
-type RoundFinished {
+type RoundFinished implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundNumber: Int!
@@ -90,7 +88,7 @@ type RoundFinished {
   numberOfQuestions: Int!
 }
 
-type QuizFinished {
+type QuizFinished implements QuizState {
   quizId: ID!
   status: QuizStatus!
 }

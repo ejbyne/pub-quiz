@@ -1,0 +1,49 @@
+mutation SaveQuiz {
+  saveQuiz(input:{
+    quizName:"Ed's quiz",
+    rounds:[
+      {
+        roundName:"Round 1",
+        questions:[
+          {
+            question:"Question 1",
+            answer:"Answer 1"
+          },
+          {
+            question:"Question 2",
+            answer:"Answer 2"
+          }
+        ]
+      },
+      {
+        roundName:"Round 2",
+        questions:[
+          {
+            question:"Question 3",
+            answer:"Answer 3"
+          }
+        ]
+      }
+    ]
+  })
+}
+
+mutation NextQuizState{
+  nextQuizState(input:{quizId:""}) {
+    quizId
+    __typename
+  }
+}
+
+subscription PlayerJoined{
+  playerJoined(quizId:"") {
+    playerName
+    quizId
+  }
+}
+
+subscription NextQuizState{
+  nextQuizState(quizId:"") {
+    __typename
+  }
+}
