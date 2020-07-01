@@ -1,12 +1,11 @@
 import { Handler } from 'aws-lambda';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { QuizState } from '../domain/state/QuizState';
+import { QuizState, QuizStatus } from '../domain/state/QuizState';
+import { mapQuizStateToResponseState } from './mapQuizStateToResponseState';
 
 interface Event {
   arguments: {
-    input: {
-      quizId: string;
-    };
+    quizId: string;
   };
 }
 
@@ -14,7 +13,16 @@ interface QuizSummaryResponse {
   quizId: string;
   quizName: string;
   playerNames?: string[];
-  state: QuizState;
+  state: {
+    __typename: string;
+    quizId: string;
+    status: QuizStatus;
+    roundNumber?: number;
+    roundName?: string;
+    numberOfQuestions?: number;
+    questionNumber?: number;
+    questionText?: string;
+  };
 }
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;
@@ -24,7 +32,7 @@ const quizRepository = new QuizRepository(quizTableName);
 export const quizSummary: Handler<Event> = async (
   event: Event
 ): Promise<QuizSummaryResponse> => {
-  const { quizId } = event.arguments.input;
+  const { quizId } = event.arguments;
 
   console.log(`Getting summary for quiz with id ${quizId}`);
 
@@ -34,6 +42,6 @@ export const quizSummary: Handler<Event> = async (
     quizId,
     quizName,
     playerNames,
-    state,
+    state: mapQuizStateToResponseState(quizId, state),
   };
 };
