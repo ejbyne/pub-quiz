@@ -1,0 +1,83 @@
+query QuizSummaryQuery($quizId: ID!) {
+  quizSummary(quizId: $quizId) {
+    quizId
+    quizName
+    playerNames
+    state {
+      quizId
+      status
+      ... on RoundStarted {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+      ... on QuestionAsked {
+        roundNumber
+        questionNumber
+        questionText
+      }
+      ... on RoundFinished {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+    }
+  }
+}
+mutation SaveQuizMutation($input: SaveQuizInput!) {
+  saveQuiz(input: $input)
+}
+mutation JoinQuizMutation($input: JoinQuizInput!) {
+  joinQuiz(input: $input) {
+    quizId
+    playerName
+  }
+}
+mutation NextQuizStateMutation($input: NextQuizStateInput!) {
+  nextQuizState(input: $input) {
+    quizId
+    status
+    ... on RoundStarted {
+      roundNumber
+      roundName
+      numberOfQuestions
+    }
+    ... on QuestionAsked {
+      roundNumber
+      questionNumber
+      questionText
+    }
+    ... on RoundFinished {
+      roundNumber
+      roundName
+      numberOfQuestions
+    }
+  }
+}
+subscription PlayerJoinedSubscription($quizId: ID!) {
+  playerJoined(quizId: $quizId) {
+    quizId
+    playerName
+  }
+}
+subscription NextQuizStateSubscription($quizId: ID!) {
+  nextQuizState(quizId: $quizId) {
+    quizId
+    status
+    ... on RoundStarted {
+      roundNumber
+      roundName
+      numberOfQuestions
+    }
+    ... on QuestionAsked {
+      roundNumber
+      questionNumber
+      questionText
+    }
+    ... on RoundFinished {
+      roundNumber
+      roundName
+      numberOfQuestions
+    }
+  }
+}
