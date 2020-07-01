@@ -4,9 +4,12 @@ import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import { ApolloLink } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { awsConfig } from '../awsConfig';
-import * as blah from 'amplify-codegen';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
+import { awsConfig } from '../../awsConfig';
+import introspectionQueryResultData from './fragmentTypes.json';
 
 const { apiKey, graphQlUrl, region } = awsConfig;
 
@@ -22,7 +25,13 @@ const link = ApolloLink.from([
   createSubscriptionHandshakeLink(graphQlUrl, httpLink),
 ]);
 
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
+
 export const client = new ApolloClient({
   link,
-  cache: new InMemoryCache(),
+  cache,
 });

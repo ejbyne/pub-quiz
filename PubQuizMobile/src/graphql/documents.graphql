@@ -1,4 +1,4 @@
-query QuizSummaryQuery($quizId: ID!) {
+query QuizSummary($quizId: ID!) {
   quizSummary(quizId: $quizId) {
     quizId
     quizName
@@ -24,16 +24,16 @@ query QuizSummaryQuery($quizId: ID!) {
     }
   }
 }
-mutation SaveQuizMutation($input: SaveQuizInput!) {
+mutation SaveQuiz($input: SaveQuizInput!) {
   saveQuiz(input: $input)
 }
-mutation JoinQuizMutation($input: JoinQuizInput!) {
+mutation JoinQuiz($input: JoinQuizInput!) {
   joinQuiz(input: $input) {
     quizId
     playerName
   }
 }
-mutation NextQuizStateMutation($input: NextQuizStateInput!) {
+mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {
     quizId
     status
@@ -54,13 +54,13 @@ mutation NextQuizStateMutation($input: NextQuizStateInput!) {
     }
   }
 }
-subscription PlayerJoinedSubscription($quizId: ID!) {
+subscription PlayerJoined($quizId: ID!) {
   playerJoined(quizId: $quizId) {
     quizId
     playerName
   }
 }
-subscription NextQuizStateSubscription($quizId: ID!) {
+subscription QuizState($quizId: ID!) {
   nextQuizState(quizId: $quizId) {
     quizId
     status

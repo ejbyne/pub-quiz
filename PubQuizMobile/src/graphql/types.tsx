@@ -150,12 +150,12 @@ export type SubscriptionNextQuizStateArgs = {
   quizId: Scalars['ID'];
 };
 
-export type QuizSummaryQueryQueryVariables = Exact<{
+export type QuizSummaryQueryVariables = Exact<{
   quizId: Scalars['ID'];
 }>;
 
 
-export type QuizSummaryQueryQuery = (
+export type QuizSummaryQuery = (
   { __typename?: 'Query' }
   & { quizSummary: (
     { __typename?: 'QuizSummary' }
@@ -179,22 +179,22 @@ export type QuizSummaryQueryQuery = (
   ) }
 );
 
-export type SaveQuizMutationMutationVariables = Exact<{
+export type SaveQuizMutationVariables = Exact<{
   input: SaveQuizInput;
 }>;
 
 
-export type SaveQuizMutationMutation = (
+export type SaveQuizMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'saveQuiz'>
 );
 
-export type JoinQuizMutationMutationVariables = Exact<{
+export type JoinQuizMutationVariables = Exact<{
   input: JoinQuizInput;
 }>;
 
 
-export type JoinQuizMutationMutation = (
+export type JoinQuizMutation = (
   { __typename?: 'Mutation' }
   & { joinQuiz: (
     { __typename?: 'PlayerJoined' }
@@ -202,12 +202,12 @@ export type JoinQuizMutationMutation = (
   ) }
 );
 
-export type NextQuizStateMutationMutationVariables = Exact<{
+export type NextQuizStateMutationVariables = Exact<{
   input: NextQuizStateInput;
 }>;
 
 
-export type NextQuizStateMutationMutation = (
+export type NextQuizStateMutation = (
   { __typename?: 'Mutation' }
   & { nextQuizState: (
     { __typename?: 'QuizNotYetStarted' }
@@ -227,12 +227,12 @@ export type NextQuizStateMutationMutation = (
   ) }
 );
 
-export type PlayerJoinedSubscriptionSubscriptionVariables = Exact<{
+export type PlayerJoinedSubscriptionVariables = Exact<{
   quizId: Scalars['ID'];
 }>;
 
 
-export type PlayerJoinedSubscriptionSubscription = (
+export type PlayerJoinedSubscription = (
   { __typename?: 'Subscription' }
   & { playerJoined?: Maybe<(
     { __typename?: 'PlayerJoined' }
@@ -240,12 +240,12 @@ export type PlayerJoinedSubscriptionSubscription = (
   )> }
 );
 
-export type NextQuizStateSubscriptionSubscriptionVariables = Exact<{
+export type QuizStateSubscriptionVariables = Exact<{
   quizId: Scalars['ID'];
 }>;
 
 
-export type NextQuizStateSubscriptionSubscription = (
+export type QuizStateSubscription = (
   { __typename?: 'Subscription' }
   & { nextQuizState?: Maybe<(
     { __typename?: 'QuizNotYetStarted' }
@@ -266,8 +266,8 @@ export type NextQuizStateSubscriptionSubscription = (
 );
 
 
-export const QuizSummaryQueryDocument = gql`
-    query QuizSummaryQuery($quizId: ID!) {
+export const QuizSummaryDocument = gql`
+    query QuizSummary($quizId: ID!) {
   quizSummary(quizId: $quizId) {
     quizId
     quizName
@@ -296,95 +296,95 @@ export const QuizSummaryQueryDocument = gql`
     `;
 
 /**
- * __useQuizSummaryQueryQuery__
+ * __useQuizSummaryQuery__
  *
- * To run a query within a React component, call `useQuizSummaryQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useQuizSummaryQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useQuizSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuizSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useQuizSummaryQueryQuery({
+ * const { data, loading, error } = useQuizSummaryQuery({
  *   variables: {
  *      quizId: // value for 'quizId'
  *   },
  * });
  */
-export function useQuizSummaryQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<QuizSummaryQueryQuery, QuizSummaryQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<QuizSummaryQueryQuery, QuizSummaryQueryQueryVariables>(QuizSummaryQueryDocument, baseOptions);
+export function useQuizSummaryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
+        return ApolloReactHooks.useQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
       }
-export function useQuizSummaryQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<QuizSummaryQueryQuery, QuizSummaryQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<QuizSummaryQueryQuery, QuizSummaryQueryQueryVariables>(QuizSummaryQueryDocument, baseOptions);
+export function useQuizSummaryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
         }
-export type QuizSummaryQueryQueryHookResult = ReturnType<typeof useQuizSummaryQueryQuery>;
-export type QuizSummaryQueryLazyQueryHookResult = ReturnType<typeof useQuizSummaryQueryLazyQuery>;
-export type QuizSummaryQueryQueryResult = ApolloReactCommon.QueryResult<QuizSummaryQueryQuery, QuizSummaryQueryQueryVariables>;
-export const SaveQuizMutationDocument = gql`
-    mutation SaveQuizMutation($input: SaveQuizInput!) {
+export type QuizSummaryQueryHookResult = ReturnType<typeof useQuizSummaryQuery>;
+export type QuizSummaryLazyQueryHookResult = ReturnType<typeof useQuizSummaryLazyQuery>;
+export type QuizSummaryQueryResult = ApolloReactCommon.QueryResult<QuizSummaryQuery, QuizSummaryQueryVariables>;
+export const SaveQuizDocument = gql`
+    mutation SaveQuiz($input: SaveQuizInput!) {
   saveQuiz(input: $input)
 }
     `;
-export type SaveQuizMutationMutationFn = ApolloReactCommon.MutationFunction<SaveQuizMutationMutation, SaveQuizMutationMutationVariables>;
+export type SaveQuizMutationFn = ApolloReactCommon.MutationFunction<SaveQuizMutation, SaveQuizMutationVariables>;
 
 /**
- * __useSaveQuizMutationMutation__
+ * __useSaveQuizMutation__
  *
- * To run a mutation, you first call `useSaveQuizMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSaveQuizMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSaveQuizMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveQuizMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [saveQuizMutationMutation, { data, loading, error }] = useSaveQuizMutationMutation({
+ * const [saveQuizMutation, { data, loading, error }] = useSaveQuizMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useSaveQuizMutationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveQuizMutationMutation, SaveQuizMutationMutationVariables>) {
-        return ApolloReactHooks.useMutation<SaveQuizMutationMutation, SaveQuizMutationMutationVariables>(SaveQuizMutationDocument, baseOptions);
+export function useSaveQuizMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveQuizMutation, SaveQuizMutationVariables>) {
+        return ApolloReactHooks.useMutation<SaveQuizMutation, SaveQuizMutationVariables>(SaveQuizDocument, baseOptions);
       }
-export type SaveQuizMutationMutationHookResult = ReturnType<typeof useSaveQuizMutationMutation>;
-export type SaveQuizMutationMutationResult = ApolloReactCommon.MutationResult<SaveQuizMutationMutation>;
-export type SaveQuizMutationMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveQuizMutationMutation, SaveQuizMutationMutationVariables>;
-export const JoinQuizMutationDocument = gql`
-    mutation JoinQuizMutation($input: JoinQuizInput!) {
+export type SaveQuizMutationHookResult = ReturnType<typeof useSaveQuizMutation>;
+export type SaveQuizMutationResult = ApolloReactCommon.MutationResult<SaveQuizMutation>;
+export type SaveQuizMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveQuizMutation, SaveQuizMutationVariables>;
+export const JoinQuizDocument = gql`
+    mutation JoinQuiz($input: JoinQuizInput!) {
   joinQuiz(input: $input) {
     quizId
     playerName
   }
 }
     `;
-export type JoinQuizMutationMutationFn = ApolloReactCommon.MutationFunction<JoinQuizMutationMutation, JoinQuizMutationMutationVariables>;
+export type JoinQuizMutationFn = ApolloReactCommon.MutationFunction<JoinQuizMutation, JoinQuizMutationVariables>;
 
 /**
- * __useJoinQuizMutationMutation__
+ * __useJoinQuizMutation__
  *
- * To run a mutation, you first call `useJoinQuizMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useJoinQuizMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useJoinQuizMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinQuizMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [joinQuizMutationMutation, { data, loading, error }] = useJoinQuizMutationMutation({
+ * const [joinQuizMutation, { data, loading, error }] = useJoinQuizMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useJoinQuizMutationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<JoinQuizMutationMutation, JoinQuizMutationMutationVariables>) {
-        return ApolloReactHooks.useMutation<JoinQuizMutationMutation, JoinQuizMutationMutationVariables>(JoinQuizMutationDocument, baseOptions);
+export function useJoinQuizMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<JoinQuizMutation, JoinQuizMutationVariables>) {
+        return ApolloReactHooks.useMutation<JoinQuizMutation, JoinQuizMutationVariables>(JoinQuizDocument, baseOptions);
       }
-export type JoinQuizMutationMutationHookResult = ReturnType<typeof useJoinQuizMutationMutation>;
-export type JoinQuizMutationMutationResult = ApolloReactCommon.MutationResult<JoinQuizMutationMutation>;
-export type JoinQuizMutationMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinQuizMutationMutation, JoinQuizMutationMutationVariables>;
-export const NextQuizStateMutationDocument = gql`
-    mutation NextQuizStateMutation($input: NextQuizStateInput!) {
+export type JoinQuizMutationHookResult = ReturnType<typeof useJoinQuizMutation>;
+export type JoinQuizMutationResult = ApolloReactCommon.MutationResult<JoinQuizMutation>;
+export type JoinQuizMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinQuizMutation, JoinQuizMutationVariables>;
+export const NextQuizStateDocument = gql`
+    mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {
     quizId
     status
@@ -406,33 +406,33 @@ export const NextQuizStateMutationDocument = gql`
   }
 }
     `;
-export type NextQuizStateMutationMutationFn = ApolloReactCommon.MutationFunction<NextQuizStateMutationMutation, NextQuizStateMutationMutationVariables>;
+export type NextQuizStateMutationFn = ApolloReactCommon.MutationFunction<NextQuizStateMutation, NextQuizStateMutationVariables>;
 
 /**
- * __useNextQuizStateMutationMutation__
+ * __useNextQuizStateMutation__
  *
- * To run a mutation, you first call `useNextQuizStateMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useNextQuizStateMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useNextQuizStateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNextQuizStateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [nextQuizStateMutationMutation, { data, loading, error }] = useNextQuizStateMutationMutation({
+ * const [nextQuizStateMutation, { data, loading, error }] = useNextQuizStateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useNextQuizStateMutationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<NextQuizStateMutationMutation, NextQuizStateMutationMutationVariables>) {
-        return ApolloReactHooks.useMutation<NextQuizStateMutationMutation, NextQuizStateMutationMutationVariables>(NextQuizStateMutationDocument, baseOptions);
+export function useNextQuizStateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<NextQuizStateMutation, NextQuizStateMutationVariables>) {
+        return ApolloReactHooks.useMutation<NextQuizStateMutation, NextQuizStateMutationVariables>(NextQuizStateDocument, baseOptions);
       }
-export type NextQuizStateMutationMutationHookResult = ReturnType<typeof useNextQuizStateMutationMutation>;
-export type NextQuizStateMutationMutationResult = ApolloReactCommon.MutationResult<NextQuizStateMutationMutation>;
-export type NextQuizStateMutationMutationOptions = ApolloReactCommon.BaseMutationOptions<NextQuizStateMutationMutation, NextQuizStateMutationMutationVariables>;
-export const PlayerJoinedSubscriptionDocument = gql`
-    subscription PlayerJoinedSubscription($quizId: ID!) {
+export type NextQuizStateMutationHookResult = ReturnType<typeof useNextQuizStateMutation>;
+export type NextQuizStateMutationResult = ApolloReactCommon.MutationResult<NextQuizStateMutation>;
+export type NextQuizStateMutationOptions = ApolloReactCommon.BaseMutationOptions<NextQuizStateMutation, NextQuizStateMutationVariables>;
+export const PlayerJoinedDocument = gql`
+    subscription PlayerJoined($quizId: ID!) {
   playerJoined(quizId: $quizId) {
     quizId
     playerName
@@ -441,28 +441,28 @@ export const PlayerJoinedSubscriptionDocument = gql`
     `;
 
 /**
- * __usePlayerJoinedSubscriptionSubscription__
+ * __usePlayerJoinedSubscription__
  *
- * To run a query within a React component, call `usePlayerJoinedSubscriptionSubscription` and pass it any options that fit your needs.
- * When your component renders, `usePlayerJoinedSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePlayerJoinedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePlayerJoinedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = usePlayerJoinedSubscriptionSubscription({
+ * const { data, loading, error } = usePlayerJoinedSubscription({
  *   variables: {
  *      quizId: // value for 'quizId'
  *   },
  * });
  */
-export function usePlayerJoinedSubscriptionSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<PlayerJoinedSubscriptionSubscription, PlayerJoinedSubscriptionSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<PlayerJoinedSubscriptionSubscription, PlayerJoinedSubscriptionSubscriptionVariables>(PlayerJoinedSubscriptionDocument, baseOptions);
+export function usePlayerJoinedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>(PlayerJoinedDocument, baseOptions);
       }
-export type PlayerJoinedSubscriptionSubscriptionHookResult = ReturnType<typeof usePlayerJoinedSubscriptionSubscription>;
-export type PlayerJoinedSubscriptionSubscriptionResult = ApolloReactCommon.SubscriptionResult<PlayerJoinedSubscriptionSubscription>;
-export const NextQuizStateSubscriptionDocument = gql`
-    subscription NextQuizStateSubscription($quizId: ID!) {
+export type PlayerJoinedSubscriptionHookResult = ReturnType<typeof usePlayerJoinedSubscription>;
+export type PlayerJoinedSubscriptionResult = ApolloReactCommon.SubscriptionResult<PlayerJoinedSubscription>;
+export const QuizStateDocument = gql`
+    subscription QuizState($quizId: ID!) {
   nextQuizState(quizId: $quizId) {
     quizId
     status
@@ -486,23 +486,23 @@ export const NextQuizStateSubscriptionDocument = gql`
     `;
 
 /**
- * __useNextQuizStateSubscriptionSubscription__
+ * __useQuizStateSubscription__
  *
- * To run a query within a React component, call `useNextQuizStateSubscriptionSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNextQuizStateSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useQuizStateSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useQuizStateSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNextQuizStateSubscriptionSubscription({
+ * const { data, loading, error } = useQuizStateSubscription({
  *   variables: {
  *      quizId: // value for 'quizId'
  *   },
  * });
  */
-export function useNextQuizStateSubscriptionSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<NextQuizStateSubscriptionSubscription, NextQuizStateSubscriptionSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<NextQuizStateSubscriptionSubscription, NextQuizStateSubscriptionSubscriptionVariables>(NextQuizStateSubscriptionDocument, baseOptions);
+export function useQuizStateSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<QuizStateSubscription, QuizStateSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<QuizStateSubscription, QuizStateSubscriptionVariables>(QuizStateDocument, baseOptions);
       }
-export type NextQuizStateSubscriptionSubscriptionHookResult = ReturnType<typeof useNextQuizStateSubscriptionSubscription>;
-export type NextQuizStateSubscriptionSubscriptionResult = ApolloReactCommon.SubscriptionResult<NextQuizStateSubscriptionSubscription>;
+export type QuizStateSubscriptionHookResult = ReturnType<typeof useQuizStateSubscription>;
+export type QuizStateSubscriptionResult = ApolloReactCommon.SubscriptionResult<QuizStateSubscription>;
