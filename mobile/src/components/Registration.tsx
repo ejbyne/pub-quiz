@@ -1,5 +1,7 @@
-import React from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { QuizStatus, useJoinQuizMutation } from '../graphql/types';
+import { QuizContext } from './App';
 
 const styles = StyleSheet.create({
   // sectionContainer: {
@@ -16,11 +18,40 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Registration: React.FC = () => (
-  <View>
-    <Text style={styles.title}>Pub Quiz</Text>
-    <TextInput placeholder="Name" />
-    <TextInput placeholder="Quiz ID" />
-    <Button title="Join quiz" onPress={() => Alert.alert('Button pressed')} />
-  </View>
-);
+export const Registration: React.FC = () => {
+  const [, updateQuiz] = useContext(QuizContext);
+  const [playerName, setPlayerName] = useState<string>('');
+  const [quizId, setQuizId] = useState<string>('');
+
+  const [joinQuiz] = useJoinQuizMutation({
+    variables: {
+      input: {
+        quizId,
+        playerName,
+      },
+    },
+  });
+
+  return (
+    <View>
+      <Text style={styles.title}>Pub Quiz</Text>
+      <TextInput
+        value={playerName}
+        placeholder="Name"
+        onChangeText={(text) => setPlayerName(text)}
+      />
+      <TextInput
+        value={quizId}
+        placeholder="Quiz ID"
+        onChangeText={(text) => setQuizId(text)}
+      />
+      <Button
+        title="Join quiz"
+        onPress={async () => {
+          await joinQuiz();
+          updateQuiz({ quizId });
+        }}
+      />
+    </View>
+  );
+};

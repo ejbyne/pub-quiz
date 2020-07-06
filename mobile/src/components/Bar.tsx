@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
+import { QuizContext } from './App';
 
-export const Bar: React.FC<{
-  quizId: string;
-  playerName: string;
-}> = () => (
-  <View>
-    <Text>Please wait at the bar for the quiz to begin</Text>
-  </View>
-);
+export const Bar: React.FC<{}> = () => {
+  const [quiz] = useContext(QuizContext);
+  console.log('quiz state in bar', JSON.stringify(quiz));
+
+  return (
+    <View>
+      <Text>You have joined the quiz: {quiz.quizName}</Text>
+    </View>
+  );
+};

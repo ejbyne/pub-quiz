@@ -21,11 +21,12 @@ export const QuizSummary: React.FC = () => {
 
   return (
     <View>
-      <Text>{JSON.stringify(data ?? error)}</Text>
+      <Text>{new Date().toISOString() + JSON.stringify(data ?? error)}</Text>
       <Text>
-        {JSON.stringify(
-          subscriptionData ?? subscriptionError ?? 'No subscription result',
-        )}
+        {new Date().toISOString() +
+          JSON.stringify(
+            subscriptionData ?? subscriptionError ?? 'No subscription result',
+          )}
       </Text>
     </View>
   );
