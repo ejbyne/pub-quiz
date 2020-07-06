@@ -33,23 +33,33 @@ const cache = new InMemoryCache({ fragmentMatcher });
 
 describe('registration', () => {
   it('allows a player to register for a quiz with the provided id', async () => {
+    const mockQuizSummaryQuery = jest.fn().mockReturnValue({
+      quizId: 'RANDOM_ID',
+      quizName: 'Random Quiz',
+      playerNames: null,
+      rounds: [],
+      state: {
+        __typename: 'QuizNotYetStarted',
+        quizId: 'RANDOM_ID',
+        status: QuizStatus.QuizNotYetStarted,
+      },
+    });
+
+    const mockJoinQuizMutation = jest.fn().mockReturnValue(true);
+
     const client = new ApolloClient({
       link: new SchemaLink({
-        schema: addMocksToSchema({ schema, mocks: {
-          Query: () => ({
-            quizSummary: () => ({
-              quizId: 'RANDOM_ID',
-              quizName: 'Random Quiz',
-              playerNames: null,
-              rounds: [],
-              state: {
-                __typename: 'QuizNotYetStarted',
-                quizId: 'RANDOM_ID',
-                status: QuizStatus.QuizNotYetStarted,
-              },
+        schema: addMocksToSchema({
+          schema,
+          mocks: {
+            Query: () => ({
+              quizSummary: mockQuizSummaryQuery,
             }),
-          }),
-        } }),
+            Mutation: () => ({
+              joinQuiz: mockJoinQuizMutation,
+            }),
+          },
+        }),
       }),
       cache,
     });
@@ -61,8 +71,15 @@ describe('registration', () => {
     );
 
     fireEvent.changeText(getByPlaceholderText('Name'), 'Ed');
-    fireEvent.changeText(getByPlaceholderText('Quiz ID'), 'A_RANDOM_ID');
+    fireEvent.changeText(getByPlaceholderText('Quiz ID'), 'RANDOM_ID');
     fireEvent.press(getByText('Join quiz'));
+
+    expect(mockJoinQuizMutation.mock.calls[0][1]).toEqual({
+      input: {
+        quizId: 'RANDOM_ID',
+        playerName: 'Ed',
+      },
+    });
 
     expect(
       await findByText('You have joined the quiz: Random Quiz'),
