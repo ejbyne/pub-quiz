@@ -23,7 +23,7 @@ export const Registration: React.FC = () => {
   const [playerName, setPlayerName] = useState<string>('');
   const [quizId, setQuizId] = useState<string>('');
 
-  const [joinQuiz] = useJoinQuizMutation({
+  const [joinQuiz, { called }] = useJoinQuizMutation({
     variables: {
       input: {
         quizId,
@@ -47,9 +47,14 @@ export const Registration: React.FC = () => {
       />
       <Button
         title="Join quiz"
+        disabled={called}
         onPress={async () => {
-          await joinQuiz();
-          updateQuiz({ quizId });
+          try {
+            await joinQuiz();
+            updateQuiz({ quizId });
+          } catch (error) {
+            console.error('error', error);
+          }
         }}
       />
     </View>

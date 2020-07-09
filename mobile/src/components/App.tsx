@@ -1,9 +1,4 @@
-import React, {
-  useReducer,
-  Reducer,
-  createContext,
-  Dispatch,
-} from 'react';
+import React, { useReducer, Reducer, createContext, Dispatch } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { Registration } from './Registration';
 import { quizReducer, Quiz } from '../domain/quizReducer';
@@ -15,20 +10,22 @@ export const QuizContext = createContext<
 >(undefined as any);
 
 export const App: React.FC = () => {
-  const [quiz, updateQuiz] = useReducer<
-    Reducer<Partial<Quiz>, Partial<Quiz>>
-  >(quizReducer, {});
+  const [quiz, updateQuiz] = useReducer<Reducer<Partial<Quiz>, Partial<Quiz>>>(
+    quizReducer,
+    {},
+  );
 
-  const CurrentStep = quiz?.quizId ? Bar : Registration;
+  const CurrentStep = quiz?.state ? Bar : Registration;
 
   const { data, error } = useQuizSummaryQuery({
     variables: {
       quizId: quiz?.quizId as any,
     },
-    onCompleted: data => updateQuiz({ ...data?.quizSummary }),
-    skip: !quiz,
+    onCompleted: (data) => updateQuiz({ ...data?.quizSummary }),
+    skip: !quiz.quizId,
   });
 
+  console.log('quiz in store', quiz);
   console.log('quiz summary', JSON.stringify(data));
   console.log('quiz summary error', JSON.stringify(error));
 

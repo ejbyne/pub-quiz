@@ -1,4 +1,4 @@
-import { quizReducer, QuizActionType } from '../quizReducer';
+import { quizReducer } from '../quizReducer';
 
 describe('quiz reducer', () => {
   it('should store the quiz id', () => {

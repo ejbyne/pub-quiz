@@ -1,16 +1,11 @@
-import { QuizState } from '../graphql/types';
+import { QuizSummary } from '../graphql/types';
 
-export interface Quiz {
-  quizId?: string;
-  quizName?: string;
-  playerNames?: string[] | null;
-  quizState?: QuizState;
-}
+export type Quiz = QuizSummary
 
 export const quizReducer = (
-  quiz: Quiz = {},
+  quiz: Partial<Quiz> = {},
   quizUpdate: Partial<Quiz>,
-): Quiz => {
+): Partial<Quiz> => {
   console.log('received next action', JSON.stringify(quizUpdate));
 
   return { ...quiz, ...quizUpdate };
