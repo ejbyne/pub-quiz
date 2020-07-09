@@ -30,18 +30,26 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 const quizRepository = new QuizRepository(quizTableName);
 
 export const quizSummary: Handler<Event> = async (
-  event: Event
-): Promise<QuizSummaryResponse> => {
+  event,
+  _,
+  callback
+): Promise<QuizSummaryResponse | void> => {
   const { quizId } = event.arguments;
 
-  console.log(`Getting summary for quiz with id ${quizId}`);
+  try {
+    console.log(`Getting summary for quiz with id ${quizId}`);
 
-  const { quizName, playerNames, state } = await quizRepository.get(quizId);
+    const quiz = await quizRepository.get(quizId);
 
-  return {
-    quizId,
-    quizName,
-    playerNames,
-    state: mapQuizStateToResponseState(quizId, state),
-  };
+    const { quizName, playerNames, state } = quiz;
+
+    return {
+      quizId,
+      quizName,
+      playerNames,
+      state: mapQuizStateToResponseState(quizId, state),
+    };
+  } catch (error) {
+    callback(error.message);
+  }
 };

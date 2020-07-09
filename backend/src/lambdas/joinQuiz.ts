@@ -17,16 +17,22 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 const quizRepository = new QuizRepository(quizTableName);
 
 export const joinQuiz: Handler<Event> = async (
-  event: Event
-): Promise<PlayerJoinedEvent> => {
+  event,
+  _,
+  callback
+): Promise<PlayerJoinedEvent | void> => {
   const { quizId, playerName } = event.arguments.input;
 
-  console.log(`Player ${playerName} joining quiz with id ${quizId}`);
+  try {
+    console.log(`Player ${playerName} joining quiz with id ${quizId}`);
 
-  await quizRepository.addPlayerName(quizId, playerName);
+    await quizRepository.addPlayerName(quizId, playerName);
 
-  return {
-    quizId,
-    playerName,
-  };
+    return {
+      quizId,
+      playerName,
+    };
+  } catch (error) {
+    callback(error.message);
+  }
 };

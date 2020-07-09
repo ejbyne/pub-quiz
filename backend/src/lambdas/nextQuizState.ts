@@ -27,19 +27,25 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 const quizRepository = new QuizRepository(quizTableName);
 
 export const nextQuizState: Handler<Event> = async (
-  event: Event
-): Promise<NextStateEvent> => {
+  event,
+  _,
+  callback
+): Promise<NextStateEvent | void> => {
   const { quizId } = event.arguments.input;
 
-  const quiz = await quizRepository.get(quizId);
+  try {
+    const quiz = await quizRepository.get(quizId);
 
-  const nextState = quiz.nextState;
+    const nextState = quiz.nextState;
 
-  console.log(
-    `Updating state for quiz with id ${quizId} to ${nextState.status}`
-  );
+    console.log(
+      `Updating state for quiz with id ${quizId} to ${nextState.status}`
+    );
 
-  await quizRepository.updateState(quizId, nextState);
+    await quizRepository.updateState(quizId, nextState);
 
-  return mapQuizStateToResponseState(quizId, nextState);
+    return mapQuizStateToResponseState(quizId, nextState);
+  } catch (error) {
+    callback(error.message);
+  }
 };

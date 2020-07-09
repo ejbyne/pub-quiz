@@ -23,9 +23,7 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 
 const quizRepository = new QuizRepository(quizTableName);
 
-export const saveQuiz: Handler<Event> = async (
-  event: Event
-): Promise<boolean> => {
+export const saveQuiz: Handler<Event> = async (event): Promise<boolean> => {
   const { quizName, rounds } = event.arguments.input;
   const quizId = uuid();
 

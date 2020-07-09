@@ -20,6 +20,10 @@
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
     "aws-cdk": "1.45.0",
+    "@aws-cdk/aws-appsync": "1.45.0",
+    "@aws-cdk/aws-dynamodb": "1.45.0",
+    "@aws-cdk/aws-lambda-nodejs": "1.45.0",
+    "@aws-cdk/core": "1.45.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
@@ -34,10 +38,6 @@
     "typescript": "~3.7.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-appsync": "^1.45.0",
-    "@aws-cdk/aws-dynamodb": "^1.45.0",
-    "@aws-cdk/aws-lambda-nodejs": "^1.45.0",
-    "@aws-cdk/core": "1.45.0",
     "aws-sdk": "^2.700.0",
     "source-map-support": "^0.5.16",
     "uuid": "^8.1.0"

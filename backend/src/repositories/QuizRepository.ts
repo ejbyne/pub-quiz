@@ -31,6 +31,10 @@ export class QuizRepository {
       })
       .promise();
 
+    if (!Item) {
+      throw new Error(`Quiz with id ${quizId} does not exist`);
+    }
+
     const { quizName, rounds, state, playerNames } = Item as QuizEntity;
 
     return new Quiz(
