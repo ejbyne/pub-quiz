@@ -32,7 +32,7 @@ export class QuizRepository {
       .promise();
 
     if (!Item) {
-      throw new Error(`Quiz with id ${quizId} does not exist`);
+      throw new Error(`The quiz ID does not exist`);
     }
 
     const { quizName, rounds, state, playerNames } = Item as QuizEntity;
@@ -71,7 +71,7 @@ export class QuizRepository {
     const playerNames = savedQuiz.playerNames?.values as string[] | undefined;
 
     if (playerNames?.includes(newPlayerName)) {
-      throw new Error('Player name already exists');
+      throw new Error(`A player with the name ${newPlayerName} already exists`);
     }
 
     await this.documentClient

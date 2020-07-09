@@ -84,7 +84,13 @@ describe('QuizRepository integration tests', () => {
 
     await expect(
       quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed')
-    ).rejects.toEqual(new Error('Player name already exists'));
+    ).rejects.toEqual(new Error('A player with the name Ed already exists'));
+  });
+
+  it('throws an error if the quiz ID does not exist', async () => {
+    await expect(
+      quizRepository.addPlayerName('UNKNOWN_QUIZ_ID', 'Ed')
+    ).rejects.toEqual(new Error('The quiz ID does not exist'));
   });
 
   it('updates the quiz state', async () => {

@@ -1,39 +1,14 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { addMocksToSchema } from '@graphql-tools/mock';
-import { SchemaLink } from 'apollo-link-schema';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { App } from '../components/App';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-client';
-import {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} from 'apollo-cache-inmemory';
 import { QuizStatus } from '../graphql/types';
-import introspectionQueryResultData from '../graphql/fragmentTypes.json';
-
-const schemaString =
-  'directive @aws_subscribe(mutations : [String]!) on FIELD_DEFINITION \n' +
-  readFileSync(
-    join(__dirname, '../../../backend/src/infrastructure/schema.graphql'),
-    'utf-8',
-  );
-
-const schema = makeExecutableSchema({ typeDefs: schemaString });
-
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData,
-});
-
-const cache = new InMemoryCache({ fragmentMatcher });
+import { createMockGraphQlClient } from './support/mockGraphQlClient';
 
 describe('registration', () => {
   it('allows a player to register for a quiz with the provided id', async () => {
-    const mockQuizSummaryQuery = jest.fn().mockReturnValue({
+    const quizSummary = jest.fn().mockReturnValue({
       quizId: 'RANDOM_ID',
       quizName: 'Random Quiz',
       playerNames: null,
@@ -45,23 +20,13 @@ describe('registration', () => {
       },
     });
 
-    const mockJoinQuizMutation = jest.fn().mockReturnValue(true);
+    const joinQuiz = jest.fn().mockReturnValue(true);
 
-    const client = new ApolloClient({
-      link: new SchemaLink({
-        schema: addMocksToSchema({
-          schema,
-          mocks: {
-            Query: () => ({
-              quizSummary: mockQuizSummaryQuery,
-            }),
-            Mutation: () => ({
-              joinQuiz: mockJoinQuizMutation,
-            }),
-          },
-        }),
-      }),
-      cache,
+    const client = createMockGraphQlClient({
+      mockQueryResolvers: { quizSummary },
+      mockMutationResolvers: {
+        joinQuiz,
+      },
     });
 
     const { getByPlaceholderText, getByText, findByText } = render(
@@ -74,7 +39,7 @@ describe('registration', () => {
     fireEvent.changeText(getByPlaceholderText('Quiz ID'), 'RANDOM_ID');
     fireEvent.press(getByText('Join quiz'));
 
-    expect(mockJoinQuizMutation.mock.calls[0][1]).toEqual({
+    expect(joinQuiz.mock.calls[0][1]).toEqual({
       input: {
         quizId: 'RANDOM_ID',
         playerName: 'Ed',
@@ -84,5 +49,32 @@ describe('registration', () => {
     expect(
       await findByText('You have joined the quiz: Random Quiz'),
     ).toBeTruthy();
+  });
+
+  it('displays an error if the quiz cannot be joined', async () => {
+    const joinQuiz = jest
+      .fn()
+      .mockReturnValue(new Error('Player with name Ed already exists'));
+
+    const client = createMockGraphQlClient({ mockMutationResolvers: { joinQuiz }})
+
+    const { getByPlaceholderText, getByText, findByText } = render(
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>,
+    );
+
+    fireEvent.changeText(getByPlaceholderText('Name'), 'Ed');
+    fireEvent.changeText(getByPlaceholderText('Quiz ID'), 'RANDOM_ID');
+    fireEvent.press(getByText('Join quiz'));
+
+    expect(joinQuiz.mock.calls[0][1]).toEqual({
+      input: {
+        quizId: 'RANDOM_ID',
+        playerName: 'Ed',
+      },
+    });
+
+    expect(await findByText('Player with name Ed already exists')).toBeTruthy();
   });
 });

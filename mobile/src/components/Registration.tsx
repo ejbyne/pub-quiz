@@ -23,7 +23,7 @@ export const Registration: React.FC = () => {
   const [playerName, setPlayerName] = useState<string>('');
   const [quizId, setQuizId] = useState<string>('');
 
-  const [joinQuiz, { called }] = useJoinQuizMutation({
+  const [joinQuiz, { called, data, error }] = useJoinQuizMutation({
     variables: {
       input: {
         quizId,
@@ -47,16 +47,19 @@ export const Registration: React.FC = () => {
       />
       <Button
         title="Join quiz"
-        disabled={called}
+        disabled={called && !error}
         onPress={async () => {
           try {
             await joinQuiz();
             updateQuiz({ quizId });
           } catch (error) {
-            console.error('error', error);
+            console.log('error', error);
           }
         }}
       />
+      {error && (
+        <Text>{error.graphQLErrors[0].message}</Text>
+      )}
     </View>
   );
 };
