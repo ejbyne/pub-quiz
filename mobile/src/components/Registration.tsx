@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { QuizStatus, useJoinQuizMutation } from '../graphql/types';
-import { QuizContext } from './App';
+import { QuizContext } from '../quizContext';
 
 const styles = StyleSheet.create({
   // sectionContainer: {
@@ -23,7 +23,7 @@ export const Registration: React.FC = () => {
   const [playerName, setPlayerName] = useState<string>('');
   const [quizId, setQuizId] = useState<string>('');
 
-  const [joinQuiz, { called, data, error }] = useJoinQuizMutation({
+  const [joinQuiz, { called, error }] = useJoinQuizMutation({
     variables: {
       input: {
         quizId,
@@ -31,6 +31,8 @@ export const Registration: React.FC = () => {
       },
     },
   });
+
+  console.log('error', JSON.stringify(error));
 
   return (
     <View>
@@ -57,7 +59,7 @@ export const Registration: React.FC = () => {
           }
         }}
       />
-      {error && (
+      {error?.graphQLErrors[0] && (
         <Text>{error.graphQLErrors[0].message}</Text>
       )}
     </View>

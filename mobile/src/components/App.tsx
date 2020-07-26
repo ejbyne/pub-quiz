@@ -1,23 +1,32 @@
-import React, { useReducer, Reducer, createContext, Dispatch } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { Registration } from './Registration';
-import { quizReducer, Quiz } from '../domain/quizReducer';
-import { Bar } from './Bar';
-import { useQuizSummaryQuery } from '../graphql/types';
+import { WaitingToStart } from './WaitingToStart';
+import {
+  useQuizSummaryQuery,
+  useQuizStateSubscription,
+  QuizStatus,
+} from '../graphql/types';
+import { QuizContext } from '../quizContext';
+import { Round } from './Round';
 
-export const QuizContext = createContext<
-  [Partial<Quiz>, Dispatch<Partial<Quiz>>]
->(undefined as any);
+const getComponentFromStatus = (status?: QuizStatus): React.FC => {
+  switch (status) {
+    case QuizStatus.QuizNotYetStarted:
+      return WaitingToStart;
+    case QuizStatus.RoundStarted:
+      return Round;
+    default:
+      return Registration;
+  }
+};
 
 export const App: React.FC = () => {
-  const [quiz, updateQuiz] = useReducer<Reducer<Partial<Quiz>, Partial<Quiz>>>(
-    quizReducer,
-    {},
-  );
+  const [quiz, updateQuiz] = useContext(QuizContext);
 
-  const CurrentStep = quiz?.state ? Bar : Registration;
+  const CurrentStep = getComponentFromStatus(quiz?.state?.status);
 
-  const { data, error } = useQuizSummaryQuery({
+  useQuizSummaryQuery({
     variables: {
       quizId: quiz?.quizId as any,
     },
@@ -25,29 +34,27 @@ export const App: React.FC = () => {
     skip: !quiz.quizId,
   });
 
-  console.log('quiz in store', quiz);
-  console.log('quiz summary', JSON.stringify(data));
-  console.log('quiz summary error', JSON.stringify(error));
+  const { data } = useQuizStateSubscription({
+    variables: { quizId: quiz?.quizId as string },
+    onSubscriptionData: (data: any) => {
+      const state = data?.subscriptionData?.data?.nextQuizState;
+      console.log('received subscription data', state);
+      if (state) {
+        updateQuiz({ state });
+      }
+    },
+  });
 
-  // const {
-  //   data: subscriptionData,
-  //   error: subscriptionError,
-  // } = useQuizStateSubscription({
-  //   variables: { quizId: quizState?.quizId as string },
-  //   skip: !data,
-  //   onSubscriptionData: (data) =>
-  //     data?.subscriptionData.data?.nextQuizState &&
-  //     dispatch(data.subscriptionData.data?.nextQuizState),
-  // });
+  console.log('subscription data', data);
+
+  console.log('quiz', quiz);
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeAreaView}>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
-          <QuizContext.Provider value={[quiz, updateQuiz]}>
-            <CurrentStep />
-          </QuizContext.Provider>
+          <CurrentStep />
         </ScrollView>
       </SafeAreaView>
     </>

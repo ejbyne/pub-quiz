@@ -41,6 +41,7 @@
     "apollo-link-schema": "^1.2.5",
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
+    "graphql-subscriptions": "^1.1.0",
     "graphql-tag": "^2.10.3",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.58.0",

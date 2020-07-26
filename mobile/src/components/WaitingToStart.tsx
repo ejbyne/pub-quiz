@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
-import { QuizContext } from './App';
+import { QuizContext } from '../quizContext';
 
-export const Bar: React.FC<{}> = () => {
+export const WaitingToStart: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
-  console.log('quiz state in bar', JSON.stringify(quiz));
+
+  console.log('in waiting to start component');
 
   return (
     <View>
