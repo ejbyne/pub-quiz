@@ -8,14 +8,17 @@ import {
   QuizStatus,
 } from '../graphql/types';
 import { QuizContext } from '../quizContext';
-import { Round } from './Round';
+import { RoundStarted } from './RoundStarted';
+import { QuestionAsked } from './QuestionAsked';
 
 const getComponentFromStatus = (status?: QuizStatus): React.FC => {
   switch (status) {
     case QuizStatus.QuizNotYetStarted:
       return WaitingToStart;
     case QuizStatus.RoundStarted:
-      return Round;
+      return RoundStarted;
+    case QuizStatus.QuestionAsked:
+      return QuestionAsked;
     default:
       return Registration;
   }
@@ -34,7 +37,7 @@ export const App: React.FC = () => {
     skip: !quiz.quizId,
   });
 
-  const { data } = useQuizStateSubscription({
+  useQuizStateSubscription({
     variables: { quizId: quiz?.quizId as string },
     onSubscriptionData: (data: any) => {
       const state = data?.subscriptionData?.data?.nextQuizState;
@@ -44,10 +47,6 @@ export const App: React.FC = () => {
       }
     },
   });
-
-  console.log('subscription data', data);
-
-  console.log('quiz', quiz);
 
   return (
     <>
