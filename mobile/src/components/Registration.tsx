@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { QuizStatus, useJoinQuizMutation } from '../graphql/types';
+import { useJoinQuizMutation } from '../graphql/types';
 import { QuizContext } from '../quizContext';
 
 const styles = StyleSheet.create({
@@ -32,8 +32,6 @@ export const Registration: React.FC = () => {
     },
   });
 
-  console.log('error', JSON.stringify(error));
-
   return (
     <View>
       <Text style={styles.title}>Pub Quiz</Text>
@@ -53,15 +51,13 @@ export const Registration: React.FC = () => {
         onPress={async () => {
           try {
             await joinQuiz();
-            updateQuiz({ quizId });
+            updateQuiz({ type: 'JoinedQuiz', payload: { quizId } });
           } catch (error) {
             console.log('error', error);
           }
         }}
       />
-      {error?.graphQLErrors[0] && (
-        <Text>{error.graphQLErrors[0].message}</Text>
-      )}
+      {error?.graphQLErrors?.[0] && <Text>{error.graphQLErrors?.[0].message}</Text>}
     </View>
   );
 };

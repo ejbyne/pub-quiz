@@ -7,8 +7,11 @@ import { TestAppContainer } from './support/TestAppContainer';
 import { QuizStatus } from '../graphql/types';
 
 describe('round', () => {
-  it('starts the first round when the quiz starts', async () => {
-    const initialQuizState = exampleQuiz;
+  it('starts the first round', async () => {
+    const initialQuizState = {
+      ...exampleQuiz,
+      rounds: [],
+    };
 
     const nextQuizState = jest.fn().mockReturnValue({
       __typename: 'RoundStarted',
@@ -24,9 +27,7 @@ describe('round', () => {
     });
 
     const { findByText } = render(
-      <TestAppContainer
-        client={client}
-        initialState={initialQuizState}>
+      <TestAppContainer client={client} initialState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -35,7 +36,7 @@ describe('round', () => {
     expect(await findByText('The first round')).toBeTruthy();
   });
 
-  it('asks a question', async () => {
+  it('asks the first question', async () => {
     const initialQuizState = {
       ...exampleQuiz,
       state: {
@@ -45,6 +46,14 @@ describe('round', () => {
         roundName: 'The first round',
         numberOfQuestions: 10,
       },
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+          questions: [],
+        },
+      ],
     };
 
     const nextQuizState = jest.fn().mockReturnValue({
@@ -70,6 +79,57 @@ describe('round', () => {
     expect(await findByText('The first question')).toBeTruthy();
   });
 
+  it('asks the second question', async () => {
+    const initialQuizState = {
+      ...exampleQuiz,
+      state: {
+        quizId: 'RANDOM_ID',
+        status: QuizStatus.QuestionAsked,
+        roundNumber: 0,
+        questionNumber: 0,
+        questionText: 'The first question',
+      },
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+          questions: [
+            {
+              questionNumber: 0,
+              questionText: 'The first question',
+            },
+          ],
+        },
+      ],
+    };
+
+    const nextQuizState = jest.fn().mockReturnValue({
+      __typename: 'QuestionAsked',
+      quizId: 'RANDOM_ID',
+      status: QuizStatus.QuestionAsked,
+      roundNumber: 0,
+      questionNumber: 1,
+      questionText: 'The second question',
+    });
+
+    const client = createMockGraphQlClient({
+      mockSubscriptionResolvers: { nextQuizState },
+    });
+
+    const { findByText } = render(
+      <TestAppContainer client={client} initialState={initialQuizState}>
+        <App />
+      </TestAppContainer>,
+    );
+
+    expect(await findByText('Question 1')).toBeTruthy();
+    expect(await findByText('The first question')).toBeTruthy();
+
+    expect(await findByText('Question 2')).toBeTruthy();
+    expect(await findByText('The second question')).toBeTruthy();
+  });
+
   it('finishes a round', async () => {
     const initialQuizState = {
       ...exampleQuiz,
@@ -80,6 +140,19 @@ describe('round', () => {
         questionNumber: 9,
         questionText: 'The last question',
       },
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+          questions: [
+            {
+              questionText: 'The first question',
+            },
+            { questionText: 'The last question' },
+          ],
+        },
+      ],
     };
 
     const nextQuizState = jest.fn().mockReturnValue({
@@ -114,6 +187,19 @@ describe('round', () => {
         roundName: 'Round 1',
         numberOfQuestions: 10,
       },
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+          questions: [
+            {
+              questionText: 'The first question',
+            },
+            { questionText: 'The last question' },
+          ],
+        },
+      ],
     };
 
     const nextQuizState = jest.fn().mockReturnValue({

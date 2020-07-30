@@ -39,17 +39,18 @@ export const App: React.FC = () => {
     variables: {
       quizId: quiz?.quizId as any,
     },
-    onCompleted: (data) => updateQuiz({ ...data?.quizSummary }),
+    onCompleted: (data) =>
+      updateQuiz({ type: 'QuizSummaryReceived', payload: data?.quizSummary }),
     skip: !quiz.quizId,
   });
 
   useQuizStateSubscription({
     variables: { quizId: quiz?.quizId as string },
     onSubscriptionData: (data: any) => {
-      const state = data?.subscriptionData?.data?.nextQuizState;
-      console.log('received subscription data', state);
-      if (state) {
-        updateQuiz({ state });
+      const nextQuizState = data?.subscriptionData?.data?.nextQuizState;
+      console.log('received subscription data', nextQuizState);
+      if (nextQuizState) {
+        updateQuiz({ type: 'NextQuizStateReceived', payload: nextQuizState });
       }
     },
   });

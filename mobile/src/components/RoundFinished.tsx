@@ -12,7 +12,7 @@ export const RoundFinished: React.FC<{}> = () => {
 
   return (
     <View>
-      <Text>{state.roundName} complete</Text>
+      <Text>Round {state.roundNumber + 1} complete</Text>
     </View>
   );
 };

@@ -1,6 +1,6 @@
-import { createContext, Dispatch } from "react";
-import { Quiz } from "./domain/quizReducer";
+import { createContext, Dispatch } from 'react';
+import { Quiz, QuizAction } from './domain/quizReducer';
 
-export const QuizContext = createContext<
-  [Partial<Quiz>, Dispatch<Partial<Quiz>>]
->(undefined as any);
+export const QuizContext = createContext<[Quiz, Dispatch<QuizAction>]>(
+  undefined as any,
+);
