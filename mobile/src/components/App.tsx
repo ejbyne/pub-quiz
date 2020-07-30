@@ -10,6 +10,8 @@ import {
 import { QuizContext } from '../quizContext';
 import { RoundStarted } from './RoundStarted';
 import { QuestionAsked } from './QuestionAsked';
+import { RoundFinished } from './RoundFinished';
+import { QuizFinished } from './QuizFinished';
 
 const getComponentFromStatus = (status?: QuizStatus): React.FC => {
   switch (status) {
@@ -19,6 +21,10 @@ const getComponentFromStatus = (status?: QuizStatus): React.FC => {
       return RoundStarted;
     case QuizStatus.QuestionAsked:
       return QuestionAsked;
+    case QuizStatus.RoundFinished:
+      return RoundFinished;
+    case QuizStatus.QuizFinished:
+      return QuizFinished;
     default:
       return Registration;
   }
