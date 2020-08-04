@@ -35,6 +35,8 @@ export const mapQuizStateToResponseState = (
         quizId,
         status: QuizStatus.QUESTION_ASKED,
         roundSummary: state.roundSummary,
+        questionNumber: state.questionNumber,
+        questionText: state.questionText,
       };
 
     case QuizStatus.QUIZ_FINISHED:

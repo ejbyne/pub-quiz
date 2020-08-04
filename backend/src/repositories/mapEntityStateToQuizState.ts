@@ -17,25 +17,15 @@ export const mapEntityStateToQuizState = (
       return new QuizNotYetStartedState(rounds);
 
     case QuizStatus.ROUND_STARTED:
-      return new RoundStartedState(
-        rounds,
-        state.roundNumber!,
-        state.roundName!,
-        state.numberOfQuestions!
-      );
+      return new RoundStartedState(rounds, state.roundSummary!);
 
     case QuizStatus.ROUND_FINISHED:
-      return new RoundFinishedState(
-        rounds,
-        state.roundNumber!,
-        state.roundName!,
-        state.numberOfQuestions!
-      );
+      return new RoundFinishedState(rounds, state.roundSummary!);
 
     case QuizStatus.QUESTION_ASKED:
       return new QuestionAskedState(
         rounds,
-        state.roundNumber!,
+        state.roundSummary!,
         state.questionNumber!,
         state.questionText!
       );

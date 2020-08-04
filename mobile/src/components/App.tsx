@@ -41,7 +41,7 @@ export const App: React.FC = () => {
     },
     onCompleted: (data) => {
       const quizSummary = data?.quizSummary;
-      console.log('quiz summary received', quizSummary);
+      console.log('quiz summary received', data);
       if (quizSummary) {
         updateQuiz({ type: 'QuizSummaryReceived', payload: quizSummary });
       }
@@ -57,7 +57,10 @@ export const App: React.FC = () => {
         updateQuiz({ type: 'NextQuizStateReceived', payload: nextQuizState });
       }
     },
+    skip: !quiz.quizId,
   });
+
+  console.log('quiz', JSON.stringify(quiz, null, 2));
 
   return (
     <>

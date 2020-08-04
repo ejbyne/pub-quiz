@@ -16,9 +16,11 @@ export interface QuizEntity {
 
 export interface QuizEntityState {
   status: QuizStatus;
-  roundNumber?: number;
-  roundName?: string;
-  numberOfQuestions?: number;
+  roundSummary?: {
+    roundNumber: number;
+    roundName: string;
+    numberOfQuestions: number;
+  };
   questionNumber?: number;
   questionText?: string;
 }

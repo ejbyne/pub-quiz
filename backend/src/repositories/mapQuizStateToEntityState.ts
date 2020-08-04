@@ -13,23 +13,19 @@ export const mapQuizStateToEntityState = (
     case QuizStatus.ROUND_STARTED:
       return {
         status: QuizStatus.ROUND_STARTED,
-        roundNumber: state.roundNumber,
-        roundName: state.roundName,
-        numberOfQuestions: state.numberOfQuestions,
+        roundSummary: state.roundSummary,
       };
 
     case QuizStatus.ROUND_FINISHED:
       return {
         status: QuizStatus.ROUND_FINISHED,
-        roundNumber: state.roundNumber,
-        roundName: state.roundName,
-        numberOfQuestions: state.numberOfQuestions,
+        roundSummary: state.roundSummary,
       };
 
     case QuizStatus.QUESTION_ASKED:
       return {
         status: QuizStatus.QUESTION_ASKED,
-        roundNumber: state.roundNumber,
+        roundSummary: state.roundSummary,
         questionNumber: state.questionNumber,
         questionText: state.questionText,
       };

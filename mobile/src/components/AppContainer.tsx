@@ -2,13 +2,14 @@ import React, { createContext, Dispatch, useReducer, Reducer } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { client } from '../graphql/apolloClient';
 import { App } from './App';
-import { Quiz, quizReducer } from '../domain/quizReducer';
+import { quizReducer } from '../domain/quizReducer';
 import { QuizContext } from '../quizContext';
+import { Quiz, QuizAction } from '../domain/types';
 
 export const AppContainer: React.FC = () => {
-  const [quiz, updateQuiz] = useReducer<Reducer<Partial<Quiz>, Partial<Quiz>>>(
+  const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
     quizReducer,
-    {},
+    { rounds: [] },
   );
   
   return (

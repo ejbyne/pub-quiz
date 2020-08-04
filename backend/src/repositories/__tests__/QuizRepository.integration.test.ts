@@ -98,13 +98,26 @@ describe('QuizRepository integration tests', () => {
 
     await quizRepository.updateState(
       EXAMPLE_QUIZ_ID,
-      new QuestionAskedState(exampleRounds, 1, 1, 'A question?')
+      new QuestionAskedState(
+        exampleRounds,
+        {
+          roundNumber: 1,
+          roundName: 'Round 2',
+          numberOfQuestions: 2,
+        },
+        1,
+        'A question?'
+      )
     );
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
     expect(savedQuiz.state).toMatchObject({
       status: QuizStatus.QUESTION_ASKED,
-      roundNumber: 1,
+      roundSummary: {
+        roundNumber: 1,
+        roundName: 'Round 2',
+        numberOfQuestions: 2,
+      },
       questionNumber: 1,
       questionText: 'A question?',
     });
