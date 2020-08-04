@@ -5,10 +5,8 @@ import { QuestionAsked as QuestionAskedState } from '../graphql/types';
 
 export const QuestionAsked: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
-
   const state = quiz.state as QuestionAskedState;
-
-  const round = quiz.rounds[state.roundNumber];
+  const round = quiz.rounds[state.roundSummary.roundNumber];
 
   return (
     <View>

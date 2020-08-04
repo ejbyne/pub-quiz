@@ -3,23 +3,32 @@ query QuizSummary($quizId: ID!) {
     quizId
     quizName
     playerNames
+
     state {
       quizId
       status
       ... on RoundStarted {
-        roundNumber
-        roundName
-        numberOfQuestions
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
       }
       ... on QuestionAsked {
-        roundNumber
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
         questionNumber
         questionText
       }
       ... on RoundFinished {
-        roundNumber
-        roundName
-        numberOfQuestions
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
       }
     }
   }
@@ -38,19 +47,27 @@ mutation NextQuizState($input: NextQuizStateInput!) {
     quizId
     status
     ... on RoundStarted {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
     ... on QuestionAsked {
-      roundNumber
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
       questionNumber
       questionText
     }
     ... on RoundFinished {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
   }
 }
@@ -65,19 +82,27 @@ subscription QuizState($quizId: ID!) {
     quizId
     status
     ... on RoundStarted {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
     ... on QuestionAsked {
-      roundNumber
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
       questionNumber
       questionText
     }
     ... on RoundFinished {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
   }
 }

@@ -63,7 +63,7 @@ export type QuestionAsked = QuizState & {
   __typename?: 'QuestionAsked';
   quizId: Scalars['ID'];
   status: QuizStatus;
-  roundNumber: Scalars['Int'];
+  roundSummary: RoundSummary;
   questionNumber: Scalars['Int'];
   questionText: Scalars['String'];
 };
@@ -110,9 +110,7 @@ export type RoundFinished = QuizState & {
   __typename?: 'RoundFinished';
   quizId: Scalars['ID'];
   status: QuizStatus;
-  roundNumber: Scalars['Int'];
-  roundName: Scalars['String'];
-  numberOfQuestions: Scalars['Int'];
+  roundSummary: RoundSummary;
 };
 
 export type RoundInput = {
@@ -124,6 +122,11 @@ export type RoundStarted = QuizState & {
   __typename?: 'RoundStarted';
   quizId: Scalars['ID'];
   status: QuizStatus;
+  roundSummary: RoundSummary;
+};
+
+export type RoundSummary = {
+  __typename?: 'RoundSummary';
   roundNumber: Scalars['Int'];
   roundName: Scalars['String'];
   numberOfQuestions: Scalars['Int'];
@@ -165,13 +168,25 @@ export type QuizSummaryQuery = (
       & Pick<QuizNotYetStarted, 'quizId' | 'status'>
     ) | (
       { __typename?: 'RoundStarted' }
-      & Pick<RoundStarted, 'roundNumber' | 'roundName' | 'numberOfQuestions' | 'quizId' | 'status'>
+      & Pick<RoundStarted, 'quizId' | 'status'>
+      & { roundSummary: (
+        { __typename?: 'RoundSummary' }
+        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ) }
     ) | (
       { __typename?: 'QuestionAsked' }
-      & Pick<QuestionAsked, 'roundNumber' | 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+      & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+      & { roundSummary: (
+        { __typename?: 'RoundSummary' }
+        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ) }
     ) | (
       { __typename?: 'RoundFinished' }
-      & Pick<RoundFinished, 'roundNumber' | 'roundName' | 'numberOfQuestions' | 'quizId' | 'status'>
+      & Pick<RoundFinished, 'quizId' | 'status'>
+      & { roundSummary: (
+        { __typename?: 'RoundSummary' }
+        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ) }
     ) | (
       { __typename?: 'QuizFinished' }
       & Pick<QuizFinished, 'quizId' | 'status'>
@@ -214,13 +229,25 @@ export type NextQuizStateMutation = (
     & Pick<QuizNotYetStarted, 'quizId' | 'status'>
   ) | (
     { __typename?: 'RoundStarted' }
-    & Pick<RoundStarted, 'roundNumber' | 'roundName' | 'numberOfQuestions' | 'quizId' | 'status'>
+    & Pick<RoundStarted, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) | (
     { __typename?: 'QuestionAsked' }
-    & Pick<QuestionAsked, 'roundNumber' | 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+    & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) | (
     { __typename?: 'RoundFinished' }
-    & Pick<RoundFinished, 'roundNumber' | 'roundName' | 'numberOfQuestions' | 'quizId' | 'status'>
+    & Pick<RoundFinished, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -252,13 +279,25 @@ export type QuizStateSubscription = (
     & Pick<QuizNotYetStarted, 'quizId' | 'status'>
   ) | (
     { __typename?: 'RoundStarted' }
-    & Pick<RoundStarted, 'roundNumber' | 'roundName' | 'numberOfQuestions' | 'quizId' | 'status'>
+    & Pick<RoundStarted, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) | (
     { __typename?: 'QuestionAsked' }
-    & Pick<QuestionAsked, 'roundNumber' | 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+    & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) | (
     { __typename?: 'RoundFinished' }
-    & Pick<RoundFinished, 'roundNumber' | 'roundName' | 'numberOfQuestions' | 'quizId' | 'status'>
+    & Pick<RoundFinished, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -276,19 +315,27 @@ export const QuizSummaryDocument = gql`
       quizId
       status
       ... on RoundStarted {
-        roundNumber
-        roundName
-        numberOfQuestions
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
       }
       ... on QuestionAsked {
-        roundNumber
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
         questionNumber
         questionText
       }
       ... on RoundFinished {
-        roundNumber
-        roundName
-        numberOfQuestions
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
       }
     }
   }
@@ -389,19 +436,27 @@ export const NextQuizStateDocument = gql`
     quizId
     status
     ... on RoundStarted {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
     ... on QuestionAsked {
-      roundNumber
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
       questionNumber
       questionText
     }
     ... on RoundFinished {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
   }
 }
@@ -467,19 +522,27 @@ export const QuizStateDocument = gql`
     quizId
     status
     ... on RoundStarted {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
     ... on QuestionAsked {
-      roundNumber
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
       questionNumber
       questionText
     }
     ... on RoundFinished {
-      roundNumber
-      roundName
-      numberOfQuestions
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
     }
   }
 }

@@ -20,6 +20,12 @@ export enum QuizStatus {
   QUIZ_FINISHED = 'QUIZ_FINISHED',
 }
 
+export interface RoundSummary {
+  roundName: string;
+  roundNumber: number;
+  numberOfQuestions: number;
+}
+
 export interface BaseQuizState {
   status: QuizStatus;
   rounds: Round[];

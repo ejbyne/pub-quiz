@@ -18,9 +18,7 @@ export const mapQuizStateToResponseState = (
         __typename: 'RoundStarted',
         quizId,
         status: QuizStatus.ROUND_STARTED,
-        roundNumber: state.roundNumber,
-        roundName: state.roundName,
-        numberOfQuestions: state.numberOfQuestions,
+        roundSummary: state.roundSummary,
       };
 
     case QuizStatus.ROUND_FINISHED:
@@ -28,9 +26,7 @@ export const mapQuizStateToResponseState = (
         __typename: 'RoundFinished',
         quizId,
         status: QuizStatus.ROUND_FINISHED,
-        roundNumber: state.roundNumber,
-        roundName: state.roundName,
-        numberOfQuestions: state.numberOfQuestions,
+        roundSummary: state.roundSummary,
       };
 
     case QuizStatus.QUESTION_ASKED:
@@ -38,9 +34,7 @@ export const mapQuizStateToResponseState = (
         __typename: 'QuestionAsked',
         quizId,
         status: QuizStatus.QUESTION_ASKED,
-        roundNumber: state.roundNumber,
-        questionNumber: state.questionNumber,
-        questionText: state.questionText,
+        roundSummary: state.roundSummary,
       };
 
     case QuizStatus.QUIZ_FINISHED:

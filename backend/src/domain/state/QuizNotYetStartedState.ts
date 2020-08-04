@@ -20,11 +20,12 @@ export class QuizNotYetStartedState implements BaseQuizState {
       return new QuizFinishedState(this.rounds);
     }
 
-    return new RoundStartedState(
-      this.rounds,
-      nextRoundWithQuestions,
-      this.rounds[nextRoundWithQuestions].roundName,
-      this.rounds[nextRoundWithQuestions].questions.length
-    );
+    const nextRoundSummary = {
+      roundNumber: nextRoundWithQuestions,
+      roundName: this.rounds[nextRoundWithQuestions].roundName,
+      numberOfQuestions: this.rounds[nextRoundWithQuestions].questions.length,
+    };
+
+    return new RoundStartedState(this.rounds, nextRoundSummary);
   }
 }

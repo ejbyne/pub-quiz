@@ -48,7 +48,6 @@ export const App: React.FC = () => {
     variables: { quizId: quiz?.quizId as string },
     onSubscriptionData: (data: any) => {
       const nextQuizState = data?.subscriptionData?.data?.nextQuizState;
-      console.log('received subscription data', nextQuizState);
       if (nextQuizState) {
         updateQuiz({ type: 'NextQuizStateReceived', payload: nextQuizState });
       }

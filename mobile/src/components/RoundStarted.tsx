@@ -7,15 +7,14 @@ import {
 
 export const RoundStarted: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
-
-  console.log('in waiting to start component');
-
   const state = quiz.state as RoundStartedState;
+  const round = quiz.rounds[state.roundSummary.roundNumber]
+  
   return (
     <View>
-      <Text>Round {state.roundNumber + 1}</Text>
-      <Text>{state.roundName}</Text>
-      <Text>{state.numberOfQuestions} questions</Text>
+      <Text>Round {round.roundNumber + 1}</Text>
+      <Text>{round.roundName}</Text>
+      <Text>{round.numberOfQuestions} questions</Text>
     </View>
   );
 };

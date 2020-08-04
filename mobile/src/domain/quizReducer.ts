@@ -66,12 +66,17 @@ export const quizReducer = (
     switch (action.payload.status) {
       case QuizStatus.RoundStarted: {
         const state = action.payload as RoundStarted;
+        const {
+          roundNumber,
+          roundName,
+          numberOfQuestions,
+        } = state.roundSummary;
 
         const rounds = [...quiz.rounds];
-        rounds[state.roundNumber] = {
-          roundNumber: state.roundNumber,
-          roundName: state.roundName,
-          numberOfQuestions: state.numberOfQuestions,
+        rounds[roundNumber] = {
+          roundNumber,
+          roundName,
+          numberOfQuestions,
           questions: [],
         };
 
@@ -89,7 +94,7 @@ export const quizReducer = (
           ...quiz,
           state,
           rounds: quiz.rounds.map((round, index) => {
-            if (index !== state.roundNumber) {
+            if (index !== state.roundSummary.roundNumber) {
               return round;
             }
 

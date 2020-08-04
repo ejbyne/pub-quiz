@@ -53,9 +53,11 @@ describe('quiz reducer', () => {
       payload: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundStarted,
-        roundNumber: 0,
-        roundName: 'The first round',
-        numberOfQuestions: 10,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
       },
     });
 
@@ -64,9 +66,11 @@ describe('quiz reducer', () => {
       payload: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundStarted,
-        roundNumber: 1,
-        roundName: 'The second round',
-        numberOfQuestions: 8,
+        roundSummary: {
+          roundNumber: 1,
+          roundName: 'The second round',
+          numberOfQuestions: 8,
+        },
       },
     });
 
@@ -92,9 +96,11 @@ describe('quiz reducer', () => {
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundStarted,
-        roundNumber: 0,
-        roundName: 'The first round',
-        numberOfQuestions: 10,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
       } as QuizState,
       rounds: [
         {
@@ -111,7 +117,11 @@ describe('quiz reducer', () => {
       payload: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuestionAsked,
-        roundNumber: 0,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
         questionNumber: 0,
         questionText: 'The first question',
       },
@@ -122,7 +132,11 @@ describe('quiz reducer', () => {
       payload: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuestionAsked,
-        roundNumber: 0,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
         questionNumber: 1,
         questionText: 'The second question',
       },

@@ -17,9 +17,11 @@ describe('round', () => {
       __typename: 'RoundStarted',
       quizId: 'RANDOM_ID',
       status: QuizStatus.RoundStarted,
-      roundNumber: 0,
-      roundName: 'The first round',
-      numberOfQuestions: 10,
+      roundSummary: {
+        roundNumber: 0,
+        roundName: 'The first round',
+        numberOfQuestions: 10,
+      },
     });
 
     const client = createMockGraphQlClient({
@@ -42,9 +44,11 @@ describe('round', () => {
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundStarted,
-        roundNumber: 0,
-        roundName: 'The first round',
-        numberOfQuestions: 10,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
       },
       rounds: [
         {
@@ -60,7 +64,11 @@ describe('round', () => {
       __typename: 'QuestionAsked',
       quizId: 'RANDOM_ID',
       status: QuizStatus.QuestionAsked,
-      roundNumber: 0,
+      roundSummary: {
+        roundNumber: 0,
+        roundName: 'The first round',
+        numberOfQuestions: 10,
+      },
       questionNumber: 0,
       questionText: 'The first question',
     });
@@ -85,7 +93,11 @@ describe('round', () => {
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuestionAsked,
-        roundNumber: 0,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
         questionNumber: 0,
         questionText: 'The first question',
       },
@@ -108,7 +120,11 @@ describe('round', () => {
       __typename: 'QuestionAsked',
       quizId: 'RANDOM_ID',
       status: QuizStatus.QuestionAsked,
-      roundNumber: 0,
+      roundSummary: {
+        roundNumber: 0,
+        roundName: 'The first round',
+        numberOfQuestions: 10,
+      },
       questionNumber: 1,
       questionText: 'The second question',
     });
@@ -136,20 +152,22 @@ describe('round', () => {
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuestionAsked,
-        roundNumber: 0,
-        questionNumber: 9,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 2,
+        },
+        questionNumber: 1,
         questionText: 'The last question',
       },
       rounds: [
         {
           roundNumber: 0,
           roundName: 'The first round',
-          numberOfQuestions: 10,
+          numberOfQuestions: 2,
           questions: [
-            {
-              questionText: 'The first question',
-            },
-            { questionText: 'The last question' },
+            { questionNumber: 0, questionText: 'The first question' },
+            { questionNumber: 1, questionText: 'The last question' },
           ],
         },
       ],
@@ -159,9 +177,11 @@ describe('round', () => {
       __typename: 'RoundFinished',
       quizId: 'RANDOM_ID',
       status: QuizStatus.RoundFinished,
-      roundNumber: 0,
-      roundName: 'Round 1',
-      numberOfQuestions: 10,
+      roundSummary: {
+        roundNumber: 0,
+        roundName: 'Round 1',
+        numberOfQuestions: 10,
+      },
     });
 
     const client = createMockGraphQlClient({
@@ -183,20 +203,20 @@ describe('round', () => {
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundFinished,
-        roundNumber: 0,
-        roundName: 'Round 1',
-        numberOfQuestions: 10,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'Round 1',
+          numberOfQuestions: 2,
+        },
       },
       rounds: [
         {
           roundNumber: 0,
           roundName: 'The first round',
-          numberOfQuestions: 10,
+          numberOfQuestions: 2,
           questions: [
-            {
-              questionText: 'The first question',
-            },
-            { questionText: 'The last question' },
+            { questionNumber: 0, questionText: 'The first question' },
+            { questionNumber: 1, questionText: 'The last question' },
           ],
         },
       ],

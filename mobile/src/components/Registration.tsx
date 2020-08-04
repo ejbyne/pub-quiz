@@ -31,6 +31,7 @@ export const Registration: React.FC = () => {
       },
     },
   });
+  const joinQuizError = error?.graphQLErrors?.[0];
 
   return (
     <View>
@@ -57,7 +58,7 @@ export const Registration: React.FC = () => {
           }
         }}
       />
-      {error?.graphQLErrors?.[0] && <Text>{error.graphQLErrors?.[0].message}</Text>}
+      {joinQuizError ? <Text>{joinQuizError.message}</Text> : null}
     </View>
   );
 };

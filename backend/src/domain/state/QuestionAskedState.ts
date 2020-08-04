@@ -1,4 +1,9 @@
-import { BaseQuizState, QuizStatus, QuizState } from './QuizState';
+import {
+  BaseQuizState,
+  QuizStatus,
+  QuizState,
+  RoundSummary,
+} from './QuizState';
 import { Round } from '../Quiz';
 import { RoundFinishedState } from './RoundFinishedState';
 
@@ -6,19 +11,19 @@ export class QuestionAskedState implements BaseQuizState {
   status: QuizStatus.QUESTION_ASKED;
   rounds: Round[];
 
-  roundNumber: number;
+  roundSummary: RoundSummary;
   questionNumber: number;
   questionText: string;
 
   constructor(
     rounds: Round[],
-    roundNumber: number,
+    roundSummary: RoundSummary,
     questionNumber: number,
     questionText: string
   ) {
     this.status = QuizStatus.QUESTION_ASKED;
     this.rounds = rounds;
-    this.roundNumber = roundNumber;
+    this.roundSummary = roundSummary;
     this.questionNumber = questionNumber;
     this.questionText = questionText;
   }
@@ -26,21 +31,18 @@ export class QuestionAskedState implements BaseQuizState {
   nextState(): QuizState {
     if (
       this.questionNumber ===
-      this.rounds[this.roundNumber].questions.length - 1
+      this.rounds[this.roundSummary.roundNumber].questions.length - 1
     ) {
-      return new RoundFinishedState(
-        this.rounds,
-        this.roundNumber,
-        this.rounds[this.roundNumber].roundName,
-        this.rounds[this.roundNumber].questions.length
-      );
+      return new RoundFinishedState(this.rounds, this.roundSummary);
     }
 
     return new QuestionAskedState(
       this.rounds,
-      this.roundNumber,
+      this.roundSummary,
       this.questionNumber + 1,
-      this.rounds[this.roundNumber].questions[this.questionNumber + 1].question
+      this.rounds[this.roundSummary.roundNumber].questions[
+        this.questionNumber + 1
+      ].question
     );
   }
 }

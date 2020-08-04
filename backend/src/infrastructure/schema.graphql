@@ -46,6 +46,12 @@ type QuizSummary {
   state: QuizState!
 }
 
+type RoundSummary {
+  roundNumber: Int!
+  roundName: String!
+  numberOfQuestions: Int!
+}
+
 enum QuizStatus {
   QUIZ_NOT_YET_STARTED
   ROUND_STARTED
@@ -67,15 +73,13 @@ type QuizNotYetStarted implements QuizState {
 type RoundStarted implements QuizState {
   quizId: ID!
   status: QuizStatus!
-  roundNumber: Int!
-  roundName: String!
-  numberOfQuestions: Int!
+  roundSummary: RoundSummary!
 }
 
 type QuestionAsked implements QuizState {
   quizId: ID!
   status: QuizStatus!
-  roundNumber: Int!
+  roundSummary: RoundSummary!
   questionNumber: Int!
   questionText: String!
 }
@@ -83,9 +87,7 @@ type QuestionAsked implements QuizState {
 type RoundFinished implements QuizState {
   quizId: ID!
   status: QuizStatus!
-  roundNumber: Int!
-  roundName: String!
-  numberOfQuestions: Int!
+  roundSummary: RoundSummary!
 }
 
 type QuizFinished implements QuizState {
