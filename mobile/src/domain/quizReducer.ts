@@ -1,56 +1,5 @@
-import {
-  QuizSummary,
-  QuizStatus,
-  RoundStarted,
-  QuestionAsked,
-  RoundFinished,
-  QuizFinished,
-  RoundSummary,
-} from '../graphql/types';
-
-export type Quiz = Partial<QuizSummary> & {
-  rounds: Round[];
-};
-
-interface Round {
-  roundNumber: number;
-  roundName: string;
-  numberOfQuestions: number;
-  questions: Question[];
-}
-
-interface Question {
-  questionNumber: number;
-  questionText: string;
-}
-
-type NextQuizState =
-  | RoundStarted
-  | QuestionAsked
-  | RoundFinished
-  | QuizFinished;
-
-export type QuizAction =
-  | JoinedQuiz
-  | QuizSummaryReceived
-  | NextQuizStateReceived;
-
-type JoinedQuiz = {
-  type: 'JoinedQuiz';
-  payload: {
-    quizId: string;
-  };
-};
-
-type QuizSummaryReceived = {
-  type: 'QuizSummaryReceived';
-  payload: QuizSummary;
-};
-
-type NextQuizStateReceived = {
-  type: 'NextQuizStateReceived';
-  payload: NextQuizState;
-};
+import { Quiz, QuizAction, Round, Question } from "./types";
+import { QuizStatus, RoundStarted, RoundFinished, QuestionAsked, RoundSummary } from "../graphql/types";
 
 export const quizReducer = (
   quiz: Quiz = { rounds: [] },
