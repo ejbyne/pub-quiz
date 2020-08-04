@@ -160,4 +160,74 @@ describe('quiz reducer', () => {
       },
     ]);
   });
+
+  it('should store round for a player who joins at the start of the round', () => {
+    const quiz = { rounds: [] };
+
+    const result = quizReducer(quiz, {
+      type: 'QuizSummaryReceived',
+      payload: {
+        quizId: 'RANDOM_ID',
+        quizName: 'A quiz',
+        state: {
+          quizId: 'RANDOM_ID',
+          status: QuizStatus.RoundStarted,
+          roundSummary: {
+            roundNumber: 0,
+            roundName: 'Round 1',
+            numberOfQuestions: 10,
+          },
+        } as QuizState,
+      },
+    });
+
+    expect(result.rounds).toEqual([
+      {
+        roundNumber: 0,
+        roundName: 'Round 1',
+        numberOfQuestions: 10,
+        questions: [],
+      },
+    ]);
+  });
+
+  it('should store round and question information for a player who joins during the questions', () => {
+    const quiz = { rounds: [] };
+
+    const result = quizReducer(quiz, {
+      type: 'QuizSummaryReceived',
+      payload: {
+        quizId: 'RANDOM_ID',
+        quizName: 'A quiz',
+        state: {
+          quizId: 'RANDOM_ID',
+          status: QuizStatus.QuestionAsked,
+          roundSummary: {
+            roundNumber: 0,
+            roundName: 'Round 1',
+            numberOfQuestions: 10,
+          },
+          questionNumber: 3,
+          questionText: 'Question 4',
+        } as QuizState,
+      },
+    });
+
+    expect(result.rounds).toEqual([
+      {
+        roundNumber: 0,
+        roundName: 'Round 1',
+        numberOfQuestions: 10,
+        questions: [
+          undefined,
+          undefined,
+          undefined,
+          {
+            questionNumber: 3,
+            questionText: 'Question 4',
+          },
+        ],
+      },
+    ]);
+  });
 });

@@ -1,4 +1,4 @@
-import { Quiz, quizReducer } from '../../domain/quizReducer';
+import { Quiz, quizReducer, QuizAction } from '../../domain/quizReducer';
 import { useReducer, Reducer } from 'react';
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -7,9 +7,9 @@ import ApolloClient from 'apollo-client';
 
 export const TestAppContainer: React.FC<{
   client: ApolloClient<any>;
-  initialState?: Partial<Quiz>;
-}> = ({ client, initialState = {}, children }) => {
-  const [quiz, updateQuiz] = useReducer<Reducer<Partial<Quiz>, Partial<Quiz>>>(
+  initialState?: Quiz;
+}> = ({ client, initialState = { rounds: [] }, children }) => {
+  const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
     quizReducer,
     initialState,
   );

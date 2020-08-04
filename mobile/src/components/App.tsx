@@ -39,8 +39,13 @@ export const App: React.FC = () => {
     variables: {
       quizId: quiz?.quizId as any,
     },
-    onCompleted: (data) =>
-      updateQuiz({ type: 'QuizSummaryReceived', payload: data?.quizSummary }),
+    onCompleted: (data) => {
+      const quizSummary = data?.quizSummary;
+      console.log('quiz summary received', quizSummary);
+      if (quizSummary) {
+        updateQuiz({ type: 'QuizSummaryReceived', payload: quizSummary });
+      }
+    },
     skip: !quiz.quizId,
   });
 
