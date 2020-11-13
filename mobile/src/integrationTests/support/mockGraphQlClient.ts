@@ -22,20 +22,16 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 const cache = new InMemoryCache({ fragmentMatcher });
 
-export const createMockGraphQlClient = (mockResolvers: {
+export const createMockGraphQlClient = (mockResolvers?: {
   mockQueryResolvers?: Record<string, jest.Mock>;
   mockMutationResolvers?: Record<string, jest.Mock>;
-  mockSubscriptionResolvers?: Record<string, any>;
 }): ApolloClient<any> => {
   const resolvers = {
     Query: {
-      ...mockResolvers.mockQueryResolvers,
+      ...mockResolvers?.mockQueryResolvers,
     },
     Mutation: {
-      ...mockResolvers.mockMutationResolvers,
-    },
-    Subscription: {
-      ...mockResolvers.mockSubscriptionResolvers,
+      ...mockResolvers?.mockMutationResolvers,
     },
   };
 
@@ -43,11 +39,7 @@ export const createMockGraphQlClient = (mockResolvers: {
 
   return new ApolloClient({
     link: new SchemaLink({
-      schema,
-      // schema: addMocksToSchema({
-      //   schema,
-      //   preserveResolvers: true,
-      // }),
+      schema
     }),
     cache,
   });

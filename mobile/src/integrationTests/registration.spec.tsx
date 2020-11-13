@@ -8,17 +8,19 @@ import { App } from '../components/App';
 
 describe('registration', () => {
   it('allows a player to register for a quiz with the provided id', async () => {
-    const quizSummary = jest.fn().mockReturnValue(exampleQuiz);
+    const mockQuizSummary = jest.fn().mockReturnValue(exampleQuiz);
 
-    const joinQuiz = jest.fn().mockReturnValue({
+    const mockJoinQuiz = jest.fn().mockReturnValue({
       quizId: 'RANDOM_ID',
       playerName: 'Ed',
     });
 
     const client = createMockGraphQlClient({
-      mockQueryResolvers: { quizSummary },
+      mockQueryResolvers: {
+        quizSummary: mockQuizSummary,
+      },
       mockMutationResolvers: {
-        joinQuiz,
+        joinQuiz: mockJoinQuiz,
       },
     });
 
@@ -32,25 +34,29 @@ describe('registration', () => {
     fireEvent.changeText(getByPlaceholderText('Quiz ID'), 'RANDOM_ID');
     fireEvent.press(getByText('Join quiz'));
 
-    expect(joinQuiz.mock.calls[0][1]).toEqual({
+    expect(
+      await findByText('You have joined the quiz: Random Quiz'),
+    ).toBeTruthy();
+
+    expect(mockJoinQuiz.mock.calls[0][1]).toEqual({
       input: {
         quizId: 'RANDOM_ID',
         playerName: 'Ed',
       },
     });
 
-    expect(
-      await findByText('You have joined the quiz: Random Quiz'),
-    ).toBeTruthy();
+    expect(mockQuizSummary.mock.calls[0][1]).toEqual({
+      quizId: 'RANDOM_ID',
+    });
   });
 
   it('displays an error if the quiz cannot be joined', async () => {
-    const joinQuiz = jest
+    const mockJoinQuiz = jest
       .fn()
       .mockReturnValue(new Error('Player with name Ed already exists'));
 
     const client = createMockGraphQlClient({
-      mockMutationResolvers: { joinQuiz },
+      mockMutationResolvers: { joinQuiz: mockJoinQuiz },
     });
 
     const { getByPlaceholderText, getByText, findByText } = render(
@@ -64,5 +70,12 @@ describe('registration', () => {
     fireEvent.press(getByText('Join quiz'));
 
     expect(await findByText('Player with name Ed already exists')).toBeTruthy();
+
+    expect(mockJoinQuiz.mock.calls[0][1]).toEqual({
+      input: {
+        quizId: 'RANDOM_ID',
+        playerName: 'Ed',
+      },
+    });
   });
 });

@@ -54,7 +54,7 @@ export const Registration: React.FC = () => {
             await joinQuiz();
             updateQuiz({ type: 'JoinedQuiz', payload: { quizId } });
           } catch (error) {
-            console.log('error', error);
+            // Do nothing: we display error message below
           }
         }}
       />

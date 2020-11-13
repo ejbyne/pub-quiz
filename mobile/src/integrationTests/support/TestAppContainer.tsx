@@ -1,9 +1,21 @@
-import { Quiz, quizReducer, QuizAction } from '../../domain/quizReducer';
-import { useReducer, Reducer } from 'react';
+import { useReducer, Reducer, Dispatch } from 'react';
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { QuizContext } from '../../quizContext';
 import ApolloClient from 'apollo-client';
+import { QuizAction, Quiz, NextQuizState } from '../../domain/types';
+import { quizReducer } from '../../domain/quizReducer';
+import { act } from '@testing-library/react-native';
+
+let mockUpdateQuiz: Dispatch<QuizAction>;
+
+export const receiveNextQuizState = (payload: NextQuizState) =>
+  act(() => {
+    mockUpdateQuiz({
+      type: 'NextQuizStateReceived',
+      payload,
+    });
+  });
 
 export const TestAppContainer: React.FC<{
   client: ApolloClient<any>;
@@ -14,8 +26,10 @@ export const TestAppContainer: React.FC<{
     initialState,
   );
 
+  mockUpdateQuiz = updateQuiz;
+
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={client as any}>
       <QuizContext.Provider value={[quiz, updateQuiz]}>
         {children}
       </QuizContext.Provider>

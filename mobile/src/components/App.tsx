@@ -1,34 +1,11 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from 'react-native';
-import { Registration } from './Registration';
-import { WaitingToStart } from './WaitingToStart';
 import {
   useQuizSummaryQuery,
   useQuizStateSubscription,
-  QuizStatus,
 } from '../graphql/types';
 import { QuizContext } from '../quizContext';
-import { RoundStarted } from './RoundStarted';
-import { QuestionAsked } from './QuestionAsked';
-import { RoundFinished } from './RoundFinished';
-import { QuizFinished } from './QuizFinished';
-
-const getComponentFromStatus = (status?: QuizStatus): React.FC => {
-  switch (status) {
-    case QuizStatus.QuizNotYetStarted:
-      return WaitingToStart;
-    case QuizStatus.RoundStarted:
-      return RoundStarted;
-    case QuizStatus.QuestionAsked:
-      return QuestionAsked;
-    case QuizStatus.RoundFinished:
-      return RoundFinished;
-    case QuizStatus.QuizFinished:
-      return QuizFinished;
-    default:
-      return Registration;
-  }
-};
+import { getComponentFromStatus } from './getComponentFromStatus';
 
 export const App: React.FC = () => {
   const [quiz, updateQuiz] = useContext(QuizContext);
@@ -41,7 +18,6 @@ export const App: React.FC = () => {
     },
     onCompleted: (data) => {
       const quizSummary = data?.quizSummary;
-      console.log('quiz summary received', data);
       if (quizSummary) {
         updateQuiz({ type: 'QuizSummaryReceived', payload: quizSummary });
       }
@@ -59,8 +35,6 @@ export const App: React.FC = () => {
     },
     skip: !quiz.quizId,
   });
-
-  console.log('quiz', JSON.stringify(quiz, null, 2));
 
   return (
     <>

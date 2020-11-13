@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { QuizContext } from '../quizContext';
 import { QuestionAsked as QuestionAskedState } from '../graphql/types';
+import { Question } from '../domain/types';
 
 export const QuestionAsked: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
@@ -12,7 +13,7 @@ export const QuestionAsked: React.FC<{}> = () => {
     <View>
       <Text>Round {round.roundNumber + 1}</Text>
       <Text>{round.roundName}</Text>
-      {round.questions.map((question) => (
+      {round.questions.map((question: Question) => (
         <View key={question.questionNumber}>
           <Text>Question {question.questionNumber + 1}</Text>
           <Text>{question.questionText}</Text>
