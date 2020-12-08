@@ -1,13 +1,10 @@
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import { InMemoryCache, ApolloClient } from '@apollo/client';
 import { SchemaLink } from 'apollo-link-schema';
-import {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} from 'apollo-cache-inmemory';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import introspectionQueryResultData from '../../graphql/fragmentTypes.json';
-import ApolloClient from 'apollo-client';
+import fragmentTypes from '../../graphql/fragmentTypes.json';
 
 const schemaString =
   'directive @aws_subscribe(mutations : [String]!) on FIELD_DEFINITION \n' +
@@ -15,12 +12,6 @@ const schemaString =
     join(__dirname, '../../../../backend/src/infrastructure/schema.graphql'),
     'utf-8',
   );
-
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData,
-});
-
-const cache = new InMemoryCache({ fragmentMatcher });
 
 export const createMockGraphQlClient = (mockResolvers?: {
   mockQueryResolvers?: Record<string, jest.Mock>;
@@ -39,8 +30,10 @@ export const createMockGraphQlClient = (mockResolvers?: {
 
   return new ApolloClient({
     link: new SchemaLink({
-      schema
+      schema,
+    }) as any,
+    cache: new InMemoryCache({
+      possibleTypes: fragmentTypes.possibleTypes,
     }),
-    cache,
   });
 };

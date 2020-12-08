@@ -1,8 +1,7 @@
 import { useReducer, Reducer, Dispatch } from 'react';
 import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, ApolloClient } from '@apollo/react-hooks';
 import { QuizContext } from '../../quizContext';
-import ApolloClient from 'apollo-client';
 import { QuizAction, Quiz, NextQuizState } from '../../domain/types';
 import { quizReducer } from '../../domain/quizReducer';
 import { act } from '@testing-library/react-native';

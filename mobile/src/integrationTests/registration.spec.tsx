@@ -6,6 +6,8 @@ import { createMockGraphQlClient } from './support/mockGraphQlClient';
 import { TestAppContainer } from './support/TestAppContainer';
 import { App } from '../components/App';
 
+jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
+
 describe('registration', () => {
   it('allows a player to register for a quiz with the provided id', async () => {
     const mockQuizSummary = jest.fn().mockReturnValue(exampleQuiz);

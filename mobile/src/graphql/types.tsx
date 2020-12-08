@@ -1,8 +1,9 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,9 +13,14 @@ export type Scalars = {
   Float: number;
 };
 
-export type JoinQuizInput = {
+export type Query = {
+  __typename?: 'Query';
+  quizSummary: QuizSummary;
+};
+
+
+export type QueryQuizSummaryArgs = {
   quizId: Scalars['ID'];
-  playerName: Scalars['String'];
 };
 
 export type Mutation = {
@@ -39,104 +45,6 @@ export type MutationNextQuizStateArgs = {
   input: NextQuizStateInput;
 };
 
-export type NextQuizStateInput = {
-  quizId: Scalars['ID'];
-};
-
-export type PlayerJoined = {
-  __typename?: 'PlayerJoined';
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  quizSummary: QuizSummary;
-};
-
-
-export type QueryQuizSummaryArgs = {
-  quizId: Scalars['ID'];
-};
-
-export type QuestionAsked = QuizState & {
-  __typename?: 'QuestionAsked';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-  questionNumber: Scalars['Int'];
-  questionText: Scalars['String'];
-};
-
-export type QuestionInput = {
-  question: Scalars['String'];
-  answer: Scalars['String'];
-};
-
-export type QuizFinished = QuizState & {
-  __typename?: 'QuizFinished';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-};
-
-export type QuizNotYetStarted = QuizState & {
-  __typename?: 'QuizNotYetStarted';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-};
-
-export type QuizState = {
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-};
-
-export enum QuizStatus {
-  QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
-  RoundStarted = 'ROUND_STARTED',
-  QuestionAsked = 'QUESTION_ASKED',
-  RoundFinished = 'ROUND_FINISHED',
-  QuizFinished = 'QUIZ_FINISHED'
-}
-
-export type QuizSummary = {
-  __typename?: 'QuizSummary';
-  quizId: Scalars['ID'];
-  quizName: Scalars['String'];
-  playerNames?: Maybe<Array<Scalars['String']>>;
-  state: QuizState;
-};
-
-export type RoundFinished = QuizState & {
-  __typename?: 'RoundFinished';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-};
-
-export type RoundInput = {
-  roundName: Scalars['String'];
-  questions: Array<QuestionInput>;
-};
-
-export type RoundStarted = QuizState & {
-  __typename?: 'RoundStarted';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-};
-
-export type RoundSummary = {
-  __typename?: 'RoundSummary';
-  roundNumber: Scalars['Int'];
-  roundName: Scalars['String'];
-  numberOfQuestions: Scalars['Int'];
-};
-
-export type SaveQuizInput = {
-  quizName: Scalars['String'];
-  rounds: Array<RoundInput>;
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   playerJoined?: Maybe<PlayerJoined>;
@@ -151,6 +59,99 @@ export type SubscriptionPlayerJoinedArgs = {
 
 export type SubscriptionNextQuizStateArgs = {
   quizId: Scalars['ID'];
+};
+
+export type SaveQuizInput = {
+  quizName: Scalars['String'];
+  rounds: Array<RoundInput>;
+};
+
+export type RoundInput = {
+  roundName: Scalars['String'];
+  questions: Array<QuestionInput>;
+};
+
+export type QuestionInput = {
+  question: Scalars['String'];
+  answer: Scalars['String'];
+};
+
+export type JoinQuizInput = {
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+};
+
+export type NextQuizStateInput = {
+  quizId: Scalars['ID'];
+};
+
+export type QuizSummary = {
+  __typename?: 'QuizSummary';
+  quizId: Scalars['ID'];
+  quizName: Scalars['String'];
+  playerNames?: Maybe<Array<Scalars['String']>>;
+  state: QuizState;
+};
+
+export type RoundSummary = {
+  __typename?: 'RoundSummary';
+  roundNumber: Scalars['Int'];
+  roundName: Scalars['String'];
+  numberOfQuestions: Scalars['Int'];
+};
+
+export enum QuizStatus {
+  QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
+  RoundStarted = 'ROUND_STARTED',
+  QuestionAsked = 'QUESTION_ASKED',
+  RoundFinished = 'ROUND_FINISHED',
+  QuizFinished = 'QUIZ_FINISHED'
+}
+
+export type QuizState = {
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+};
+
+export type QuizNotYetStarted = QuizState & {
+  __typename?: 'QuizNotYetStarted';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+};
+
+export type RoundStarted = QuizState & {
+  __typename?: 'RoundStarted';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+};
+
+export type QuestionAsked = QuizState & {
+  __typename?: 'QuestionAsked';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+  questionNumber: Scalars['Int'];
+  questionText: Scalars['String'];
+};
+
+export type RoundFinished = QuizState & {
+  __typename?: 'RoundFinished';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+};
+
+export type QuizFinished = QuizState & {
+  __typename?: 'QuizFinished';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+};
+
+export type PlayerJoined = {
+  __typename?: 'PlayerJoined';
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
 };
 
 export type QuizSummaryQueryVariables = Exact<{
@@ -358,21 +359,21 @@ export const QuizSummaryDocument = gql`
  *   },
  * });
  */
-export function useQuizSummaryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
-        return ApolloReactHooks.useQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
+export function useQuizSummaryQuery(baseOptions: Apollo.QueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
+        return Apollo.useQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
       }
-export function useQuizSummaryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
+export function useQuizSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
+          return Apollo.useLazyQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
         }
 export type QuizSummaryQueryHookResult = ReturnType<typeof useQuizSummaryQuery>;
 export type QuizSummaryLazyQueryHookResult = ReturnType<typeof useQuizSummaryLazyQuery>;
-export type QuizSummaryQueryResult = ApolloReactCommon.QueryResult<QuizSummaryQuery, QuizSummaryQueryVariables>;
+export type QuizSummaryQueryResult = Apollo.QueryResult<QuizSummaryQuery, QuizSummaryQueryVariables>;
 export const SaveQuizDocument = gql`
     mutation SaveQuiz($input: SaveQuizInput!) {
   saveQuiz(input: $input)
 }
     `;
-export type SaveQuizMutationFn = ApolloReactCommon.MutationFunction<SaveQuizMutation, SaveQuizMutationVariables>;
+export type SaveQuizMutationFn = Apollo.MutationFunction<SaveQuizMutation, SaveQuizMutationVariables>;
 
 /**
  * __useSaveQuizMutation__
@@ -391,12 +392,12 @@ export type SaveQuizMutationFn = ApolloReactCommon.MutationFunction<SaveQuizMuta
  *   },
  * });
  */
-export function useSaveQuizMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveQuizMutation, SaveQuizMutationVariables>) {
-        return ApolloReactHooks.useMutation<SaveQuizMutation, SaveQuizMutationVariables>(SaveQuizDocument, baseOptions);
+export function useSaveQuizMutation(baseOptions?: Apollo.MutationHookOptions<SaveQuizMutation, SaveQuizMutationVariables>) {
+        return Apollo.useMutation<SaveQuizMutation, SaveQuizMutationVariables>(SaveQuizDocument, baseOptions);
       }
 export type SaveQuizMutationHookResult = ReturnType<typeof useSaveQuizMutation>;
-export type SaveQuizMutationResult = ApolloReactCommon.MutationResult<SaveQuizMutation>;
-export type SaveQuizMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveQuizMutation, SaveQuizMutationVariables>;
+export type SaveQuizMutationResult = Apollo.MutationResult<SaveQuizMutation>;
+export type SaveQuizMutationOptions = Apollo.BaseMutationOptions<SaveQuizMutation, SaveQuizMutationVariables>;
 export const JoinQuizDocument = gql`
     mutation JoinQuiz($input: JoinQuizInput!) {
   joinQuiz(input: $input) {
@@ -405,7 +406,7 @@ export const JoinQuizDocument = gql`
   }
 }
     `;
-export type JoinQuizMutationFn = ApolloReactCommon.MutationFunction<JoinQuizMutation, JoinQuizMutationVariables>;
+export type JoinQuizMutationFn = Apollo.MutationFunction<JoinQuizMutation, JoinQuizMutationVariables>;
 
 /**
  * __useJoinQuizMutation__
@@ -424,12 +425,12 @@ export type JoinQuizMutationFn = ApolloReactCommon.MutationFunction<JoinQuizMuta
  *   },
  * });
  */
-export function useJoinQuizMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<JoinQuizMutation, JoinQuizMutationVariables>) {
-        return ApolloReactHooks.useMutation<JoinQuizMutation, JoinQuizMutationVariables>(JoinQuizDocument, baseOptions);
+export function useJoinQuizMutation(baseOptions?: Apollo.MutationHookOptions<JoinQuizMutation, JoinQuizMutationVariables>) {
+        return Apollo.useMutation<JoinQuizMutation, JoinQuizMutationVariables>(JoinQuizDocument, baseOptions);
       }
 export type JoinQuizMutationHookResult = ReturnType<typeof useJoinQuizMutation>;
-export type JoinQuizMutationResult = ApolloReactCommon.MutationResult<JoinQuizMutation>;
-export type JoinQuizMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinQuizMutation, JoinQuizMutationVariables>;
+export type JoinQuizMutationResult = Apollo.MutationResult<JoinQuizMutation>;
+export type JoinQuizMutationOptions = Apollo.BaseMutationOptions<JoinQuizMutation, JoinQuizMutationVariables>;
 export const NextQuizStateDocument = gql`
     mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {
@@ -461,7 +462,7 @@ export const NextQuizStateDocument = gql`
   }
 }
     `;
-export type NextQuizStateMutationFn = ApolloReactCommon.MutationFunction<NextQuizStateMutation, NextQuizStateMutationVariables>;
+export type NextQuizStateMutationFn = Apollo.MutationFunction<NextQuizStateMutation, NextQuizStateMutationVariables>;
 
 /**
  * __useNextQuizStateMutation__
@@ -480,12 +481,12 @@ export type NextQuizStateMutationFn = ApolloReactCommon.MutationFunction<NextQui
  *   },
  * });
  */
-export function useNextQuizStateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<NextQuizStateMutation, NextQuizStateMutationVariables>) {
-        return ApolloReactHooks.useMutation<NextQuizStateMutation, NextQuizStateMutationVariables>(NextQuizStateDocument, baseOptions);
+export function useNextQuizStateMutation(baseOptions?: Apollo.MutationHookOptions<NextQuizStateMutation, NextQuizStateMutationVariables>) {
+        return Apollo.useMutation<NextQuizStateMutation, NextQuizStateMutationVariables>(NextQuizStateDocument, baseOptions);
       }
 export type NextQuizStateMutationHookResult = ReturnType<typeof useNextQuizStateMutation>;
-export type NextQuizStateMutationResult = ApolloReactCommon.MutationResult<NextQuizStateMutation>;
-export type NextQuizStateMutationOptions = ApolloReactCommon.BaseMutationOptions<NextQuizStateMutation, NextQuizStateMutationVariables>;
+export type NextQuizStateMutationResult = Apollo.MutationResult<NextQuizStateMutation>;
+export type NextQuizStateMutationOptions = Apollo.BaseMutationOptions<NextQuizStateMutation, NextQuizStateMutationVariables>;
 export const PlayerJoinedDocument = gql`
     subscription PlayerJoined($quizId: ID!) {
   playerJoined(quizId: $quizId) {
@@ -511,11 +512,11 @@ export const PlayerJoinedDocument = gql`
  *   },
  * });
  */
-export function usePlayerJoinedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>(PlayerJoinedDocument, baseOptions);
+export function usePlayerJoinedSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>) {
+        return Apollo.useSubscription<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>(PlayerJoinedDocument, baseOptions);
       }
 export type PlayerJoinedSubscriptionHookResult = ReturnType<typeof usePlayerJoinedSubscription>;
-export type PlayerJoinedSubscriptionResult = ApolloReactCommon.SubscriptionResult<PlayerJoinedSubscription>;
+export type PlayerJoinedSubscriptionResult = Apollo.SubscriptionResult<PlayerJoinedSubscription>;
 export const QuizStateDocument = gql`
     subscription QuizState($quizId: ID!) {
   nextQuizState(quizId: $quizId) {
@@ -564,8 +565,8 @@ export const QuizStateDocument = gql`
  *   },
  * });
  */
-export function useQuizStateSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<QuizStateSubscription, QuizStateSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<QuizStateSubscription, QuizStateSubscriptionVariables>(QuizStateDocument, baseOptions);
+export function useQuizStateSubscription(baseOptions: Apollo.SubscriptionHookOptions<QuizStateSubscription, QuizStateSubscriptionVariables>) {
+        return Apollo.useSubscription<QuizStateSubscription, QuizStateSubscriptionVariables>(QuizStateDocument, baseOptions);
       }
 export type QuizStateSubscriptionHookResult = ReturnType<typeof useQuizStateSubscription>;
-export type QuizStateSubscriptionResult = ApolloReactCommon.SubscriptionResult<QuizStateSubscription>;
+export type QuizStateSubscriptionResult = Apollo.SubscriptionResult<QuizStateSubscription>;

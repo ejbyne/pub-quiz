@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, useReducer, Reducer } from 'react';
+import React, { useReducer, Reducer } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { client } from '../graphql/apolloClient';
 import { App } from './App';
@@ -11,7 +11,7 @@ export const AppContainer: React.FC = () => {
     quizReducer,
     { rounds: [] },
   );
-  
+
   return (
     <ApolloProvider client={client}>
       <QuizContext.Provider value={[quiz, updateQuiz]}>

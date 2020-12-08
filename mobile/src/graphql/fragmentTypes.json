@@ -1,27 +1,11 @@
 {
-  "__schema": {
-    "types": [
-      {
-        "kind": "INTERFACE",
-        "name": "QuizState",
-        "possibleTypes": [
-          {
-            "name": "QuizNotYetStarted"
-          },
-          {
-            "name": "RoundStarted"
-          },
-          {
-            "name": "QuestionAsked"
-          },
-          {
-            "name": "RoundFinished"
-          },
-          {
-            "name": "QuizFinished"
-          }
-        ]
-      }
+  "possibleTypes": {
+    "QuizState": [
+      "QuizNotYetStarted",
+      "RoundStarted",
+      "QuestionAsked",
+      "RoundFinished",
+      "QuizFinished"
     ]
   }
 }

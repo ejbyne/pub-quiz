@@ -17,7 +17,9 @@ describe('round', () => {
     };
 
     const { findByText } = render(
-      <TestAppContainer client={createMockGraphQlClient()} initialState={initialQuizState}>
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -60,7 +62,9 @@ describe('round', () => {
     };
 
     const { findByText } = render(
-      <TestAppContainer client={createMockGraphQlClient()} initialState={initialQuizState}>
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -112,7 +116,9 @@ describe('round', () => {
     };
 
     const { findByText } = render(
-      <TestAppContainer client={createMockGraphQlClient()} initialState={initialQuizState}>
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -165,7 +171,9 @@ describe('round', () => {
     };
 
     const { findByText } = render(
-      <TestAppContainer client={createMockGraphQlClient()} initialState={initialQuizState}>
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -210,7 +218,9 @@ describe('round', () => {
     };
 
     const { findByText } = render(
-      <TestAppContainer client={createMockGraphQlClient()} initialState={initialQuizState}>
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
