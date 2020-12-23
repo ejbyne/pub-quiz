@@ -7,8 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "codegen": "graphql-codegen"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@apollo/client": "^3.3.4",
@@ -21,11 +20,6 @@
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/runtime": "^7.8.4",
-    "@graphql-codegen/cli": "^1.19.4",
-    "@graphql-codegen/fragment-matcher": "^2.0.1",
-    "@graphql-codegen/typescript": "^1.19.0",
-    "@graphql-codegen/typescript-operations": "^1.17.12",
-    "@graphql-codegen/typescript-react-apollo": "^2.2.1",
     "@react-native-community/eslint-config": "^1.1.0",
     "@testing-library/jest-native": "^3.4.3",
     "@testing-library/react-native": "^7.1.0",

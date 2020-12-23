@@ -1,15 +1,13 @@
 import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
-import { QuizContext } from '../quizContext';
-import {
-  RoundStarted as RoundStartedState,
-} from '../graphql/types';
+import { QuizContext } from '../../../shared/context/quizContext';
+import { RoundStarted as RoundStartedState } from '../../../shared/graphql/types';
 
 export const RoundStarted: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
   const state = quiz.state as RoundStartedState;
-  const round = quiz.rounds[state.roundSummary.roundNumber]
-  
+  const round = quiz.rounds[state.roundSummary.roundNumber];
+
   return (
     <View>
       <Text>Round {round.roundNumber + 1}</Text>

@@ -1,10 +1,14 @@
 import { useReducer, Reducer, Dispatch } from 'react';
 import React from 'react';
 import { ApolloProvider, ApolloClient } from '@apollo/react-hooks';
-import { QuizContext } from '../../quizContext';
-import { QuizAction, Quiz, NextQuizState } from '../../domain/types';
-import { quizReducer } from '../../domain/quizReducer';
+import { QuizContext } from '../../../../shared/context/quizContext';
 import { act } from '@testing-library/react-native';
+import { quizReducer } from '../../../../shared/domain/quizReducer';
+import {
+  QuizAction,
+  NextQuizState,
+  Quiz,
+} from '../../../../shared/domain/types';
 
 let mockUpdateQuiz: Dispatch<QuizAction>;
 

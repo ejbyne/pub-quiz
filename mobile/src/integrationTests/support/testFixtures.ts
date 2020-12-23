@@ -1,4 +1,4 @@
-import { QuizStatus } from "../../graphql/types";
+import { QuizStatus } from "../../../../shared/graphql/types";
 
 export const exampleQuiz = {
   quizId: 'RANDOM_ID',

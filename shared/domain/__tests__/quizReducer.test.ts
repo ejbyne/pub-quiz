@@ -1,6 +1,16 @@
 import { quizReducer } from '../quizReducer';
-import { exampleQuiz } from '../../integrationTests/support/testFixtures';
-import { QuizState, QuizStatus } from '../../graphql/types';
+import { QuizStatus, QuizState } from '../../graphql/types';
+
+const exampleQuiz = {
+  quizId: 'RANDOM_ID',
+  quizName: 'Random Quiz',
+  playerNames: null,
+  state: {
+    __typename: 'QuizNotYetStarted',
+    quizId: 'RANDOM_ID',
+    status: QuizStatus.QuizNotYetStarted,
+  },
+};
 
 describe('quiz reducer', () => {
   it('should store the quiz id', () => {

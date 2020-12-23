@@ -1,10 +1,10 @@
 import React, { useReducer, Reducer } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { client } from '../graphql/apolloClient';
+import { client } from '../../../shared/graphql/apolloClient';
 import { App } from './App';
-import { quizReducer } from '../domain/quizReducer';
-import { QuizContext } from '../quizContext';
-import { Quiz, QuizAction } from '../domain/types';
+import { quizReducer } from '../../../shared/domain/quizReducer';
+import { QuizContext } from '../../../shared/context/quizContext';
+import { Quiz, QuizAction } from '../../../shared/domain/types';
 
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(

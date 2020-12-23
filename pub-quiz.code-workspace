@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "mobile"
+		},
+		{
+			"path": "web-app"
+		},
+		{
+			"path": "shared"
 		}
 	],
 	"settings": {}

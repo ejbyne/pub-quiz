@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from 'react-native';
+import { QuizContext } from '../../../shared/context/quizContext';
+import { getComponentFromStatus } from './getComponentFromStatus';
 import {
   useQuizSummaryQuery,
   useQuizStateSubscription,
-} from '../graphql/types';
-import { QuizContext } from '../quizContext';
-import { getComponentFromStatus } from './getComponentFromStatus';
+} from '../../../shared/graphql/types';
 
 export const App: React.FC = () => {
   const [quiz, updateQuiz] = useContext(QuizContext);

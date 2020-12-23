@@ -4,7 +4,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import fragmentTypes from '../../graphql/fragmentTypes.json';
+import fragmentTypes from '../../../shared/graphql/fragmentTypes.json';
 
 const schemaString =
   'directive @aws_subscribe(mutations : [String]!) on FIELD_DEFINITION \n' +

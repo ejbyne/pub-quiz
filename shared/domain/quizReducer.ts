@@ -97,7 +97,7 @@ export const quizReducer = (
 const addNewRound = (
   rounds: Round[],
   newRoundSummary: RoundSummary,
-  questions?: Question[] = [],
+  questions: Question[] = [],
 ): Round[] => {
   const updatedRounds = [...rounds];
 

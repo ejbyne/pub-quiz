@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
 import { exampleQuiz } from './support/testFixtures';
 import { createMockGraphQlClient } from './support/mockGraphQlClient';

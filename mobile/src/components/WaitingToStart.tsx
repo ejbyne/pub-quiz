@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
-import { QuizContext } from '../quizContext';
+import { QuizContext } from '../../../shared/context/quizContext';
 
 export const WaitingToStart: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);

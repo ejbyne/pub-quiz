@@ -1,11 +1,11 @@
 import React from 'react';
 import { Registration } from './Registration';
 import { WaitingToStart } from './WaitingToStart';
-import { QuizStatus } from '../graphql/types';
 import { RoundStarted } from './RoundStarted';
 import { QuestionAsked } from './QuestionAsked';
 import { RoundFinished } from './RoundFinished';
 import { QuizFinished } from './QuizFinished';
+import { QuizStatus } from '../../../shared/graphql/types';
 
 export const getComponentFromStatus = (status?: QuizStatus): React.FC => {
   switch (status) {
