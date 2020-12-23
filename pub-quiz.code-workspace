@@ -8,10 +8,9 @@
 		},
 		{
 			"path": "web-app"
-		},
-		{
-			"path": "shared"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"typescript.tsdk": "web-app/node_modules/typescript/lib"
+	}
 }

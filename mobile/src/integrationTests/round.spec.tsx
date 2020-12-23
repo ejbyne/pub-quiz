@@ -7,7 +7,7 @@ import {
   TestAppContainer,
   receiveNextQuizState,
 } from './support/TestAppContainer';
-import { QuizStatus } from '../../../shared/graphql/types';
+import { QuizStatus } from '../../../web-app/src/shared/graphql/types';
 
 describe('round', () => {
   it('starts the first round', async () => {

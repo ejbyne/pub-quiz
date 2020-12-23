@@ -7,7 +7,7 @@ import {
   ApolloLink,
   createHttpLink,
 } from '@apollo/client';
-import fragmentTypes from '../fragmentTypes.json';
+import fragmentTypes from './fragmentTypes.json';
 
 import { awsConfig } from '../awsConfig';
 
