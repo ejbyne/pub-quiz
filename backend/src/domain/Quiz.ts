@@ -8,8 +8,8 @@ export interface Round {
 export interface Question {
   question: string;
   answer: string;
+  options?: string[];
 }
-
 export class Quiz {
   quizId: string;
   quizName: string;

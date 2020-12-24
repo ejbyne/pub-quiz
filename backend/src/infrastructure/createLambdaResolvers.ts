@@ -11,6 +11,21 @@ export const createLambdaResolvers = (
   api: GraphQLApi
 ): void => {
   // Lambdas
+  const generateRandomQuizLambda = new NodejsFunction(
+    scope,
+    'GenerateRandomQuizLambda',
+    {
+      functionName: 'generate-random-quiz-resolver',
+      entry: Path.join(__dirname, '../lambdas/generateRandomQuiz.ts'),
+      handler: 'generateRandomQuiz',
+      minify: true,
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        QUIZ_TABLE_NAME: quizTable.tableName,
+      },
+    }
+  );
+
   const saveQuizLambda = new NodejsFunction(scope, 'SaveQuizLambda', {
     functionName: 'save-quiz-resolver',
     entry: Path.join(__dirname, '../lambdas/saveQuiz.ts'),
@@ -56,12 +71,19 @@ export const createLambdaResolvers = (
   });
 
   // Rights
+  quizTable.grantReadWriteData(generateRandomQuizLambda);
   quizTable.grantReadWriteData(saveQuizLambda);
   quizTable.grantReadWriteData(joinQuizLambda);
   quizTable.grantReadWriteData(nextQuizStateLambda);
   quizTable.grantReadWriteData(quizSummaryLambda);
 
   // Data sources
+  const generateRandomQuizLambdaDataSource = api.addLambdaDataSource(
+    'GenerateRandomQuizLambda',
+    'Generate Random Quiz Lambda DataSource',
+    saveQuizLambda
+  );
+
   const saveQuizLambdaDataSource = api.addLambdaDataSource(
     'SaveQuizLambda',
     'Save Quiz Lambda DataSource',
@@ -87,6 +109,13 @@ export const createLambdaResolvers = (
   );
 
   // Resolvers
+  generateRandomQuizLambdaDataSource.createResolver({
+    typeName: 'Mutation',
+    fieldName: 'generateRandomQuiz',
+    requestMappingTemplate: MappingTemplate.lambdaRequest(),
+    responseMappingTemplate: MappingTemplate.lambdaResult(),
+  });
+
   saveQuizLambdaDataSource.createResolver({
     typeName: 'Mutation',
     fieldName: 'saveQuiz',
