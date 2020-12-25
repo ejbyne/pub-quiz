@@ -14,18 +14,21 @@ export class QuestionAskedState implements BaseQuizState {
   roundSummary: RoundSummary;
   questionNumber: number;
   questionText: string;
+  questionOptions?: string[];
 
   constructor(
     rounds: Round[],
     roundSummary: RoundSummary,
     questionNumber: number,
-    questionText: string
+    questionText: string,
+    questionOptions?: string[]
   ) {
     this.status = QuizStatus.QUESTION_ASKED;
     this.rounds = rounds;
     this.roundSummary = roundSummary;
     this.questionNumber = questionNumber;
     this.questionText = questionText;
+    this.questionOptions = questionOptions;
   }
 
   nextState(): QuizState {
@@ -36,13 +39,18 @@ export class QuestionAskedState implements BaseQuizState {
       return new RoundFinishedState(this.rounds, this.roundSummary);
     }
 
+    const nextQuestionNumber = this.questionNumber + 1;
+    const nextQuestion = this.rounds[this.roundSummary.roundNumber].questions[
+      this.questionNumber + 1
+    ];
+
+    this.questionNumber + 1;
     return new QuestionAskedState(
       this.rounds,
       this.roundSummary,
-      this.questionNumber + 1,
-      this.rounds[this.roundSummary.roundNumber].questions[
-        this.questionNumber + 1
-      ].question
+      nextQuestionNumber,
+      nextQuestion.question,
+      nextQuestion.options
     );
   }
 }

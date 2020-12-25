@@ -17,7 +17,9 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 
 const quizRepository = new QuizRepository(quizTableName);
 
-export const generateRandomQuiz: Handler<Event> = async (event): Promise<string> => {
+export const generateRandomQuiz: Handler<Event> = async (
+  event
+): Promise<{ quizId: string; quizName: string }> => {
   const { quizName } = event.arguments.input;
   const quizId = uuid();
   const rounds = await generateRounds();
@@ -35,5 +37,8 @@ export const generateRandomQuiz: Handler<Event> = async (event): Promise<string>
 
   await quizRepository.save(newQuiz);
 
-  return quizId;
+  return {
+    quizId,
+    quizName,
+  };
 };

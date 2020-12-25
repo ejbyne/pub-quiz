@@ -3,7 +3,7 @@ type Query {
 }
 
 type Mutation {
-  generateRandomQuiz(input: GenerateRandomQuizInput!): ID!
+  generateRandomQuiz(input: GenerateRandomQuizInput!): QuizGenerated!
   saveQuiz(input: SaveQuizInput!): Boolean!
   joinQuiz(input: JoinQuizInput!): PlayerJoined!
   nextQuizState(input: NextQuizStateInput!): QuizState!
@@ -42,6 +42,11 @@ input JoinQuizInput {
 
 input NextQuizStateInput {
   quizId: ID!
+}
+
+type QuizGenerated {
+  quizId: ID!
+  quizName: String!
 }
 
 type QuizSummary {
@@ -87,6 +92,7 @@ type QuestionAsked implements QuizState {
   roundSummary: RoundSummary!
   questionNumber: Int!
   questionText: String!
+  questionOptions: [String!]
 }
 
 type RoundFinished implements QuizState {

@@ -20,6 +20,7 @@ export interface Round {
 export interface Question {
   questionNumber: number;
   questionText: string;
+  questionOptions?: string[];
 }
 
 export type NextQuizState =

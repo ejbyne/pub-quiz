@@ -17,7 +17,14 @@ export const QuestionAsked: React.FC<{}> = () => {
         <li key={question.questionNumber}>
           <p>Question {question.questionNumber + 1}</p>
           <p>{question.questionText}</p>
-          <p placeholder="Your answer" />
+          {question.questionOptions && (
+            <ul>
+              {question.questionOptions.map(option => (
+                <li>{option}</li>
+              ))}
+            </ul>
+          )}
+          {/* <p placeholder="Your answer" /> */}
         </li>
       ))}
       </ul>

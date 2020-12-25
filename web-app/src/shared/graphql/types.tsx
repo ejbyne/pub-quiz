@@ -25,9 +25,15 @@ export type QueryQuizSummaryArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  generateRandomQuiz: QuizGenerated;
   saveQuiz: Scalars['Boolean'];
   joinQuiz: PlayerJoined;
   nextQuizState: QuizState;
+};
+
+
+export type MutationGenerateRandomQuizArgs = {
+  input: GenerateRandomQuizInput;
 };
 
 
@@ -61,6 +67,10 @@ export type SubscriptionNextQuizStateArgs = {
   quizId: Scalars['ID'];
 };
 
+export type GenerateRandomQuizInput = {
+  quizName: Scalars['String'];
+};
+
 export type SaveQuizInput = {
   quizName: Scalars['String'];
   rounds: Array<RoundInput>;
@@ -83,6 +93,12 @@ export type JoinQuizInput = {
 
 export type NextQuizStateInput = {
   quizId: Scalars['ID'];
+};
+
+export type QuizGenerated = {
+  __typename?: 'QuizGenerated';
+  quizId: Scalars['ID'];
+  quizName: Scalars['String'];
 };
 
 export type QuizSummary = {
@@ -133,6 +149,7 @@ export type QuestionAsked = QuizState & {
   roundSummary: RoundSummary;
   questionNumber: Scalars['Int'];
   questionText: Scalars['String'];
+  questionOptions?: Maybe<Array<Scalars['String']>>;
 };
 
 export type RoundFinished = QuizState & {
@@ -176,7 +193,7 @@ export type QuizSummaryQuery = (
       ) }
     ) | (
       { __typename?: 'QuestionAsked' }
-      & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+      & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'questionOptions' | 'quizId' | 'status'>
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
@@ -192,6 +209,19 @@ export type QuizSummaryQuery = (
       { __typename?: 'QuizFinished' }
       & Pick<QuizFinished, 'quizId' | 'status'>
     ) }
+  ) }
+);
+
+export type GenerateRandomQuizMutationVariables = Exact<{
+  input: GenerateRandomQuizInput;
+}>;
+
+
+export type GenerateRandomQuizMutation = (
+  { __typename?: 'Mutation' }
+  & { generateRandomQuiz: (
+    { __typename?: 'QuizGenerated' }
+    & Pick<QuizGenerated, 'quizId' | 'quizName'>
   ) }
 );
 
@@ -237,7 +267,7 @@ export type NextQuizStateMutation = (
     ) }
   ) | (
     { __typename?: 'QuestionAsked' }
-    & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+    & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'questionOptions' | 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
@@ -287,7 +317,7 @@ export type QuizStateSubscription = (
     ) }
   ) | (
     { __typename?: 'QuestionAsked' }
-    & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'quizId' | 'status'>
+    & Pick<QuestionAsked, 'questionNumber' | 'questionText' | 'questionOptions' | 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
@@ -330,6 +360,7 @@ export const QuizSummaryDocument = gql`
         }
         questionNumber
         questionText
+        questionOptions
       }
       ... on RoundFinished {
         roundSummary {
@@ -368,6 +399,39 @@ export function useQuizSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type QuizSummaryQueryHookResult = ReturnType<typeof useQuizSummaryQuery>;
 export type QuizSummaryLazyQueryHookResult = ReturnType<typeof useQuizSummaryLazyQuery>;
 export type QuizSummaryQueryResult = Apollo.QueryResult<QuizSummaryQuery, QuizSummaryQueryVariables>;
+export const GenerateRandomQuizDocument = gql`
+    mutation GenerateRandomQuiz($input: GenerateRandomQuizInput!) {
+  generateRandomQuiz(input: $input) {
+    quizId
+    quizName
+  }
+}
+    `;
+export type GenerateRandomQuizMutationFn = Apollo.MutationFunction<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>;
+
+/**
+ * __useGenerateRandomQuizMutation__
+ *
+ * To run a mutation, you first call `useGenerateRandomQuizMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateRandomQuizMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateRandomQuizMutation, { data, loading, error }] = useGenerateRandomQuizMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGenerateRandomQuizMutation(baseOptions?: Apollo.MutationHookOptions<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>) {
+        return Apollo.useMutation<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>(GenerateRandomQuizDocument, baseOptions);
+      }
+export type GenerateRandomQuizMutationHookResult = ReturnType<typeof useGenerateRandomQuizMutation>;
+export type GenerateRandomQuizMutationResult = Apollo.MutationResult<GenerateRandomQuizMutation>;
+export type GenerateRandomQuizMutationOptions = Apollo.BaseMutationOptions<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>;
 export const SaveQuizDocument = gql`
     mutation SaveQuiz($input: SaveQuizInput!) {
   saveQuiz(input: $input)
@@ -451,6 +515,7 @@ export const NextQuizStateDocument = gql`
       }
       questionNumber
       questionText
+      questionOptions
     }
     ... on RoundFinished {
       roundSummary {
@@ -537,6 +602,7 @@ export const QuizStateDocument = gql`
       }
       questionNumber
       questionText
+      questionOptions
     }
     ... on RoundFinished {
       roundSummary {

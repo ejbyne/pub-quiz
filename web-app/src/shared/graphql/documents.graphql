@@ -22,6 +22,7 @@ query QuizSummary($quizId: ID!) {
         }
         questionNumber
         questionText
+        questionOptions
       }
       ... on RoundFinished {
         roundSummary {
@@ -33,15 +34,25 @@ query QuizSummary($quizId: ID!) {
     }
   }
 }
+
+mutation GenerateRandomQuiz($input: GenerateRandomQuizInput!) {
+  generateRandomQuiz(input: $input) {
+    quizId
+    quizName
+  }
+}
+
 mutation SaveQuiz($input: SaveQuizInput!) {
   saveQuiz(input: $input)
 }
+
 mutation JoinQuiz($input: JoinQuizInput!) {
   joinQuiz(input: $input) {
     quizId
     playerName
   }
 }
+
 mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {
     quizId
@@ -61,6 +72,7 @@ mutation NextQuizState($input: NextQuizStateInput!) {
       }
       questionNumber
       questionText
+      questionOptions
     }
     ... on RoundFinished {
       roundSummary {
@@ -71,12 +83,14 @@ mutation NextQuizState($input: NextQuizStateInput!) {
     }
   }
 }
+
 subscription PlayerJoined($quizId: ID!) {
   playerJoined(quizId: $quizId) {
     quizId
     playerName
   }
 }
+
 subscription QuizState($quizId: ID!) {
   nextQuizState(quizId: $quizId) {
     quizId
@@ -96,6 +110,7 @@ subscription QuizState($quizId: ID!) {
       }
       questionNumber
       questionText
+      questionOptions
     }
     ... on RoundFinished {
       roundSummary {

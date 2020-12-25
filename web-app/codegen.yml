@@ -1,8 +1,8 @@
 schema: ../backend/src/infrastructure/schema.graphql
-documents: ./src/graphql/documents.graphql
+documents: ./src/shared/graphql/documents.graphql
 overwrite: true
 generates:
-  src/graphql/types.tsx:
+  src/shared/graphql/types.tsx:
     plugins:
       - typescript
       - typescript-operations
@@ -11,7 +11,7 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
-  src/graphql/fragmentTypes.json:
+  src/shared/graphql/fragmentTypes.json:
     plugins:
       - fragment-matcher
     config:

@@ -19,11 +19,15 @@ export class RoundStartedState implements BaseQuizState {
   }
 
   nextState(): QuizState {
+    const nextQuestion = this.rounds[this.roundSummary.roundNumber]
+      .questions[0];
+
     return new QuestionAskedState(
       this.rounds,
       this.roundSummary,
       0,
-      this.rounds[this.roundSummary.roundNumber].questions[0].question
+      nextQuestion.question,
+      nextQuestion.options
     );
   }
 }

@@ -15,6 +15,7 @@ describe('Quiz', () => {
         {
           question: 'Question 1',
           answer: 'Answer 1',
+          options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
         },
         {
           question: 'Question 2',
@@ -73,6 +74,7 @@ describe('Quiz', () => {
         },
         questionNumber: 0,
         questionText: 'Question 1',
+        questionOptions: ['Answer 1', 'Answer 1b', 'Answer 1c'],
       });
     });
 
@@ -89,7 +91,8 @@ describe('Quiz', () => {
             numberOfQuestions: 2,
           },
           0,
-          'Question 1'
+          'Question 1',
+          ['Answer 1', 'Answer 1b', 'Answer 1c']
         )
       );
 

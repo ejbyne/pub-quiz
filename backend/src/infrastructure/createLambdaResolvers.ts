@@ -81,7 +81,7 @@ export const createLambdaResolvers = (
   const generateRandomQuizLambdaDataSource = api.addLambdaDataSource(
     'GenerateRandomQuizLambda',
     'Generate Random Quiz Lambda DataSource',
-    saveQuizLambda
+    generateRandomQuizLambda
   );
 
   const saveQuizLambdaDataSource = api.addLambdaDataSource(
