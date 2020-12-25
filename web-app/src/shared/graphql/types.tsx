@@ -116,6 +116,12 @@ export type RoundSummary = {
   numberOfQuestions: Scalars['Int'];
 };
 
+export type Answer = {
+  __typename?: 'Answer';
+  question: Scalars['String'];
+  answer: Scalars['String'];
+};
+
 export enum QuizStatus {
   QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
   RoundStarted = 'ROUND_STARTED',
@@ -157,6 +163,7 @@ export type RoundFinished = QuizState & {
   quizId: Scalars['ID'];
   status: QuizStatus;
   roundSummary: RoundSummary;
+  answers?: Maybe<Array<Answer>>;
 };
 
 export type QuizFinished = QuizState & {
@@ -204,7 +211,10 @@ export type QuizSummaryQuery = (
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-      ) }
+      ), answers?: Maybe<Array<(
+        { __typename?: 'Answer' }
+        & Pick<Answer, 'question' | 'answer'>
+      )>> }
     ) | (
       { __typename?: 'QuizFinished' }
       & Pick<QuizFinished, 'quizId' | 'status'>
@@ -278,7 +288,10 @@ export type NextQuizStateMutation = (
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ) }
+    ), answers?: Maybe<Array<(
+      { __typename?: 'Answer' }
+      & Pick<Answer, 'question' | 'answer'>
+    )>> }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -328,7 +341,10 @@ export type QuizStateSubscription = (
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ) }
+    ), answers?: Maybe<Array<(
+      { __typename?: 'Answer' }
+      & Pick<Answer, 'question' | 'answer'>
+    )>> }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -367,6 +383,10 @@ export const QuizSummaryDocument = gql`
           roundNumber
           roundName
           numberOfQuestions
+        }
+        answers {
+          question
+          answer
         }
       }
     }
@@ -523,6 +543,10 @@ export const NextQuizStateDocument = gql`
         roundName
         numberOfQuestions
       }
+      answers {
+        question
+        answer
+      }
     }
   }
 }
@@ -609,6 +633,10 @@ export const QuizStateDocument = gql`
         roundNumber
         roundName
         numberOfQuestions
+      }
+      answers {
+        question
+        answer
       }
     }
   }

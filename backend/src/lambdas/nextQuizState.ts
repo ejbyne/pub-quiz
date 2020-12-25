@@ -22,6 +22,11 @@ export interface NextStateEvent {
   };
   questionNumber?: number;
   questionText?: string;
+  questionOptions?: string[];
+  answers?: {
+    question: string;
+    answer: string;
+  }[];
 }
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;

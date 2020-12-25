@@ -8,6 +8,7 @@ export const QuestionAsked: React.FC<{}> = () => {
   const state = quiz.state as QuestionAskedState;
   const round = quiz.rounds[state.roundSummary.roundNumber];
 
+  console.log('question asked', state);
   return (
     <div>
       <h1>Round {round.roundNumber + 1}</h1>

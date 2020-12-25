@@ -30,6 +30,10 @@ query QuizSummary($quizId: ID!) {
           roundName
           numberOfQuestions
         }
+        answers {
+          question
+          answer
+        }
       }
     }
   }
@@ -80,6 +84,10 @@ mutation NextQuizState($input: NextQuizStateInput!) {
         roundName
         numberOfQuestions
       }
+      answers {
+        question
+        answer
+      }
     }
   }
 }
@@ -117,6 +125,10 @@ subscription QuizState($quizId: ID!) {
         roundNumber
         roundName
         numberOfQuestions
+      }
+      answers {
+        question
+        answer
       }
     }
   }

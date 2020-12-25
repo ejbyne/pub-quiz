@@ -10,6 +10,16 @@ export const RoundFinished: React.FC<{}> = () => {
   return (
     <div>
       <h1>Round {round.roundNumber + 1} complete</h1>
+      <h2>Answers</h2>
+      <ul>
+        {state.answers?.map((answer, index) => (
+          <li>
+            <p>Question {index + 1}</p>
+            <p>{answer.question}</p>
+            <p>{answer.answer}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
