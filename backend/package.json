@@ -1,5 +1,5 @@
 {
-  "name": "pub-quiz-backend",
+  "name": "@pub-quiz/backend",
   "version": "0.1.0",
   "bin": {
     "pub-quiz-backend": "bin/pubQuizBackend.js"

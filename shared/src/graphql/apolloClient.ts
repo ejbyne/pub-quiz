@@ -1,12 +1,13 @@
 import { createAuthLink, AUTH_TYPE } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
+import fetch from 'cross-fetch';
 
 import {
   InMemoryCache,
   ApolloClient,
   ApolloLink,
   createHttpLink,
-} from '@apollo/client';
+} from '@apollo/react-hooks';
 import fragmentTypes from './fragmentTypes.json';
 
 import { awsConfig } from '../awsConfig';
@@ -18,7 +19,7 @@ const auth = {
   apiKey,
 };
 
-const httpLink = createHttpLink({ uri: graphQlUrl });
+const httpLink = createHttpLink({ uri: graphQlUrl, fetch });
 
 const link = ApolloLink.from([
   createAuthLink({ url: graphQlUrl, region, auth }),

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { QuizContext } from '../shared/context/quizContext';
-import { RoundStarted as RoundStartedState } from '../shared/graphql/types';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import { RoundStarted as RoundStartedState } from '@pub-quiz/shared/src/graphql/types';
 
 export const RoundStarted: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { QuizContext } from "../shared/context/quizContext";
-import { useJoinQuizMutation } from "../shared/graphql/types";
+import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
+import { useJoinQuizMutation } from "@pub-quiz/shared/src/graphql/types";
 
 export const Registration: React.FC = () => {
   const [, updateQuiz] = useContext(QuizContext);

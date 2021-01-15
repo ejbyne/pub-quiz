@@ -1,14 +1,17 @@
 {
 	"folders": [
 		{
-			"path": "backend"
-		},
-		{
-			"path": "mobile"
-		},
-		{
-			"path": "web-app"
+			"path": "."
 		}
+		// {
+		// 	"path": "backend"
+		// },
+		// {
+		// 	"path": "mobile"
+		// },
+		// {
+		// 	"path": "web-app"
+		// }
 	],
 	"settings": {
 		"typescript.tsdk": "web-app/node_modules/typescript/lib"

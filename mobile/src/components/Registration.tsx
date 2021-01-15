@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { QuizContext } from '../../../web-app/src/shared/context/quizContext';
-import { useJoinQuizMutation } from '../../../web-app/src/shared/graphql/types';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import { useJoinQuizMutation } from '@pub-quiz/shared/src/graphql/types';
 
 const styles = StyleSheet.create({
   // sectionContainer: {

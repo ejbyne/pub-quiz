@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { QuizContext } from '../shared/context/quizContext';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 
 export const WaitingToStart: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);

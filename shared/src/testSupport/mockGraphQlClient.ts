@@ -3,13 +3,12 @@ import { SchemaLink } from 'apollo-link-schema';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import { readFileSync } from 'fs';
-import { join } from 'path';
-import fragmentTypes from '../../../web-app/src/shared/graphql/fragmentTypes.json';
+import fragmentTypes from '@pub-quiz/shared/src/graphql/fragmentTypes.json';
 
 const schemaString =
   'directive @aws_subscribe(mutations : [String]!) on FIELD_DEFINITION \n' +
   readFileSync(
-    join(__dirname, '../../../../backend/src/infrastructure/schema.graphql'),
+    require.resolve('@pub-quiz/backend/src/infrastructure/schema.graphql'),
     'utf-8',
   );
 

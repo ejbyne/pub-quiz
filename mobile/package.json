@@ -1,5 +1,5 @@
 {
-  "name": "PubQuizMobile",
+  "name": "@pub-quiz/mobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,10 +10,10 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.4",
     "@apollo/react-hooks": "^4.0.0",
     "aws-appsync-auth-link": "^3.0.2",
     "aws-appsync-subscription-link": "^3.0.3",
+    "graphql": "^15.4.0",
     "react": "16.13.1",
     "react-native": "0.63.4"
   },
@@ -30,6 +30,7 @@
     "@typescript-eslint/parser": "^2.27.0",
     "apollo-link-schema": "^1.2.5",
     "babel-jest": "^25.1.0",
+    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^6.5.1",
     "graphql-tools": "^6.0.12",
     "jest": "^25.1.0",

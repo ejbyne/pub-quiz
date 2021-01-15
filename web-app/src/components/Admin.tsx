@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   useGenerateRandomQuizMutation,
   useNextQuizStateMutation,
-} from "../shared/graphql/types";
+} from "@pub-quiz/shared/src/graphql/types";
 
 export const Admin: React.FC = () => {
   const [quizName, setQuizName] = useState<string>("");

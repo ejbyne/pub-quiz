@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { QuizContext } from '../shared/context/quizContext';
-import { RoundFinished as RoundFinishedState } from '../shared/graphql/types';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import { RoundFinished as RoundFinishedState } from '@pub-quiz/shared/src/graphql/types';
 
 export const RoundFinished: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);

@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
-import { exampleQuiz } from './support/testFixtures';
-import { createMockGraphQlClient } from './support/mockGraphQlClient';
-import { TestAppContainer } from './support/TestAppContainer';
+import { exampleQuiz } from '@pub-quiz/shared/src/testSupport/testFixtures';
+import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
+import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { App } from '../components/App';
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');

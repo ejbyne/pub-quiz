@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
-import { QuizContext } from '../../../web-app/src/shared/context/quizContext';
-import { RoundFinished as RoundFinishedState } from '../../../web-app/src/shared/graphql/types';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import { RoundFinished as RoundFinishedState } from '@pub-quiz/shared/src/graphql/types';
 
 export const RoundFinished: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);

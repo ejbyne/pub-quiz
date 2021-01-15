@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { QuestionAsked as QuestionAskedState } from '../shared/graphql/types';
-import { QuizContext } from '../shared/context/quizContext';
-import { Question } from '../shared/domain/types';
+import { QuestionAsked as QuestionAskedState } from '@pub-quiz/shared/src/graphql/types';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import { Question } from '@pub-quiz/shared/src/domain/types';
 
 export const QuestionAsked: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);

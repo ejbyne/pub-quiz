@@ -1,0 +1,16 @@
+{
+    "private": true,
+    "workspaces": {
+        "packages": ["backend", "mobile", "web-app", "shared"],
+        "nohoist": [
+            "mobile/react-native",
+            "mobile/react-native/**",
+            "mobile/react",
+            "mobile/react/**",
+            "mobile/jest",
+            "mobile/jest/**",
+            "mobile/babel-jest",
+            "mobile/babel-jest/**"
+        ]
+    }
+}

@@ -5,7 +5,7 @@ import { RoundStarted } from './RoundStarted';
 import { QuestionAsked } from './QuestionAsked';
 import { RoundFinished } from './RoundFinished';
 import { QuizFinished } from './QuizFinished';
-import { QuizStatus } from '../../../web-app/src/shared/graphql/types';
+import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
 
 export const getComponentFromStatus = (status?: QuizStatus): React.FC => {
   switch (status) {

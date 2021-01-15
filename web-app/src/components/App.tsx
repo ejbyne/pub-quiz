@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { QuizContext } from "../shared/context/quizContext";
-import { useQuizStateSubscription, useQuizSummaryQuery } from "../shared/graphql/types";
+import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
+import { useQuizStateSubscription, useQuizSummaryQuery } from "@pub-quiz/shared/src/graphql/types";
 import { getComponentFromStatus } from "./getComponentFromStatus";
 
 export const App: React.FC = () => {

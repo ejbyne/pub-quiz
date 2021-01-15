@@ -1,11 +1,11 @@
 import React, { useReducer, Reducer } from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { App } from "./App";
-import { Quiz, QuizAction } from "../shared/domain/types";
-import { quizReducer } from "../shared/domain/quizReducer";
-import { QuizContext } from "../shared/context/quizContext";
-import { client } from "../shared/graphql/apolloClient";
+import { Quiz, QuizAction } from "@pub-quiz/shared/src/domain/types";
+import { quizReducer } from "@pub-quiz/shared/src/domain/quizReducer";
+import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
+import { client } from "@pub-quiz/shared/src/graphql/apolloClient";
 import { Admin } from "./Admin";
 
 export const AppContainer: React.FC = () => {
@@ -17,16 +17,14 @@ export const AppContainer: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <QuizContext.Provider value={[quiz, updateQuiz]}>
-        <Router>
-          <Switch>
-            <Route path="/admin">
-              <Admin />
-            </Route>
-            <Route path="/">
-              <App />
-            </Route>
-          </Switch>
-        </Router>
+        <Switch>
+          <Route path="/admin">
+            <Admin />
+          </Route>
+          <Route path="/">
+            <App />
+          </Route>
+        </Switch>
       </QuizContext.Provider>
     </ApolloProvider>
   );
