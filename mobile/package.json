@@ -51,14 +51,7 @@
   },
   "workspaces": {
     "nohoist": [
-        "react-native",
-        "react-native/**",
-        "react",
-        "react/**",
-        "jest",
-        "jest/**",
-        "babel-jest",
-        "babel-jest/**"
+        "**"
     ]
   }
 }
