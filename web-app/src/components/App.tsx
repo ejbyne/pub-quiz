@@ -3,6 +3,8 @@ import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { useQuizStateSubscription, useQuizSummaryQuery } from "@pub-quiz/shared/src/graphql/types";
 import { getComponentFromStatus } from "./getComponentFromStatus";
 
+import BeerDarkImage from "../assets/images/beer-dark.svg";
+
 export const App: React.FC = () => {
   const [quiz, updateQuiz] = useContext(QuizContext);
 
@@ -33,7 +35,15 @@ export const App: React.FC = () => {
   });
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-gray-800 pub-wallpaper">
+    <div className="w-screen h-screen p-2 flex flex-col justify-center items-center bg-gray-800 pub-wallpaper text-gray-200">
+      <section className="top-2 left-2 right-2 p-2 bg-gray-200 fixed rounded">
+        <div className="flex items-center">
+          <img src={BeerDarkImage} alt="Two pints of beer" className="w-16" />
+          <h1 className="ml-2 uppercase text-2xl text-center font-serif select-none text-indigo-900">
+            The Online Pub Quiz
+          </h1>
+        </div>
+      </section>
       <CurrentStep />
     </div>
   );

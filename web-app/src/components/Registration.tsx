@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { useJoinQuizMutation } from "@pub-quiz/shared/src/graphql/types";
 
-import BeerImage from "../assets/images/beer.svg";
+import QuizImage from '../assets/images/quiz.svg';
 
 export const Registration: React.FC = () => {
   const [, updateQuiz] = useContext(QuizContext);
@@ -20,11 +20,13 @@ export const Registration: React.FC = () => {
   const joinQuizError = error?.graphQLErrors?.[0];
 
   return (
-    <section className="w-full lg:w-1/3 px-4 py-8 flex flex-col justify-center items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg relative">
-      <h1 className="text-white uppercase text-2xl text-center font-serif select-none">
-        The Online Pub Quiz
+    <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col justify-center items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg relative">
+      <h1 className="text-2xl font-medium text-center mb-4">
+        Registration
       </h1>
-      <img src={BeerImage} alt="Two pints of beer" className="w-20 mb-2 self-center" />
+      <p className="text-center mb-4">
+        Please enter your name and the quiz ID provided by your host
+      </p>
       <input
         className="text-input"
         value={playerName}
@@ -51,7 +53,11 @@ export const Registration: React.FC = () => {
       >
         Join quiz
       </button>
-      {joinQuizError ? <p className="text-red-500 text-sm text-center">{joinQuizError.message}</p> : null}
+      {joinQuizError ? (
+        <p className="text-red-500 text-sm text-center">
+          {joinQuizError.message}
+        </p>
+      ) : null}
     </section>
   );
 };

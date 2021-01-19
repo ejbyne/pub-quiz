@@ -38,6 +38,11 @@ export const Admin: React.FC = () => {
             placeholder="Quiz name"
             onChange={(e) => setQuizName(e.currentTarget.value)}
           />
+          <input
+            value={quizId}
+            placeholder="Quiz ID"
+            onChange={(e) => setQuizId(e.currentTarget.value)}
+          />
           <button disabled={called && !error} onClick={() => generateQuiz()}>
             Generate quiz
           </button>
