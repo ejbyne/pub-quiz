@@ -19,6 +19,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.2",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
@@ -29,9 +30,12 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/webpack-env": "^1.16.0",
+    "autoprefixer": "^9",
     "babel-plugin-module-resolver": "^4.1.0",
+    "postcss": "^7",
     "razzle": "^3.3.11",
     "react": "^17.0.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.0.3"
   }
 }

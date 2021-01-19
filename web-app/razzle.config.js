@@ -17,7 +17,7 @@ module.exports = {
   modifyPaths({ paths }) {
     return {
       ...paths,
-      appSrc: [paths.appSrc, path.resolve(process.cwd(), "../shared/src")],
+      appSrc: [paths.appSrc, path.resolve(__dirname, "../shared/src")],
     };
   },
 };

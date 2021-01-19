@@ -33,7 +33,7 @@ export const App: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="w-screen h-screen flex justify-center items-center bg-gray-800 pub-wallpaper">
       <CurrentStep />
     </div>
   );

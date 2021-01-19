@@ -8,6 +8,8 @@ import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { client } from "@pub-quiz/shared/src/graphql/apolloClient";
 import { Admin } from "./Admin";
 
+import '../styles/base.css';
+
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
     quizReducer,
