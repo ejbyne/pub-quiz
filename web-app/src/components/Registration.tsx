@@ -3,6 +3,7 @@ import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { useJoinQuizMutation } from "@pub-quiz/shared/src/graphql/types";
 
 import QuizLogo from "../assets/images/team.svg";
+import BeerImage from "../assets/images/beer.svg";
 
 export const Registration: React.FC = () => {
   const [, updateQuiz] = useContext(QuizContext);
@@ -21,12 +22,10 @@ export const Registration: React.FC = () => {
 
   return (
     <section className="w-full lg:w-1/3 px-4 py-8 flex flex-col justify-center items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg relative">
-      <div className="h-32 mb-12 relative">
-        <img src={QuizLogo} alt="Quiz Logo" className="h-32 mb-2" />
-        <h1 className="absolute bottom-0 left-24 text-white text-2xl text-center font-mono select-none">
-          Pub Quiz
-        </h1>
-      </div>
+      <h1 className="text-white uppercase text-2xl text-center font-serif select-none">
+        The Online Pub Quiz
+      </h1>
+      <img src={BeerImage} alt="Two pints of beer" className="w-20 mb-2 self-center" />
       <input
         className="text-input"
         value={playerName}
@@ -41,7 +40,7 @@ export const Registration: React.FC = () => {
       />
       <button
         className="button"
-        disabled={called && !error}
+        disabled={!playerName || !quizId || (called && !error)}
         onClick={async () => {
           try {
             await joinQuiz();
