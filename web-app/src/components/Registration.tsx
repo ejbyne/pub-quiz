@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { useJoinQuizMutation } from "@pub-quiz/shared/src/graphql/types";
 
-import QuizLogo from "../assets/images/team.svg";
 import BeerImage from "../assets/images/beer.svg";
 
 export const Registration: React.FC = () => {
@@ -52,7 +51,7 @@ export const Registration: React.FC = () => {
       >
         Join quiz
       </button>
-      {joinQuizError ? <p>{joinQuizError.message}</p> : null}
+      {joinQuizError ? <p className="text-red-500 text-sm text-center">{joinQuizError.message}</p> : null}
     </section>
   );
 };
