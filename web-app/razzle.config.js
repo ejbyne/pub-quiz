@@ -1,6 +1,10 @@
 const path = require("path");
 
 module.exports = {
+  experimental: {
+    reactRefresh: true,
+  },
+
   modifyWebpackConfig({ webpackConfig }) {
     return {
       ...webpackConfig,
