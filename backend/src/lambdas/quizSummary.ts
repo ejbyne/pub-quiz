@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { QuizState, QuizStatus } from '../domain/state/QuizState';
+import { QuizStatus } from '../domain/state/QuizState';
 import { mapQuizStateToResponseState } from './mapQuizStateToResponseState';
 
 interface Event {

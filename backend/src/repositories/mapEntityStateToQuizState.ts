@@ -27,7 +27,8 @@ export const mapEntityStateToQuizState = (
         rounds,
         state.roundSummary!,
         state.questionNumber!,
-        state.questionText!
+        state.questionText!,
+        state.questionOptions
       );
 
     case QuizStatus.QUIZ_FINISHED:

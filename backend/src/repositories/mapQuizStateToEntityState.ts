@@ -28,6 +28,7 @@ export const mapQuizStateToEntityState = (
         roundSummary: state.roundSummary,
         questionNumber: state.questionNumber,
         questionText: state.questionText,
+        questionOptions: state.questionOptions,
       };
 
     case QuizStatus.QUIZ_FINISHED:

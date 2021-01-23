@@ -106,7 +106,8 @@ describe('QuizRepository integration tests', () => {
           numberOfQuestions: 2,
         },
         1,
-        'A question?'
+        'A question?',
+        ['Answer 1', 'Answer 2', 'Answer 3', 'Answer 4']
       )
     );
 
@@ -120,6 +121,7 @@ describe('QuizRepository integration tests', () => {
       },
       questionNumber: 1,
       questionText: 'A question?',
+      questionOptions: ['Answer 1', 'Answer 2', 'Answer 3', 'Answer 4'],
     });
   });
 });

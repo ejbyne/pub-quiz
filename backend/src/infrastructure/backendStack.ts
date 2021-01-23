@@ -1,6 +1,5 @@
 import * as cdk from '@aws-cdk/core';
 import { FieldLogLevel, GraphQLApi } from '@aws-cdk/aws-appsync';
-import * as Path from 'path';
 import { BillingMode, Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 import { createLambdaResolvers } from './createLambdaResolvers';
 
@@ -13,7 +12,9 @@ export class PubQuizBackendStack extends cdk.Stack {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
-      schemaDefinitionFile: Path.join(__dirname, './schema.graphql'),
+      schemaDefinitionFile: require.resolve(
+        '@pub-quiz/shared/src/graphql/schema.graphql'
+      ),
     });
 
     const quizTable = new Table(this, 'QuizTable', {

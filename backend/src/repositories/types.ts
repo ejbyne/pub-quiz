@@ -22,4 +22,5 @@ export interface QuizEntityState {
   };
   questionNumber?: number;
   questionText?: string;
+  questionOptions?: string[];
 }
