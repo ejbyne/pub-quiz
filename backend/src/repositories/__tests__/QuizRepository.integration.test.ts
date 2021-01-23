@@ -47,7 +47,7 @@ describe('QuizRepository integration tests', () => {
       tableName,
       databaseManager.dynamoClientConfiguration
     );
-  });
+  }, 20000);
 
   afterAll(async () => await databaseManager.tearDownDatabase());
 

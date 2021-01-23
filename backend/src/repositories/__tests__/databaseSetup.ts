@@ -20,9 +20,9 @@ export const provisionDatabase = async (): Promise<{
 
   const endpoint = `http://${container.getContainerIpAddress()}:${container.getMappedPort(
     8000
-  )}}`;
+  )}`;
 
-  console.log('Started Dynamo DB test container');
+  console.log('Started Dynamo DB test container', endpoint);
 
   const dynamoClientConfiguration: ServiceConfigurationOptions = {
     endpoint,
