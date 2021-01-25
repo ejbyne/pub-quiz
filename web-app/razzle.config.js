@@ -6,7 +6,7 @@ module.exports = {
   },
 
   modifyWebpackConfig({ webpackConfig }) {
-    const babelLoader = webpackConfig.module.rules.find(
+    const babelLoaderRule = webpackConfig.module.rules.find(
       (rule) => rule.test.toString() === /\.(js|jsx|mjs|ts|tsx)$/.toString()
     );
 
@@ -17,8 +17,8 @@ module.exports = {
         rules: [
           ...webpackConfig.module.rules,
           {
-            ...babelLoader,
-            // We want to transpile local shared code
+            ...babelLoaderRule,
+            // We also want to transpile local shared code
             include: path.resolve(__dirname, "../shared/src"),
           },
         ],
