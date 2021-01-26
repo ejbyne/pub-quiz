@@ -1,23 +1,16 @@
-import React, { useReducer, Reducer, Dispatch } from 'react';
-import { ApolloProvider, ApolloClient } from '@apollo/react-hooks';
-// import { act } from '@testing-library/react';
-import {
-  NextQuizState,
-  Quiz,
-  QuizAction,
-} from '../domain/types';
-import { quizReducer } from '../domain/quizReducer';
-import { QuizContext } from '../context/quizContext';
+import React, { useReducer, Reducer, Dispatch } from "react";
+import { ApolloProvider, ApolloClient } from "@apollo/react-hooks";
+import { NextQuizState, Quiz, QuizAction } from "../domain/types";
+import { quizReducer } from "../domain/quizReducer";
+import { QuizContext } from "../context/quizContext";
 
 let mockUpdateQuiz: Dispatch<QuizAction>;
 
 export const receiveNextQuizState = (payload: NextQuizState) =>
-  // act(() => {
-    mockUpdateQuiz({
-      type: 'NextQuizStateReceived',
-      payload,
-    });
-  // });
+  mockUpdateQuiz({
+    type: "NextQuizStateReceived",
+    payload,
+  });
 
 export const TestAppContainer: React.FC<{
   client: ApolloClient<any>;
