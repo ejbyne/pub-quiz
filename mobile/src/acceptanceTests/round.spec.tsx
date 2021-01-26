@@ -3,8 +3,9 @@ import { App } from '../components/App';
 import { render } from '@testing-library/react-native';
 import { exampleQuiz } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
-import { TestAppContainer, receiveNextQuizState } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
+import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { QuizStatus } from '../../../shared/src/graphql/types';
+import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 
 describe('round', () => {
   it('starts the first round', async () => {
