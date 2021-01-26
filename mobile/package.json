@@ -39,7 +39,10 @@
     "typescript": "^3.8.3"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "./jest/jest-preset.js",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
