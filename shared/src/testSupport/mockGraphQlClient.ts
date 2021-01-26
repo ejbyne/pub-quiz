@@ -1,14 +1,14 @@
-import { InMemoryCache, ApolloClient } from '@apollo/client';
+import { InMemoryCache, ApolloClient } from '@apollo/react-hooks';
 import { SchemaLink } from 'apollo-link-schema';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import { readFileSync } from 'fs';
-import fragmentTypes from '@pub-quiz/shared/src/graphql/fragmentTypes.json';
+import fragmentTypes from '../graphql/fragmentTypes.json';
 
 const schemaString =
   'directive @aws_subscribe(mutations : [String]!) on FIELD_DEFINITION \n' +
   readFileSync(
-    require.resolve('@pub-quiz/backend/src/infrastructure/schema.graphql'),
+    require.resolve('../graphql/schema.graphql'),
     'utf-8',
   );
 

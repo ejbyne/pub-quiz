@@ -3,8 +3,9 @@ import { App } from '../components/App';
 import { render } from '@testing-library/react';
 import { exampleQuiz } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
-import { TestAppContainer, receiveNextQuizState } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
+import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { QuizStatus } from '../../../shared/src/graphql/types';
+import { receiveNextQuizState } from '../testSupport/triggerNextStateEvent';
 
 describe('round', () => {
   it('starts the first round', async () => {
@@ -32,7 +33,7 @@ describe('round', () => {
       },
     });
 
-    expect(await findByText('Round 1')).toBeTruthy();
+    expect(await findByText('Round 1 started')).toBeTruthy();
     expect(await findByText('The first round')).toBeTruthy();
   });
 

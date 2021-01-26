@@ -8,8 +8,6 @@ export const QuestionAsked: React.FC<{}> = () => {
   const state = quiz.state as QuestionAskedState;
   const round = quiz.rounds[state.roundSummary.roundNumber];
 
-  console.log("question asked", state);
-  console.log("round", round);
   return (
     <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg absolute top-24 bottom-4 text-gray-200">
       <h1 className="text-2xl text-center mb-4">

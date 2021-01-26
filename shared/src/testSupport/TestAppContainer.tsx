@@ -1,5 +1,5 @@
 import React, { useReducer, Reducer, Dispatch } from 'react';
-import { ApolloProvider, ApolloClient } from '@apollo/client';
+import { ApolloProvider, ApolloClient } from '@apollo/react-hooks';
 // import { act } from '@testing-library/react';
 import {
   NextQuizState,
@@ -25,7 +25,7 @@ export const TestAppContainer: React.FC<{
 }> = ({ client, initialState = { rounds: [] }, children }) => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
     quizReducer,
-    initialState,
+    initialState
   );
 
   mockUpdateQuiz = updateQuiz;
