@@ -33,11 +33,4 @@ module.exports = {
       },
     };
   },
-
-  modifyPaths({ paths }) {
-    return {
-      ...paths,
-      appBabelRc: path.resolve(__dirname, 'babel.config.js')
-    }
-  }
 };
