@@ -71,6 +71,7 @@ enum QuizStatus {
   QUIZ_NOT_YET_STARTED
   ROUND_STARTED
   QUESTION_ASKED
+  QUESTION_ANSWERED
   ROUND_FINISHED
   QUIZ_FINISHED
 }
@@ -97,6 +98,16 @@ type QuestionAsked implements QuizState {
   roundSummary: RoundSummary!
   questionNumber: Int!
   questionText: String!
+  questionOptions: [String!]
+}
+
+type QuestionAsked implements QuizState {
+  quizId: ID!
+  status: QuizStatus!
+  roundSummary: RoundSummary!
+  questionNumber: Int!
+  questionText: String!
+  questionAnswer: String!
   questionOptions: [String!]
 }
 

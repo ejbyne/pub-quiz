@@ -7,6 +7,7 @@ import { RoundStartedState } from '../domain/state/RoundStartedState';
 import { RoundFinishedState } from '../domain/state/RoundFinishedState';
 import { QuestionAskedState } from '../domain/state/QuestionAskedState';
 import { QuizFinishedState } from '../domain/state/QuizFinishedState';
+import { QuestionAnsweredState } from '../domain/state/QuestionAnsweredState';
 
 export const mapEntityStateToQuizState = (
   state: QuizEntityState,
@@ -30,6 +31,16 @@ export const mapEntityStateToQuizState = (
         state.questionText!,
         state.questionOptions
       );
+
+    case QuizStatus.QUESTION_ANSWERED:
+      return new QuestionAnsweredState(
+        rounds,
+        state.roundSummary!,
+        state.questionNumber!,
+        state.questionText!,
+        state.questionAnswer!,
+        state.questionOptions
+      )
 
     case QuizStatus.QUIZ_FINISHED:
       return new QuizFinishedState(rounds);

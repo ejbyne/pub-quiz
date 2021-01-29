@@ -22,6 +22,7 @@ export interface NextStateEvent {
   };
   questionNumber?: number;
   questionText?: string;
+  questionAnswer?: string;
   questionOptions?: string[];
   answers?: {
     question: string;

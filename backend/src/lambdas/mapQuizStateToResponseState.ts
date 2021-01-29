@@ -41,6 +41,18 @@ export const mapQuizStateToResponseState = (
         questionOptions: state.questionOptions,
       };
 
+    case QuizStatus.QUESTION_ANSWERED:
+      return {
+        __typename: 'QuestionAnswered',
+        quizId,
+        status: QuizStatus.QUESTION_ANSWERED,
+        roundSummary: state.roundSummary,
+        questionNumber: state.questionNumber,
+        questionText: state.questionText,
+        questionAnswer: state.questionAnswer,
+        questionOptions: state.questionOptions,
+      };
+
     case QuizStatus.QUIZ_FINISHED:
       return {
         __typename: 'QuizFinished',
