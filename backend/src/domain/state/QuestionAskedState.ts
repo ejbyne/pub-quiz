@@ -1,25 +1,31 @@
-import { BaseQuizState, QuizStatus, QuizState } from './QuizState';
-import { Round } from '../Quiz';
+import { Question, QuizState, QuizStatus, Round } from '../types';
+import { BaseQuizState } from './BaseQuizState';
 import { RoundFinishedState } from './RoundFinishedState';
 
-export class QuestionAskedState implements BaseQuizState {
+export class QuestionAskedState extends BaseQuizState {
   status: QuizStatus.QUESTION_ASKED;
   rounds: Round[];
   roundNumber: number;
   questionNumber: number;
 
   constructor(rounds: Round[], roundNumber: number, questionNumber: number) {
-    this.status = QuizStatus.QUESTION_ASKED;
-    this.rounds = rounds;
-    this.roundNumber = roundNumber;
-    this.questionNumber = questionNumber;
+    super(QuizStatus.QUESTION_ASKED, rounds, roundNumber, questionNumber);
+  }
+
+  get questionText(): string {
+    return this.question.question;
+  }
+
+  get questionOptions(): string[] | undefined {
+    return this.question.options;
+  }
+
+  private get question(): Question {
+    return this.rounds[this.roundNumber].questions[this.questionNumber];
   }
 
   nextState(): QuizState {
-    if (
-      this.questionNumber ===
-      this.rounds[this.roundNumber].questions.length - 1
-    ) {
+    if (this.isLastQuestionInRound()) {
       return new RoundFinishedState(this.rounds, this.roundNumber);
     }
 
@@ -27,6 +33,12 @@ export class QuestionAskedState implements BaseQuizState {
       this.rounds,
       this.roundNumber,
       this.questionNumber + 1
+    );
+  }
+
+  private isLastQuestionInRound(): boolean {
+    return (
+      this.questionNumber === this.rounds[this.roundNumber].questions.length - 1
     );
   }
 }

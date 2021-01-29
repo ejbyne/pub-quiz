@@ -4,7 +4,7 @@ import { Quiz } from '../domain/Quiz';
 import { QuizEntity } from './types';
 import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
 import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
-import { QuizState } from '../domain/state/QuizState';
+import { QuizState } from '../domain/state/BaseQuizState';
 
 export class QuizRepository {
   private documentClient: DocumentClient;

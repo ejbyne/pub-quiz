@@ -1,4 +1,4 @@
-import { QuizState, QuizStatus } from '../domain/state/QuizState';
+import { QuizState, QuizStatus } from '../domain/state/BaseQuizState';
 import { NextStateEvent } from './nextQuizState';
 
 export const mapQuizStateToResponseState = (

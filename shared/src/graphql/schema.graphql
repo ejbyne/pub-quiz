@@ -101,7 +101,7 @@ type QuestionAsked implements QuizState {
   questionOptions: [String!]
 }
 
-type QuestionAsked implements QuizState {
+type QuestionAnswered implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!

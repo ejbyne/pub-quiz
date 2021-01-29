@@ -5,7 +5,7 @@ import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../../domain/Quiz';
 import { QuizNotYetStartedState } from '../../domain/state/QuizNotYetStartedState';
 import { QuestionAskedState } from '../../domain/state/QuestionAskedState';
-import { QuizStatus } from '../../domain/state/QuizState';
+import { QuizStatus } from '../../domain/state/BaseQuizState';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 

@@ -1,5 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { QuizStatus } from '../domain/state/QuizState';
+import { QuizStatus } from '../domain/state/BaseQuizState';
 export interface QuizEntity {
   quizId: string;
   quizName: string;

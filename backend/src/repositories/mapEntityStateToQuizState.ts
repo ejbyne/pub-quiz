@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { QuizEntityState } from './types';
 import { Round } from '../domain/Quiz';
-import { QuizState, QuizStatus } from '../domain/state/QuizState';
+import { QuizState, QuizStatus } from '../domain/state/BaseQuizState';
 import { QuizNotYetStartedState } from '../domain/state/QuizNotYetStartedState';
 import { RoundStartedState } from '../domain/state/RoundStartedState';
 import { RoundFinishedState } from '../domain/state/RoundFinishedState';

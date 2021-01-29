@@ -1,40 +1,15 @@
 import { Quiz } from '../Quiz';
 import { QuizNotYetStartedState } from '../state/QuizNotYetStartedState';
-import { QuizStatus } from '../state/QuizState';
 import { RoundStartedState } from '../state/RoundStartedState';
 import { QuestionAskedState } from '../state/QuestionAskedState';
 import { RoundFinishedState } from '../state/RoundFinishedState';
 import { QuestionAnsweredState } from '../state/QuestionAnsweredState';
+import { exampleRounds } from '../../testSupport/testFixtures';
+import { QuizStatus } from '../types';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 
 describe('Quiz', () => {
-  const exampleRounds = [
-    {
-      roundName: 'Round 1',
-      questions: [
-        {
-          question: 'Question 1',
-          answer: 'Answer 1',
-          options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
-        },
-        {
-          question: 'Question 2',
-          answer: 'Answer 2',
-        },
-      ],
-    },
-    {
-      roundName: 'Round 2',
-      questions: [
-        {
-          question: 'Question 3',
-          answer: 'Answer 3',
-        },
-      ],
-    },
-  ];
-
   describe('nextState', () => {
     it('should start the first round if the quiz has not yet started', () => {
       const quiz = new Quiz(

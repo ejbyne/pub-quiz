@@ -1,5 +1,5 @@
 import { QuizEntityState } from './types';
-import { QuizState, QuizStatus } from '../domain/state/QuizState';
+import { QuizState, QuizStatus } from '../domain/state/BaseQuizState';
 
 export const mapQuizStateToEntityState = (
   state: QuizState

@@ -1,15 +1,14 @@
-import { BaseQuizState, QuizStatus, QuizState } from './QuizState';
-import { Round } from '../Quiz';
+import { QuizState, QuizStatus, Round } from '../types';
+import { BaseQuizState } from './BaseQuizState';
 import { QuestionAskedState } from './QuestionAskedState';
 
-export class RoundStartedState implements BaseQuizState {
-  status: QuizStatus.ROUND_STARTED = QuizStatus.ROUND_STARTED;
+export class RoundStartedState extends BaseQuizState {
+  status: QuizStatus.ROUND_STARTED;
   rounds: Round[];
   roundNumber: number;
 
   constructor(rounds: Round[], roundNumber: number) {
-    this.rounds = rounds;
-    this.roundNumber = roundNumber;
+    super(QuizStatus.ROUND_STARTED, rounds, roundNumber);
   }
 
   nextState(): QuizState {
