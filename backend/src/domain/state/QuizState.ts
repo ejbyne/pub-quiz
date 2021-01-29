@@ -4,12 +4,14 @@ import { RoundFinishedState } from './RoundFinishedState';
 import { QuestionAskedState } from './QuestionAskedState';
 import { QuizFinishedState } from './QuizFinishedState';
 import { Round } from '../Quiz';
+import { QuestionAnsweredState } from './QuestionAnsweredState';
 
 export type QuizState =
   | QuizNotYetStartedState
   | RoundStartedState
   | RoundFinishedState
   | QuestionAskedState
+  | QuestionAnsweredState
   | QuizFinishedState;
 
 export enum QuizStatus {
@@ -17,6 +19,7 @@ export enum QuizStatus {
   ROUND_STARTED = 'ROUND_STARTED',
   ROUND_FINISHED = 'ROUND_FINISHED',
   QUESTION_ASKED = 'QUESTION_ASKED',
+  QUESTION_ANSWERED = 'QUESTION_ANSWERED',
   QUIZ_FINISHED = 'QUIZ_FINISHED',
 }
 

@@ -4,6 +4,7 @@ import { QuizStatus } from '../state/QuizState';
 import { RoundStartedState } from '../state/RoundStartedState';
 import { QuestionAskedState } from '../state/QuestionAskedState';
 import { RoundFinishedState } from '../state/RoundFinishedState';
+import { QuestionAnsweredState } from '../state/QuestionAnsweredState';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 
@@ -135,7 +136,7 @@ describe('Quiz', () => {
       });
     });
 
-    it('should move to the second round if the first round has finished', () => {
+    it('should return the first answer if the round has finished', () => {
       const quiz = new Quiz(
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
@@ -145,6 +146,68 @@ describe('Quiz', () => {
           roundName: 'Round 1',
           numberOfQuestions: 2,
         })
+      );
+
+      expect(quiz.nextState).toMatchObject({
+        status: QuizStatus.QUESTION_ANSWERED,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'Round 1',
+          numberOfQuestions: 2,
+        },
+        questionText: 'Question 1',
+        questionAnswer: 'Answer 1',
+        questionOptions: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+      });
+    });
+
+    it('should return the second answer if the first question has been answered', () => {
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAnsweredState(
+          exampleRounds,
+          {
+            roundNumber: 0,
+            roundName: 'Round 1',
+            numberOfQuestions: 2,
+          },
+          0,
+          'Question 1',
+          'Answer 1',
+          ['Answer 1', 'Answer 1b', 'Answer 1c']
+        )
+      );
+
+      expect(quiz.nextState).toMatchObject({
+        status: QuizStatus.QUESTION_ANSWERED,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'Round 1',
+          numberOfQuestions: 2,
+        },
+        questionText: 'Question 2',
+        questionAnswer: 'Answer 2',
+      });
+    });
+
+    it('should move to the second round if all of the questions have been answered', () => {
+      const quiz = new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAnsweredState(
+          exampleRounds,
+          {
+            roundNumber: 0,
+            roundName: 'Round 1',
+            numberOfQuestions: 2,
+          },
+          1,
+          'Question 2',
+          'Answer 2'
+        )
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -162,11 +225,17 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new RoundFinishedState(exampleRounds, {
-          roundNumber: 1,
-          roundName: 'Round 2',
-          numberOfQuestions: 1,
-        })
+        new QuestionAnsweredState(
+          exampleRounds,
+          {
+            roundNumber: 1,
+            roundName: 'Round 2',
+            numberOfQuestions: 1,
+          },
+          0,
+          'Question 1',
+          'Answer 1'
+        )
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -246,11 +315,17 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         roundsWithNoQuestionsInSecondRound,
-        new RoundFinishedState(roundsWithNoQuestionsInSecondRound, {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        })
+        new QuestionAnsweredState(
+          roundsWithNoQuestionsInSecondRound,
+          {
+            roundNumber: 0,
+            roundName: 'Round 1',
+            numberOfQuestions: 2,
+          },
+          1,
+          'Question 2',
+          'Answer 2'
+        )
       );
 
       expect(quiz.nextState).toMatchObject({

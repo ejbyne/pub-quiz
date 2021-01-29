@@ -5,8 +5,7 @@ import {
   RoundSummary,
 } from './QuizState';
 import { Round } from '../Quiz';
-import { QuizFinishedState } from './QuizFinishedState';
-import { RoundStartedState } from './RoundStartedState';
+import { QuestionAnsweredState } from './QuestionAnsweredState';
 
 export class RoundFinishedState implements BaseQuizState {
   status: QuizStatus.ROUND_FINISHED;
@@ -21,19 +20,24 @@ export class RoundFinishedState implements BaseQuizState {
   }
 
   nextState(): QuizState {
-    const nextRoundWithQuestions = this.rounds.findIndex(
-      (round, index) =>
-        index > this.roundSummary.roundNumber && round.questions.length > 0
+    // const nextRoundWithQuestions = this.rounds.findIndex(
+    //   (round, index) =>
+    //     index > this.roundSummary.roundNumber && round.questions.length > 0
+    // );
+
+    // if (nextRoundWithQuestions === -1) {
+    //   return new QuizFinishedState(this.rounds);
+    // }
+
+    const nextAnswer = this.rounds[this.roundSummary.roundNumber].questions[0];
+
+    return new QuestionAnsweredState(
+      this.rounds,
+      this.roundSummary,
+      0,
+      nextAnswer.question,
+      nextAnswer.answer,
+      nextAnswer.options
     );
-
-    if (nextRoundWithQuestions === -1) {
-      return new QuizFinishedState(this.rounds);
-    }
-
-    return new RoundStartedState(this.rounds, {
-      roundNumber: nextRoundWithQuestions,
-      roundName: this.rounds[nextRoundWithQuestions].roundName,
-      numberOfQuestions: this.rounds[nextRoundWithQuestions].questions.length,
-    });
   }
 }
