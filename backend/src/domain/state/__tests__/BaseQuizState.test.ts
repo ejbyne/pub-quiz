@@ -4,13 +4,13 @@ import { BaseQuizState } from '../BaseQuizState';
 
 describe('BaseQuizState', () => {
   describe('roundSummary', () => {
-    it('returns null if there is no current round', () => {
+    it('returns undefined if there is no current round', () => {
       const quizState = new BaseQuizState(
         QuizStatus.QUIZ_NOT_YET_STARTED,
         exampleRounds
       );
 
-      expect(quizState.roundSummary).toBe(null);
+      expect(quizState.roundSummary).toBe(undefined);
     });
 
     it('returns the round summary if there is a current round', () => {

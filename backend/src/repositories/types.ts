@@ -1,5 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { QuizStatus } from '../domain/state/BaseQuizState';
+import { QuizStatus } from '../domain/types';
 export interface QuizEntity {
   quizId: string;
   quizName: string;
@@ -15,13 +15,6 @@ export interface QuizEntity {
 }
 export interface QuizEntityState {
   status: QuizStatus;
-  roundSummary?: {
-    roundNumber: number;
-    roundName: string;
-    numberOfQuestions: number;
-  };
+  roundNumber?: number;
   questionNumber?: number;
-  questionText?: string;
-  questionAnswer?: string;
-  questionOptions?: string[];
 }

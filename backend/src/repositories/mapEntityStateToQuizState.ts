@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { QuizEntityState } from './types';
-import { Round } from '../domain/Quiz';
-import { QuizState, QuizStatus } from '../domain/state/BaseQuizState';
 import { QuizNotYetStartedState } from '../domain/state/QuizNotYetStartedState';
 import { RoundStartedState } from '../domain/state/RoundStartedState';
 import { RoundFinishedState } from '../domain/state/RoundFinishedState';
 import { QuestionAskedState } from '../domain/state/QuestionAskedState';
 import { QuizFinishedState } from '../domain/state/QuizFinishedState';
 import { QuestionAnsweredState } from '../domain/state/QuestionAnsweredState';
+import { QuizState, QuizStatus, Round } from '../domain/types';
 
 export const mapEntityStateToQuizState = (
   state: QuizEntityState,
@@ -18,29 +17,24 @@ export const mapEntityStateToQuizState = (
       return new QuizNotYetStartedState(rounds);
 
     case QuizStatus.ROUND_STARTED:
-      return new RoundStartedState(rounds, state.roundSummary!);
+      return new RoundStartedState(rounds, state.roundNumber!);
 
     case QuizStatus.ROUND_FINISHED:
-      return new RoundFinishedState(rounds, state.roundSummary!);
+      return new RoundFinishedState(rounds, state.roundNumber!);
 
     case QuizStatus.QUESTION_ASKED:
       return new QuestionAskedState(
         rounds,
-        state.roundSummary!,
-        state.questionNumber!,
-        state.questionText!,
-        state.questionOptions
+        state.roundNumber!,
+        state.questionNumber!
       );
 
     case QuizStatus.QUESTION_ANSWERED:
       return new QuestionAnsweredState(
         rounds,
-        state.roundSummary!,
+        state.roundNumber!,
         state.questionNumber!,
-        state.questionText!,
-        state.questionAnswer!,
-        state.questionOptions
-      )
+      );
 
     case QuizStatus.QUIZ_FINISHED:
       return new QuizFinishedState(rounds);

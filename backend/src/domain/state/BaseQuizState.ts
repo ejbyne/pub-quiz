@@ -18,9 +18,9 @@ export class BaseQuizState {
     this.questionNumber = questionNumber;
   }
 
-  get roundSummary(): RoundSummary | null {
+  get roundSummary(): RoundSummary | undefined {
     if (this.roundNumber === undefined) {
-      return null;
+      return undefined;
     }
 
     const round = this.rounds[this.roundNumber];

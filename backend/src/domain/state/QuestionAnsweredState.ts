@@ -4,7 +4,7 @@ import { QuizFinishedState } from './QuizFinishedState';
 import { RoundStartedState } from './RoundStartedState';
 
 export class QuestionAnsweredState extends BaseQuizState {
-  status: QuizStatus;
+  status: QuizStatus.QUESTION_ANSWERED;
   rounds: Round[];
   roundNumber: number;
   questionNumber: number;

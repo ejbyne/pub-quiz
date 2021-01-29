@@ -1,5 +1,4 @@
-import { QuizState } from './state/BaseQuizState';
-import { Round } from './types';
+import { QuizState, Round } from './types';
 export class Quiz {
   quizId: string;
   quizName: string;

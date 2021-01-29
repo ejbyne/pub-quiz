@@ -5,7 +5,7 @@ import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../../domain/Quiz';
 import { QuizNotYetStartedState } from '../../domain/state/QuizNotYetStartedState';
 import { QuestionAskedState } from '../../domain/state/QuestionAskedState';
-import { QuizStatus } from '../../domain/state/BaseQuizState';
+import { QuizStatus } from '../../domain/types';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
 
@@ -98,30 +98,14 @@ describe('QuizRepository integration tests', () => {
 
     await quizRepository.updateState(
       EXAMPLE_QUIZ_ID,
-      new QuestionAskedState(
-        exampleRounds,
-        {
-          roundNumber: 1,
-          roundName: 'Round 2',
-          numberOfQuestions: 2,
-        },
-        1,
-        'A question?',
-        ['Answer 1', 'Answer 2', 'Answer 3', 'Answer 4']
-      )
+      new QuestionAskedState(exampleRounds, 0, 0)
     );
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
     expect(savedQuiz.state).toMatchObject({
       status: QuizStatus.QUESTION_ASKED,
-      roundSummary: {
-        roundNumber: 1,
-        roundName: 'Round 2',
-        numberOfQuestions: 2,
-      },
-      questionNumber: 1,
-      questionText: 'A question?',
-      questionOptions: ['Answer 1', 'Answer 2', 'Answer 3', 'Answer 4'],
+      roundNumber: 0,
+      questionNumber: 0,
     });
   });
 });

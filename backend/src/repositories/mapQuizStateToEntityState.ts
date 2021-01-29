@@ -1,5 +1,5 @@
+import { QuizState, QuizStatus } from '../domain/types';
 import { QuizEntityState } from './types';
-import { QuizState, QuizStatus } from '../domain/state/BaseQuizState';
 
 export const mapQuizStateToEntityState = (
   state: QuizState
@@ -13,32 +13,27 @@ export const mapQuizStateToEntityState = (
     case QuizStatus.ROUND_STARTED:
       return {
         status: QuizStatus.ROUND_STARTED,
-        roundSummary: state.roundSummary,
+        roundNumber: state.roundNumber,
       };
 
     case QuizStatus.ROUND_FINISHED:
       return {
         status: QuizStatus.ROUND_FINISHED,
-        roundSummary: state.roundSummary,
+        roundNumber: state.roundNumber,
       };
 
     case QuizStatus.QUESTION_ASKED:
       return {
         status: QuizStatus.QUESTION_ASKED,
-        roundSummary: state.roundSummary,
+        roundNumber: state.roundNumber,
         questionNumber: state.questionNumber,
-        questionText: state.questionText,
-        questionOptions: state.questionOptions,
       };
 
     case QuizStatus.QUESTION_ANSWERED:
       return {
         status: QuizStatus.QUESTION_ANSWERED,
-        roundSummary: state.roundSummary,
+        roundNumber: state.roundNumber,
         questionNumber: state.questionNumber,
-        questionText: state.questionText,
-        questionAnswer: state.questionAnswer,
-        questionOptions: state.questionOptions,
       };
 
     case QuizStatus.QUIZ_FINISHED:

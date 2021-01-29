@@ -1,4 +1,4 @@
-import { QuizState, QuizStatus } from '../domain/state/BaseQuizState';
+import { QuizState, QuizStatus } from '../domain/types';
 import { NextStateEvent } from './nextQuizState';
 
 export const mapQuizStateToResponseState = (
@@ -27,7 +27,6 @@ export const mapQuizStateToResponseState = (
         quizId,
         status: QuizStatus.ROUND_FINISHED,
         roundSummary: state.roundSummary,
-        answers: state.rounds[state.roundSummary.roundNumber].questions,
       };
 
     case QuizStatus.QUESTION_ASKED:
