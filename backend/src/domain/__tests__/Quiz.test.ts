@@ -46,11 +46,7 @@ describe('Quiz', () => {
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_STARTED,
-        roundSummary: {
-          roundName: 'Round 1',
-          roundNumber: 0,
-          numberOfQuestions: 2,
-        },
+        roundNumber: 0,
       });
     });
 
@@ -59,23 +55,13 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new RoundStartedState(exampleRounds, {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        })
+        new RoundStartedState(exampleRounds, 0)
       );
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUESTION_ASKED,
-        roundSummary: {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        },
+        roundNumber: 0,
         questionNumber: 0,
-        questionText: 'Question 1',
-        questionOptions: ['Answer 1', 'Answer 1b', 'Answer 1c'],
       });
     });
 
@@ -84,28 +70,13 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAskedState(
-          exampleRounds,
-          {
-            roundNumber: 0,
-            roundName: 'Round 1',
-            numberOfQuestions: 2,
-          },
-          0,
-          'Question 1',
-          ['Answer 1', 'Answer 1b', 'Answer 1c']
-        )
+        new QuestionAskedState(exampleRounds, 0, 0)
       );
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUESTION_ASKED,
-        roundSummary: {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        },
+        roundNumber: 0,
         questionNumber: 1,
-        questionText: 'Question 2',
       });
     });
 
@@ -114,25 +85,12 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAskedState(
-          exampleRounds,
-          {
-            roundNumber: 0,
-            roundName: 'Round 1',
-            numberOfQuestions: 2,
-          },
-          1,
-          'Question 2'
-        )
+        new QuestionAskedState(exampleRounds, 0, 1)
       );
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_FINISHED,
-        roundSummary: {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        },
+        roundNumber: 0,
       });
     });
 
@@ -141,23 +99,13 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new RoundFinishedState(exampleRounds, {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        })
+        new RoundFinishedState(exampleRounds, 0)
       );
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUESTION_ANSWERED,
-        roundSummary: {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        },
-        questionText: 'Question 1',
-        questionAnswer: 'Answer 1',
-        questionOptions: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+        roundNumber: 0,
+        questionNumber: 0,
       });
     });
 
@@ -166,29 +114,13 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAnsweredState(
-          exampleRounds,
-          {
-            roundNumber: 0,
-            roundName: 'Round 1',
-            numberOfQuestions: 2,
-          },
-          0,
-          'Question 1',
-          'Answer 1',
-          ['Answer 1', 'Answer 1b', 'Answer 1c']
-        )
+        new QuestionAnsweredState(exampleRounds, 0, 0)
       );
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.QUESTION_ANSWERED,
-        roundSummary: {
-          roundNumber: 0,
-          roundName: 'Round 1',
-          numberOfQuestions: 2,
-        },
-        questionText: 'Question 2',
-        questionAnswer: 'Answer 2',
+        roundNumber: 0,
+        questionNumber: 1,
       });
     });
 
@@ -197,26 +129,12 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAnsweredState(
-          exampleRounds,
-          {
-            roundNumber: 0,
-            roundName: 'Round 1',
-            numberOfQuestions: 2,
-          },
-          1,
-          'Question 2',
-          'Answer 2'
-        )
+        new QuestionAnsweredState(exampleRounds, 0, 1)
       );
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_STARTED,
-        roundSummary: {
-          roundNumber: 1,
-          roundName: 'Round 2',
-          numberOfQuestions: 1,
-        },
+        roundNumber: 1,
       });
     });
 
@@ -225,17 +143,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAnsweredState(
-          exampleRounds,
-          {
-            roundNumber: 1,
-            roundName: 'Round 2',
-            numberOfQuestions: 1,
-          },
-          0,
-          'Question 1',
-          'Answer 1'
-        )
+        new QuestionAnsweredState(exampleRounds, 1, 0)
       );
 
       expect(quiz.nextState).toMatchObject({
@@ -282,11 +190,7 @@ describe('Quiz', () => {
 
       expect(quiz.nextState).toMatchObject({
         status: QuizStatus.ROUND_STARTED,
-        roundSummary: {
-          roundNumber: 1,
-          roundName: 'Round 2',
-          numberOfQuestions: 1,
-        },
+        roundNumber: 1,
       });
     });
 
@@ -315,17 +219,7 @@ describe('Quiz', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         roundsWithNoQuestionsInSecondRound,
-        new QuestionAnsweredState(
-          roundsWithNoQuestionsInSecondRound,
-          {
-            roundNumber: 0,
-            roundName: 'Round 1',
-            numberOfQuestions: 2,
-          },
-          1,
-          'Question 2',
-          'Answer 2'
-        )
+        new QuestionAnsweredState(roundsWithNoQuestionsInSecondRound, 0, 1)
       );
 
       expect(quiz.nextState).toMatchObject({

@@ -1,33 +1,18 @@
-import {
-  BaseQuizState,
-  QuizStatus,
-  QuizState,
-  RoundSummary,
-} from './QuizState';
+import { BaseQuizState, QuizStatus, QuizState } from './QuizState';
 import { Round } from '../Quiz';
 import { QuestionAskedState } from './QuestionAskedState';
 
 export class RoundStartedState implements BaseQuizState {
   status: QuizStatus.ROUND_STARTED = QuizStatus.ROUND_STARTED;
   rounds: Round[];
+  roundNumber: number;
 
-  roundSummary: RoundSummary;
-
-  constructor(rounds: Round[], roundSummary: RoundSummary) {
+  constructor(rounds: Round[], roundNumber: number) {
     this.rounds = rounds;
-    this.roundSummary = roundSummary;
+    this.roundNumber = roundNumber;
   }
 
   nextState(): QuizState {
-    const nextQuestion = this.rounds[this.roundSummary.roundNumber]
-      .questions[0];
-
-    return new QuestionAskedState(
-      this.rounds,
-      this.roundSummary,
-      0,
-      nextQuestion.question,
-      nextQuestion.options
-    );
+    return new QuestionAskedState(this.rounds, this.roundNumber, 0);
   }
 }
