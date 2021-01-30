@@ -12,16 +12,10 @@ export class QuizNotYetStartedState extends BaseQuizState {
   }
 
   nextState(): QuizState {
-    const nextRoundWithQuestions = this.nextRoundWithQuestions();
-
-    if (nextRoundWithQuestions === -1) {
+    if (this.nextRoundWithQuestions === -1) {
       return new QuizFinishedState(this.rounds);
     }
 
-    return new RoundStartedState(this.rounds, nextRoundWithQuestions);
-  }
-
-  nextRoundWithQuestions(): number {
-    return this.rounds.findIndex((round) => round.questions.length > 0);
+    return new RoundStartedState(this.rounds, this.nextRoundWithQuestions);
   }
 }

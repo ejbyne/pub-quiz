@@ -13,6 +13,7 @@ interface Event {
         questions: {
           question: string;
           answer: string;
+          options?: string[];
         }[];
       }[];
     };

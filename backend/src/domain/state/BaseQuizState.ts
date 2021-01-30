@@ -1,4 +1,4 @@
-import { Question, QuizState, QuizStatus, Round, RoundSummary } from "../types";
+import { Question, QuizState, QuizStatus, Round, RoundSummary } from '../types';
 
 export class BaseQuizState {
   status: QuizStatus;
@@ -49,6 +49,24 @@ export class BaseQuizState {
       return undefined;
     }
     return this.rounds[this.roundNumber].questions[this.questionNumber];
+  }
+
+  get nextRoundWithQuestions(): number {
+    return this.rounds.findIndex((round, index) => {
+      if (this.roundNumber === undefined) {
+        return round.questions.length > 0;
+      }
+      return index > this.roundNumber && round.questions.length > 0;
+    });
+  }
+
+  get isLastQuestionInRound(): boolean | undefined {
+    if (this.roundNumber === undefined || this.questionNumber === undefined) {
+      return undefined;
+    }
+    return (
+      this.questionNumber === this.rounds[this.roundNumber].questions.length - 1
+    );
   }
 
   nextState(): QuizState {

@@ -23,10 +23,4 @@ export class QuestionAskedState extends BaseQuizState {
       this.questionNumber + 1
     );
   }
-
-  private get isLastQuestionInRound(): boolean {
-    return (
-      this.questionNumber === this.rounds[this.roundNumber].questions.length - 1
-    );
-  }
 }

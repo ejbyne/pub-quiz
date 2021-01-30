@@ -19,25 +19,13 @@ export class QuestionAnsweredState extends BaseQuizState {
         return new QuizFinishedState(this.rounds);
       }
 
-      return new RoundStartedState(this.rounds, this.roundNumber + 1);
+      return new RoundStartedState(this.rounds, this.nextRoundWithQuestions);
     }
 
     return new QuestionAnsweredState(
       this.rounds,
       this.roundNumber,
       this.questionNumber + 1
-    );
-  }
-
-  private get isLastQuestionInRound(): boolean {
-    return (
-      this.questionNumber === this.rounds[this.roundNumber].questions.length - 1
-    );
-  }
-
-  private get nextRoundWithQuestions(): number {
-    return this.rounds.findIndex(
-      (round, index) => index > this.roundNumber && round.questions.length > 0
     );
   }
 }

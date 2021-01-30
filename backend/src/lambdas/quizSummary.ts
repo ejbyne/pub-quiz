@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { QuizStatus } from '../domain/state/BaseQuizState';
 import { mapQuizStateToResponseState } from './mapQuizStateToResponseState';
+import { NextStateEvent } from './nextQuizState';
 
 interface Event {
   arguments: {
@@ -13,23 +13,7 @@ interface QuizSummaryResponse {
   quizId: string;
   quizName: string;
   playerNames?: string[];
-  state: {
-    __typename: string;
-    quizId: string;
-    status: QuizStatus;
-    roundSummary?: {
-      roundNumber: number;
-      roundName: string;
-      numberOfQuestions: number;
-    };
-    questionNumber?: number;
-    questionText?: string;
-    questionOptions?: string[];
-    answers?: {
-      question: string;
-      answer: string;
-    }[];
-  };
+  state: NextStateEvent;
 }
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;
