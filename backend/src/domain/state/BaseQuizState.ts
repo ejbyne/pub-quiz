@@ -1,4 +1,4 @@
-import { QuizState, QuizStatus, Round, RoundSummary } from "../types";
+import { Question, QuizState, QuizStatus, Round, RoundSummary } from "../types";
 
 export class BaseQuizState {
   status: QuizStatus;
@@ -30,6 +30,25 @@ export class BaseQuizState {
       roundName: round.roundName,
       numberOfQuestions: round.questions.length,
     };
+  }
+
+  get questionText(): string | undefined {
+    return this.currentQuestion?.question;
+  }
+
+  get questionAnswer(): string | undefined {
+    return this.currentQuestion?.answer;
+  }
+
+  get questionOptions(): string[] | undefined {
+    return this.currentQuestion?.options;
+  }
+
+  private get currentQuestion(): Question | undefined {
+    if (this.roundNumber === undefined || this.questionNumber === undefined) {
+      return undefined;
+    }
+    return this.rounds[this.roundNumber].questions[this.questionNumber];
   }
 
   nextState(): QuizState {

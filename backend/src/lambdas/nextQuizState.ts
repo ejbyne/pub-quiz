@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda';
+import { QuizStatus } from '../domain/types';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { QuizStatus } from '../domain/state/BaseQuizState';
 import { mapQuizStateToResponseState } from './mapQuizStateToResponseState';
 
 interface Event {
@@ -24,10 +24,6 @@ export interface NextStateEvent {
   questionText?: string;
   questionAnswer?: string;
   questionOptions?: string[];
-  answers?: {
-    question: string;
-    answer: string;
-  }[];
 }
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;

@@ -33,7 +33,7 @@ export const mapEntityStateToQuizState = (
       return new QuestionAnsweredState(
         rounds,
         state.roundNumber!,
-        state.questionNumber!,
+        state.questionNumber!
       );
 
     case QuizStatus.QUIZ_FINISHED:
