@@ -1,5 +1,5 @@
-schema: ../backend/src/infrastructure/schema.graphql
-documents: ./src/shared/graphql/documents.graphql
+schema: ./src/graphql/schema.graphql
+documents: ./src/graphql/documents.graphql
 overwrite: true
 generates:
   src/shared/graphql/types.tsx:

@@ -3,12 +3,12 @@ import * as Path from 'path';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import { Runtime } from '@aws-cdk/aws-lambda';
 import { Table } from '@aws-cdk/aws-dynamodb';
-import { MappingTemplate, GraphQLApi } from '@aws-cdk/aws-appsync';
+import { MappingTemplate, GraphqlApi } from '@aws-cdk/aws-appsync';
 
 export const createLambdaResolvers = (
   scope: cdk.Construct,
   quizTable: Table,
-  api: GraphQLApi
+  api: GraphqlApi
 ): void => {
   // Lambdas
   const generateRandomQuizLambda = new NodejsFunction(
@@ -18,7 +18,6 @@ export const createLambdaResolvers = (
       functionName: 'generate-random-quiz-resolver',
       entry: Path.join(__dirname, '../lambdas/generateRandomQuiz.ts'),
       handler: 'generateRandomQuiz',
-      minify: true,
       runtime: Runtime.NODEJS_12_X,
       environment: {
         QUIZ_TABLE_NAME: quizTable.tableName,
@@ -30,7 +29,6 @@ export const createLambdaResolvers = (
     functionName: 'save-quiz-resolver',
     entry: Path.join(__dirname, '../lambdas/saveQuiz.ts'),
     handler: 'saveQuiz',
-    minify: true,
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -41,7 +39,6 @@ export const createLambdaResolvers = (
     functionName: 'join-quiz-resolver',
     entry: Path.join(__dirname, '../lambdas/joinQuiz.ts'),
     handler: 'joinQuiz',
-    minify: true,
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -52,7 +49,6 @@ export const createLambdaResolvers = (
     functionName: 'next-quiz-state-resolver',
     entry: Path.join(__dirname, '../lambdas/nextQuizState.ts'),
     handler: 'nextQuizState',
-    minify: true,
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -63,7 +59,6 @@ export const createLambdaResolvers = (
     functionName: 'quiz-summary-resolver',
     entry: Path.join(__dirname, '../lambdas/quizSummary.ts'),
     handler: 'quizSummary',
-    minify: true,
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -80,31 +75,26 @@ export const createLambdaResolvers = (
   // Data sources
   const generateRandomQuizLambdaDataSource = api.addLambdaDataSource(
     'GenerateRandomQuizLambda',
-    'Generate Random Quiz Lambda DataSource',
     generateRandomQuizLambda
   );
 
   const saveQuizLambdaDataSource = api.addLambdaDataSource(
     'SaveQuizLambda',
-    'Save Quiz Lambda DataSource',
     saveQuizLambda
   );
 
   const joinQuizLambdaDataSource = api.addLambdaDataSource(
     'JoinQuizLambda',
-    'Join Quiz Lambda DataSource',
     joinQuizLambda
   );
 
   const nextQuizStateLambdaDataSource = api.addLambdaDataSource(
     'NextQuizStateLambda',
-    'Next Quiz State Lambda DataSource',
     nextQuizStateLambda
   );
 
   const quizSummaryLambdaDataSource = api.addLambdaDataSource(
     'QuizSummaryLambda',
-    'Quiz Summary Lambda DataSource',
     quizSummaryLambda
   );
 

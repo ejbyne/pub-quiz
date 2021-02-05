@@ -1,19 +1,20 @@
 import * as cdk from '@aws-cdk/core';
-import { FieldLogLevel, GraphQLApi } from '@aws-cdk/aws-appsync';
+import { FieldLogLevel, GraphqlApi, Schema } from '@aws-cdk/aws-appsync';
 import { BillingMode, Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 import { createLambdaResolvers } from './createLambdaResolvers';
+import { CfnOutput } from '@aws-cdk/core';
 
 export class PubQuizBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const api = new GraphQLApi(this, 'Api', {
+    const api = new GraphqlApi(this, 'Api', {
       name: 'pub-quiz-api',
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
-      schemaDefinitionFile: require.resolve(
-        '@pub-quiz/shared/src/graphql/schema.graphql'
+      schema: Schema.fromAsset(
+        require.resolve('@pub-quiz/shared/src/graphql/schema.graphql')
       ),
     });
 
@@ -26,5 +27,9 @@ export class PubQuizBackendStack extends cdk.Stack {
     });
 
     createLambdaResolvers(this, quizTable, api);
+
+    new CfnOutput(this, 'graphQlUrl', {
+      value: api.graphqlUrl,
+    });
   }
 }

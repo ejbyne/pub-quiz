@@ -24,15 +24,22 @@ query QuizSummary($quizId: ID!) {
         questionText
         questionOptions
       }
+      ... on QuestionAnswered {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+      questionNumber
+      questionText
+      questionOptions
+      questionAnswer
+    }
       ... on RoundFinished {
         roundSummary {
           roundNumber
           roundName
           numberOfQuestions
-        }
-        answers {
-          question
-          answer
         }
       }
     }
@@ -78,15 +85,22 @@ mutation NextQuizState($input: NextQuizStateInput!) {
       questionText
       questionOptions
     }
-    ... on RoundFinished {
+    ... on QuestionAnswered {
       roundSummary {
         roundNumber
         roundName
         numberOfQuestions
       }
-      answers {
-        question
-        answer
+      questionNumber
+      questionText
+      questionOptions
+      questionAnswer
+    }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
       }
     }
   }
@@ -120,15 +134,22 @@ subscription QuizState($quizId: ID!) {
       questionText
       questionOptions
     }
-    ... on RoundFinished {
+    ... on QuestionAnswered {
       roundSummary {
         roundNumber
         roundName
         numberOfQuestions
       }
-      answers {
-        question
-        answer
+      questionNumber
+      questionText
+      questionOptions
+      questionAnswer
+    }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
       }
     }
   }

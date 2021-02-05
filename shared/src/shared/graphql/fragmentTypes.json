@@ -1,0 +1,12 @@
+{
+  "possibleTypes": {
+    "QuizState": [
+      "QuizNotYetStarted",
+      "RoundStarted",
+      "QuestionAsked",
+      "QuestionAnswered",
+      "RoundFinished",
+      "QuizFinished"
+    ]
+  }
+}
