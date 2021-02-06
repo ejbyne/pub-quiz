@@ -187,7 +187,7 @@ describe('round', () => {
       },
     });
 
-    expect(await findByText('Round 1 complete')).toBeTruthy();
+    expect(await findByText('Round 1 completed')).toBeTruthy();
   });
 
   it('shows the question answers', async () => {
