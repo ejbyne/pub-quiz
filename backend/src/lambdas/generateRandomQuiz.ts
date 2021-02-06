@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
 import { QuizRepository } from '../repositories/QuizRepository';
 import { Quiz } from '../domain/Quiz';
-import { QuizNotYetStartedState } from '../domain/state/QuizNotYetStartedState';
+import { QuizNotYetStarted } from '../domain/state/QuizNotYetStarted';
 import { generateRounds } from '../quizApi';
 
 interface Event {
@@ -32,7 +32,7 @@ export const generateRandomQuiz: Handler<Event> = async (
     quizId,
     quizName,
     rounds,
-    new QuizNotYetStartedState(rounds)
+    new QuizNotYetStarted(rounds)
   );
 
   await quizRepository.save(newQuiz);

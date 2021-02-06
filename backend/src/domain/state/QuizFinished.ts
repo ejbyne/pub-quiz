@@ -1,7 +1,7 @@
 import { QuizState, QuizStatus, Round } from '../types';
 import { BaseQuizState } from './BaseQuizState';
 
-export class QuizFinishedState extends BaseQuizState {
+export class QuizFinished extends BaseQuizState {
   status: QuizStatus.QUIZ_FINISHED;
   rounds: Round[];
 

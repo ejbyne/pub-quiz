@@ -1,10 +1,10 @@
 import { exampleRounds } from '../../../testSupport/testFixtures';
 import { QuizStatus } from '../../types';
-import { RoundStartedState } from '../RoundStartedState';
+import { RoundStarted } from '../RoundStarted';
 
-describe('RoundStartedState', () => {
+describe('RoundStarted', () => {
   it('should return the first question after the round has started', () => {
-    const state = new RoundStartedState(exampleRounds, 0);
+    const state = new RoundStarted(exampleRounds, 0);
 
     expect(state.nextState()).toMatchObject({
       status: QuizStatus.QUESTION_ASKED,

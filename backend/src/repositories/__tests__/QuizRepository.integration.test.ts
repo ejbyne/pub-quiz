@@ -3,8 +3,8 @@ import { QuizRepository } from '../QuizRepository';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 
 import { Quiz } from '../../domain/Quiz';
-import { QuizNotYetStartedState } from '../../domain/state/QuizNotYetStartedState';
-import { QuestionAskedState } from '../../domain/state/QuestionAskedState';
+import { QuizNotYetStarted } from '../../domain/state/QuizNotYetStarted';
+import { QuestionAsked } from '../../domain/state/QuestionAsked';
 import { QuizStatus } from '../../domain/types';
 
 const EXAMPLE_QUIZ_ID = 'NEW_QUIZ_ID';
@@ -25,7 +25,7 @@ const exampleQuiz: Quiz = new Quiz(
   EXAMPLE_QUIZ_ID,
   "Ed's quiz",
   exampleRounds,
-  new QuizNotYetStartedState(exampleRounds)
+  new QuizNotYetStarted(exampleRounds)
 );
 
 describe('QuizRepository integration tests', () => {
@@ -98,7 +98,7 @@ describe('QuizRepository integration tests', () => {
 
     await quizRepository.updateState(
       EXAMPLE_QUIZ_ID,
-      new QuestionAskedState(exampleRounds, 0, 0)
+      new QuestionAsked(exampleRounds, 0, 0)
     );
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);

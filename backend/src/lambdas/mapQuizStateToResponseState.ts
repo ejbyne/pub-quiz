@@ -5,7 +5,7 @@ export const mapQuizStateToResponseState = (
   quizId: string,
   state: QuizState
 ): NextStateEvent => ({
-  __typename: state.constructor.name.replace('State', ''),
+  __typename: state.constructor.name,
   quizId,
   status: state.status,
   roundSummary: state.roundSummary,

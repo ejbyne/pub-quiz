@@ -1,11 +1,11 @@
 import { exampleRounds } from '../../../testSupport/testFixtures';
 import { QuizStatus } from '../../types';
-import { QuestionAskedState } from '../QuestionAskedState';
+import { QuestionAsked } from '../QuestionAsked';
 
-describe('QuestionAskedState', () => {
+describe('QuestionAsked', () => {
   describe('nextState', () => {
     it('should return the next question if the first question has been asked', () => {
-      const state = new QuestionAskedState(exampleRounds, 0, 0);
+      const state = new QuestionAsked(exampleRounds, 0, 0);
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.QUESTION_ASKED,
@@ -15,7 +15,7 @@ describe('QuestionAskedState', () => {
     });
 
     it('should finish the round if there are no more questions', () => {
-      const state = new QuestionAskedState(exampleRounds, 0, 1)
+      const state = new QuestionAsked(exampleRounds, 0, 1)
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.ROUND_FINISHED,
@@ -26,7 +26,7 @@ describe('QuestionAskedState', () => {
 
   describe('questionText and questionOptions', () => {
     it('returns the question text and options', () => {
-      const state = new QuestionAskedState(exampleRounds, 0, 0);
+      const state = new QuestionAsked(exampleRounds, 0, 0);
 
       expect(state.questionText).toBe('Question 1');
       expect(state.questionOptions).toEqual([

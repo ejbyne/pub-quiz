@@ -1,8 +1,8 @@
 import { QuizState, QuizStatus, Round } from '../types';
 import { BaseQuizState } from './BaseQuizState';
-import { QuestionAnsweredState } from './QuestionAnsweredState';
+import { QuestionAnswered } from './QuestionAnswered';
 
-export class RoundFinishedState extends BaseQuizState {
+export class RoundFinished extends BaseQuizState {
   status: QuizStatus.ROUND_FINISHED;
   rounds: Round[];
   roundNumber: number;
@@ -12,6 +12,6 @@ export class RoundFinishedState extends BaseQuizState {
   }
 
   nextState(): QuizState {
-    return new QuestionAnsweredState(this.rounds, this.roundNumber, 0);
+    return new QuestionAnswered(this.rounds, this.roundNumber, 0);
   }
 }

@@ -1,9 +1,9 @@
-import { QuestionAnsweredState } from './state/QuestionAnsweredState';
-import { QuestionAskedState } from './state/QuestionAskedState';
-import { QuizFinishedState } from './state/QuizFinishedState';
-import { QuizNotYetStartedState } from './state/QuizNotYetStartedState';
-import { RoundFinishedState } from './state/RoundFinishedState';
-import { RoundStartedState } from './state/RoundStartedState';
+import { QuestionAnswered } from './state/QuestionAnswered';
+import { QuestionAsked } from './state/QuestionAsked';
+import { QuizFinished } from './state/QuizFinished';
+import { QuizNotYetStarted } from './state/QuizNotYetStarted';
+import { RoundFinished } from './state/RoundFinished';
+import { RoundStarted } from './state/RoundStarted';
 
 export interface Round {
   roundName: string;
@@ -17,12 +17,12 @@ export interface Question {
 }
 
 export type QuizState =
-  | QuizNotYetStartedState
-  | RoundStartedState
-  | RoundFinishedState
-  | QuestionAskedState
-  | QuestionAnsweredState
-  | QuizFinishedState;
+  | QuizNotYetStarted
+  | RoundStarted
+  | RoundFinished
+  | QuestionAsked
+  | QuestionAnswered
+  | QuizFinished;
 
 export enum QuizStatus {
   QUIZ_NOT_YET_STARTED = 'QUIZ_NOT_YET_STARTED',

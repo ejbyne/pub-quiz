@@ -1,10 +1,10 @@
 import { exampleRounds } from '../../../testSupport/testFixtures';
 import { QuizStatus } from '../../types';
-import { RoundFinishedState } from '../RoundFinishedState';
+import { RoundFinished } from '../RoundFinished';
 
-describe('RoundFinishedState', () => {
+describe('RoundFinished', () => {
   it('should return the first answer if the round has finished', () => {
-    const state = new RoundFinishedState(exampleRounds, 0)
+    const state = new RoundFinished(exampleRounds, 0)
 
     expect(state.nextState()).toMatchObject({
       status: QuizStatus.QUESTION_ANSWERED,
