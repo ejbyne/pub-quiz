@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { exampleQuiz } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
-import { QuizStatus } from '../../../shared/src/graphql/types';
+import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
 import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 
 describe('round', () => {
@@ -188,6 +188,58 @@ describe('round', () => {
     });
 
     expect(await findByText('Round 1 complete')).toBeTruthy();
+  });
+
+  it('shows the question answers', async () => {
+    const initialQuizState = {
+      ...exampleQuiz,
+      state: {
+        quizId: 'RANDOM_ID',
+        status: QuizStatus.RoundFinished,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+        },
+      },
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 10,
+          questions: [
+            { questionNumber: 0, questionText: 'The first question' },
+            { questionNumber: 1, questionText: 'The last question' },
+          ],
+        },
+      ],
+    };
+
+    const { findByText } = render(
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialState={initialQuizState}>
+        <App />
+      </TestAppContainer>,
+    );
+
+    receiveNextQuizState({
+      __typename: 'QuestionAnswered',
+      quizId: 'RANDOM_ID',
+      status: QuizStatus.QuestionAnswered,
+      roundSummary: {
+        roundNumber: 0,
+        roundName: 'The first round',
+        numberOfQuestions: 10,
+      },
+      questionNumber: 0,
+      questionText: 'The first question',
+      questionAnswer: 'The first answer',
+    });
+
+    expect(await findByText('Question 1')).toBeTruthy();
+    expect(await findByText('The first question')).toBeTruthy();
+    expect(await findByText('Answer: The first answer')).toBeTruthy();
   });
 
   it('finishes the quiz', async () => {

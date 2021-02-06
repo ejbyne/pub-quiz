@@ -1,15 +1,16 @@
 import React, { useContext } from "react";
-import { QuestionAsked as QuestionAskedState } from "@pub-quiz/shared/src/graphql/types";
+import { QuestionAsked } from "@pub-quiz/shared/src/graphql/types";
 import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { Question } from "@pub-quiz/shared/src/domain/types";
+import { QuestionAnswered } from "@pub-quiz/shared/src/graphql/types";
 
-export const QuestionAsked: React.FC<{}> = () => {
+export const QuestionSheet: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
-  const state = quiz.state as QuestionAskedState;
+  const state = quiz.state as QuestionAsked | QuestionAnswered;
   const round = quiz.rounds[state.roundSummary.roundNumber];
 
   return (
-    <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg absolute top-24 bottom-4 text-gray-200">
+    <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg absolute top-24 bottom-4 text-gray-200 overflow-y-auto">
       <h1 className="text-2xl text-center mb-4">
         Round {round.roundNumber + 1}
       </h1>
@@ -23,6 +24,11 @@ export const QuestionAsked: React.FC<{}> = () => {
                   Question {question.questionNumber + 1}
                 </p>
                 <p>{question.questionText}</p>
+                {question.questionAnswer && (
+                  <p className="font-semibold my-2">
+                    Answer: {question.questionAnswer}
+                </p>
+                )}
                 {question.questionOptions ? (
                   <ul className="list-alphabet ml-4 my-2">
                     {question.questionOptions.map((option) => (

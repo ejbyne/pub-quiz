@@ -25,16 +25,16 @@ query QuizSummary($quizId: ID!) {
         questionOptions
       }
       ... on QuestionAnswered {
-      roundSummary {
-        roundNumber
-        roundName
-        numberOfQuestions
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
+        questionNumber
+        questionText
+        questionOptions
+        questionAnswer
       }
-      questionNumber
-      questionText
-      questionOptions
-      questionAnswer
-    }
       ... on RoundFinished {
         roundSummary {
           roundNumber

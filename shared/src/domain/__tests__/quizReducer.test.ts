@@ -1,84 +1,84 @@
-import { quizReducer } from '../quizReducer';
-import { QuizStatus, QuizState } from '../../graphql/types';
+import { quizReducer } from "../quizReducer";
+import { QuizStatus, QuizState } from "../../graphql/types";
 
 const exampleQuiz = {
-  quizId: 'RANDOM_ID',
-  quizName: 'Random Quiz',
+  quizId: "RANDOM_ID",
+  quizName: "Random Quiz",
   playerNames: null,
   state: {
-    __typename: 'QuizNotYetStarted',
-    quizId: 'RANDOM_ID',
+    __typename: "QuizNotYetStarted",
+    quizId: "RANDOM_ID",
     status: QuizStatus.QuizNotYetStarted,
   },
 };
 
-describe('quiz reducer', () => {
-  it('should store the quiz id', () => {
+describe("quiz reducer", () => {
+  it("should store the quiz id", () => {
     const quiz = { rounds: [] };
 
     const result = quizReducer(quiz, {
-      type: 'JoinedQuiz',
+      type: "JoinedQuiz",
       payload: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
       },
     });
 
-    expect(result.quizId).toEqual('RANDOM_ID');
+    expect(result.quizId).toEqual("RANDOM_ID");
   });
 
-  it('should store the quiz summary', () => {
+  it("should store the quiz summary", () => {
     const quiz = { rounds: [] };
 
     const result = quizReducer(quiz, {
-      type: 'QuizSummaryReceived',
+      type: "QuizSummaryReceived",
       payload: {
-        quizId: 'RANDOM_ID',
-        quizName: 'A quiz',
+        quizId: "RANDOM_ID",
+        quizName: "A quiz",
         state: {
-          quizId: 'RANDOM_ID',
+          quizId: "RANDOM_ID",
           status: QuizStatus.QuizNotYetStarted,
         },
       },
     });
 
     expect(result).toMatchObject({
-      quizId: 'RANDOM_ID',
-      quizName: 'A quiz',
+      quizId: "RANDOM_ID",
+      quizName: "A quiz",
       state: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
         status: QuizStatus.QuizNotYetStarted,
       },
       rounds: [],
     });
   });
 
-  it('should remember the round information', () => {
+  it("should remember the round information", () => {
     const quiz = {
       ...exampleQuiz,
       rounds: [],
     };
 
     const resultAfterFirstRound = quizReducer(quiz, {
-      type: 'NextQuizStateReceived',
+      type: "NextQuizStateReceived",
       payload: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
         status: QuizStatus.RoundStarted,
         roundSummary: {
           roundNumber: 0,
-          roundName: 'The first round',
+          roundName: "The first round",
           numberOfQuestions: 10,
         },
       },
     });
 
     const resultAfterSecondRound = quizReducer(resultAfterFirstRound, {
-      type: 'NextQuizStateReceived',
+      type: "NextQuizStateReceived",
       payload: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
         status: QuizStatus.RoundStarted,
         roundSummary: {
           roundNumber: 1,
-          roundName: 'The second round',
+          roundName: "The second round",
           numberOfQuestions: 8,
         },
       },
@@ -87,35 +87,35 @@ describe('quiz reducer', () => {
     expect(resultAfterSecondRound.rounds).toEqual([
       {
         roundNumber: 0,
-        roundName: 'The first round',
+        roundName: "The first round",
         numberOfQuestions: 10,
         questions: [],
       },
       {
         roundNumber: 1,
-        roundName: 'The second round',
+        roundName: "The second round",
         numberOfQuestions: 8,
         questions: [],
       },
     ]);
   });
 
-  it('should remember questions', () => {
+  it("should remember questions", () => {
     const quiz = {
       ...exampleQuiz,
       state: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
         status: QuizStatus.RoundStarted,
         roundSummary: {
           roundNumber: 0,
-          roundName: 'The first round',
+          roundName: "The first round",
           numberOfQuestions: 10,
         },
       } as QuizState,
       rounds: [
         {
           roundNumber: 0,
-          roundName: 'The first round',
+          roundName: "The first round",
           numberOfQuestions: 10,
           questions: [],
         },
@@ -123,68 +123,152 @@ describe('quiz reducer', () => {
     };
 
     const resultAfterFirstQuestion = quizReducer(quiz, {
-      type: 'NextQuizStateReceived',
+      type: "NextQuizStateReceived",
       payload: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
         status: QuizStatus.QuestionAsked,
         roundSummary: {
           roundNumber: 0,
-          roundName: 'The first round',
+          roundName: "The first round",
           numberOfQuestions: 10,
         },
         questionNumber: 0,
-        questionText: 'The first question',
+        questionText: "The first question",
       },
     });
 
     const resultAfterSecondQuestion = quizReducer(resultAfterFirstQuestion, {
-      type: 'NextQuizStateReceived',
+      type: "NextQuizStateReceived",
       payload: {
-        quizId: 'RANDOM_ID',
+        quizId: "RANDOM_ID",
         status: QuizStatus.QuestionAsked,
         roundSummary: {
           roundNumber: 0,
-          roundName: 'The first round',
+          roundName: "The first round",
           numberOfQuestions: 10,
         },
         questionNumber: 1,
-        questionText: 'The second question',
+        questionText: "The second question",
       },
     });
 
     expect(resultAfterSecondQuestion.rounds).toEqual([
       {
         roundNumber: 0,
-        roundName: 'The first round',
+        roundName: "The first round",
         numberOfQuestions: 10,
         questions: [
           {
             questionNumber: 0,
-            questionText: 'The first question',
+            questionText: "The first question",
           },
           {
             questionNumber: 1,
-            questionText: 'The second question',
+            questionText: "The second question",
           },
         ],
       },
     ]);
   });
 
-  it('should store round for a player who joins at the start of the round', () => {
+  it("should remember answers", () => {
+    const quiz = {
+      ...exampleQuiz,
+      state: {
+        quizId: "RANDOM_ID",
+        status: QuizStatus.RoundFinished,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: "The first round",
+          numberOfQuestions: 10,
+        },
+      } as QuizState,
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: "The first round",
+          numberOfQuestions: 10,
+          questions: [
+            {
+              questionNumber: 0,
+              questionText: "The first question",
+            },
+            {
+              questionNumber: 1,
+              questionText: "The second question",
+            },
+          ],
+        },
+      ],
+    };
+
+    const resultAfterFirstQuestion = quizReducer(quiz, {
+      type: "NextQuizStateReceived",
+      payload: {
+        quizId: "RANDOM_ID",
+        status: QuizStatus.QuestionAnswered,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: "The first round",
+          numberOfQuestions: 10,
+        },
+        questionNumber: 0,
+        questionText: "The first question",
+        questionAnswer: "The first answer",
+      },
+    });
+
+    const resultAfterSecondQuestion = quizReducer(resultAfterFirstQuestion, {
+      type: "NextQuizStateReceived",
+      payload: {
+        quizId: "RANDOM_ID",
+        status: QuizStatus.QuestionAnswered,
+        roundSummary: {
+          roundNumber: 0,
+          roundName: "The first round",
+          numberOfQuestions: 10,
+        },
+        questionNumber: 1,
+        questionText: "The second question",
+        questionAnswer: "The second answer",
+      },
+    });
+
+    expect(resultAfterSecondQuestion.rounds).toEqual([
+      {
+        roundNumber: 0,
+        roundName: "The first round",
+        numberOfQuestions: 10,
+        questions: [
+          {
+            questionNumber: 0,
+            questionText: "The first question",
+            questionAnswer: "The first answer",
+          },
+          {
+            questionNumber: 1,
+            questionText: "The second question",
+            questionAnswer: "The second answer",
+          },
+        ],
+      },
+    ]);
+  });
+
+  it("should store round for a player who joins at the start of the round", () => {
     const quiz = { rounds: [] };
 
     const result = quizReducer(quiz, {
-      type: 'QuizSummaryReceived',
+      type: "QuizSummaryReceived",
       payload: {
-        quizId: 'RANDOM_ID',
-        quizName: 'A quiz',
+        quizId: "RANDOM_ID",
+        quizName: "A quiz",
         state: {
-          quizId: 'RANDOM_ID',
+          quizId: "RANDOM_ID",
           status: QuizStatus.RoundStarted,
           roundSummary: {
             roundNumber: 0,
-            roundName: 'Round 1',
+            roundName: "Round 1",
             numberOfQuestions: 10,
           },
         } as QuizState,
@@ -194,31 +278,31 @@ describe('quiz reducer', () => {
     expect(result.rounds).toEqual([
       {
         roundNumber: 0,
-        roundName: 'Round 1',
+        roundName: "Round 1",
         numberOfQuestions: 10,
         questions: [],
       },
     ]);
   });
 
-  it('should store round and question information for a player who joins during the questions', () => {
+  it("should store round and question information for a player who joins during the questions", () => {
     const quiz = { rounds: [] };
 
     const result = quizReducer(quiz, {
-      type: 'QuizSummaryReceived',
+      type: "QuizSummaryReceived",
       payload: {
-        quizId: 'RANDOM_ID',
-        quizName: 'A quiz',
+        quizId: "RANDOM_ID",
+        quizName: "A quiz",
         state: {
-          quizId: 'RANDOM_ID',
+          quizId: "RANDOM_ID",
           status: QuizStatus.QuestionAsked,
           roundSummary: {
             roundNumber: 0,
-            roundName: 'Round 1',
+            roundName: "Round 1",
             numberOfQuestions: 10,
           },
           questionNumber: 3,
-          questionText: 'Question 4',
+          questionText: "Question 4",
         } as QuizState,
       },
     });
@@ -226,7 +310,7 @@ describe('quiz reducer', () => {
     expect(result.rounds).toEqual([
       {
         roundNumber: 0,
-        roundName: 'Round 1',
+        roundName: "Round 1",
         numberOfQuestions: 10,
         questions: [
           undefined,
@@ -234,7 +318,7 @@ describe('quiz reducer', () => {
           undefined,
           {
             questionNumber: 3,
-            questionText: 'Question 4',
+            questionText: "Question 4",
           },
         ],
       },

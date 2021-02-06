@@ -2,7 +2,7 @@ import React from 'react';
 import { Registration } from './Registration';
 import { WaitingToStart } from './WaitingToStart';
 import { RoundStarted } from './RoundStarted';
-import { QuestionAsked } from './QuestionAsked';
+import { QuestionSheet } from './QuestionSheet';
 import { RoundFinished } from './RoundFinished';
 import { QuizFinished } from './QuizFinished';
 import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
@@ -14,7 +14,8 @@ export const getComponentFromStatus = (status?: QuizStatus): React.FC => {
     case QuizStatus.RoundStarted:
       return RoundStarted;
     case QuizStatus.QuestionAsked:
-      return QuestionAsked;
+    case QuizStatus.QuestionAnswered:
+      return QuestionSheet;
     case QuizStatus.RoundFinished:
       return RoundFinished;
     case QuizStatus.QuizFinished:

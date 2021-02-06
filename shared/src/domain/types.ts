@@ -5,6 +5,7 @@ import {
   RoundFinished,
   QuizFinished,
 } from '../graphql/types';
+import { QuestionAnswered } from '../graphql/types';
 
 export type Quiz = Partial<QuizSummary> & {
   rounds: Round[];
@@ -21,11 +22,13 @@ export interface Question {
   questionNumber: number;
   questionText: string;
   questionOptions?: string[] | null;
+  questionAnswer?: string;
 }
 
 export type NextQuizState =
   | RoundStarted
   | QuestionAsked
+  | QuestionAnswered
   | RoundFinished
   | QuizFinished;
 

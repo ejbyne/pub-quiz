@@ -1,18 +1,25 @@
 import { Quiz, QuizAction, Round, Question } from "./types";
-import { QuizStatus, RoundStarted, RoundFinished, QuestionAsked, RoundSummary } from "../graphql/types";
+import {
+  QuizStatus,
+  RoundStarted,
+  RoundFinished,
+  QuestionAsked,
+  RoundSummary,
+} from "../graphql/types";
+import { QuestionAnswered } from "../graphql/types";
 
 export const quizReducer = (
   quiz: Quiz = { rounds: [] },
-  action: QuizAction,
+  action: QuizAction
 ): Quiz => {
-  if (action.type === 'JoinedQuiz') {
+  if (action.type === "JoinedQuiz") {
     return {
       ...quiz,
       ...action.payload,
     };
   }
 
-  if (action.type === 'QuizSummaryReceived') {
+  if (action.type === "QuizSummaryReceived") {
     switch (action.payload.state.status) {
       case QuizStatus.RoundStarted:
       case QuizStatus.RoundFinished: {
@@ -25,14 +32,16 @@ export const quizReducer = (
         };
       }
 
-      case QuizStatus.QuestionAsked: {
-        const state = action.payload.state as QuestionAsked;
+      case QuizStatus.QuestionAsked:
+      case QuizStatus.QuestionAnswered: {
+        const state = action.payload.state as QuestionAsked | QuestionAnswered;
 
         const questions = addNewQuestion(
           [],
           state.questionNumber,
           state.questionText,
-          state.questionOptions
+          state.questionOptions,
+          (state as QuestionAnswered).questionAnswer
         );
 
         return {
@@ -50,7 +59,7 @@ export const quizReducer = (
     }
   }
 
-  if (action.type === 'NextQuizStateReceived') {
+  if (action.type === "NextQuizStateReceived") {
     switch (action.payload.status) {
       case QuizStatus.RoundStarted: {
         const state = action.payload as RoundStarted;
@@ -62,8 +71,9 @@ export const quizReducer = (
         };
       }
 
-      case QuizStatus.QuestionAsked: {
-        const state = action.payload as QuestionAsked;
+      case QuizStatus.QuestionAsked:
+      case QuizStatus.QuestionAnswered: {
+        const state = action.payload as QuestionAsked | QuestionAnswered;
 
         return {
           ...quiz,
@@ -77,7 +87,8 @@ export const quizReducer = (
               round.questions,
               state.questionNumber,
               state.questionText,
-              state.questionOptions
+              state.questionOptions,
+              (state as QuestionAnswered).questionAnswer
             );
 
             return {
@@ -99,7 +110,7 @@ export const quizReducer = (
 const addNewRound = (
   rounds: Round[],
   newRoundSummary: RoundSummary,
-  questions: Question[] = [],
+  questions: Question[] = []
 ): Round[] => {
   const updatedRounds = [...rounds];
 
@@ -116,6 +127,7 @@ const addNewQuestion = (
   questionNumber: number,
   questionText: string,
   questionOptions?: string[] | null,
+  questionAnswer?: string
 ): Question[] => {
   const updatedQuestions = [...questions];
 
@@ -123,6 +135,7 @@ const addNewQuestion = (
     questionNumber,
     questionText,
     questionOptions,
+    questionAnswer,
   };
 
   return updatedQuestions;

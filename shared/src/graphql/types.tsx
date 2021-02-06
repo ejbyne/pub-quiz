@@ -126,6 +126,7 @@ export enum QuizStatus {
   QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
   RoundStarted = 'ROUND_STARTED',
   QuestionAsked = 'QUESTION_ASKED',
+  QuestionAnswered = 'QUESTION_ANSWERED',
   RoundFinished = 'ROUND_FINISHED',
   QuizFinished = 'QUIZ_FINISHED'
 }
@@ -155,6 +156,17 @@ export type QuestionAsked = QuizState & {
   roundSummary: RoundSummary;
   questionNumber: Scalars['Int'];
   questionText: Scalars['String'];
+  questionOptions?: Maybe<Array<Scalars['String']>>;
+};
+
+export type QuestionAnswered = QuizState & {
+  __typename?: 'QuestionAnswered';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+  questionNumber: Scalars['Int'];
+  questionText: Scalars['String'];
+  questionAnswer: Scalars['String'];
   questionOptions?: Maybe<Array<Scalars['String']>>;
 };
 
@@ -206,15 +218,19 @@ export type QuizSummaryQuery = (
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
       ) }
     ) | (
+      { __typename?: 'QuestionAnswered' }
+      & Pick<QuestionAnswered, 'questionNumber' | 'questionText' | 'questionOptions' | 'questionAnswer' | 'quizId' | 'status'>
+      & { roundSummary: (
+        { __typename?: 'RoundSummary' }
+        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ) }
+    ) | (
       { __typename?: 'RoundFinished' }
       & Pick<RoundFinished, 'quizId' | 'status'>
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-      ), answers?: Maybe<Array<(
-        { __typename?: 'Answer' }
-        & Pick<Answer, 'question' | 'answer'>
-      )>> }
+      ) }
     ) | (
       { __typename?: 'QuizFinished' }
       & Pick<QuizFinished, 'quizId' | 'status'>
@@ -283,15 +299,19 @@ export type NextQuizStateMutation = (
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ) }
   ) | (
+    { __typename?: 'QuestionAnswered' }
+    & Pick<QuestionAnswered, 'questionNumber' | 'questionText' | 'questionOptions' | 'questionAnswer' | 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
+  ) | (
     { __typename?: 'RoundFinished' }
     & Pick<RoundFinished, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ), answers?: Maybe<Array<(
-      { __typename?: 'Answer' }
-      & Pick<Answer, 'question' | 'answer'>
-    )>> }
+    ) }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -336,15 +356,19 @@ export type QuizStateSubscription = (
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ) }
   ) | (
+    { __typename?: 'QuestionAnswered' }
+    & Pick<QuestionAnswered, 'questionNumber' | 'questionText' | 'questionOptions' | 'questionAnswer' | 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
+  ) | (
     { __typename?: 'RoundFinished' }
     & Pick<RoundFinished, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ), answers?: Maybe<Array<(
-      { __typename?: 'Answer' }
-      & Pick<Answer, 'question' | 'answer'>
-    )>> }
+    ) }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -378,15 +402,22 @@ export const QuizSummaryDocument = gql`
         questionText
         questionOptions
       }
-      ... on RoundFinished {
+      ... on QuestionAnswered {
         roundSummary {
           roundNumber
           roundName
           numberOfQuestions
         }
-        answers {
-          question
-          answer
+        questionNumber
+        questionText
+        questionOptions
+        questionAnswer
+      }
+      ... on RoundFinished {
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
         }
       }
     }
@@ -537,15 +568,22 @@ export const NextQuizStateDocument = gql`
       questionText
       questionOptions
     }
-    ... on RoundFinished {
+    ... on QuestionAnswered {
       roundSummary {
         roundNumber
         roundName
         numberOfQuestions
       }
-      answers {
-        question
-        answer
+      questionNumber
+      questionText
+      questionOptions
+      questionAnswer
+    }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
       }
     }
   }
@@ -628,15 +666,22 @@ export const QuizStateDocument = gql`
       questionText
       questionOptions
     }
-    ... on RoundFinished {
+    ... on QuestionAnswered {
       roundSummary {
         roundNumber
         roundName
         numberOfQuestions
       }
-      answers {
-        question
-        answer
+      questionNumber
+      questionText
+      questionOptions
+      questionAnswer
+    }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
       }
     }
   }
