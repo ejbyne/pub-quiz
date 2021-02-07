@@ -15,7 +15,7 @@ describe('QuestionAsked', () => {
     });
 
     it('should finish the round if there are no more questions', () => {
-      const state = new QuestionAsked(exampleRounds, 0, 1)
+      const state = new QuestionAsked(exampleRounds, 0, 1);
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.ROUND_FINISHED,
@@ -24,16 +24,15 @@ describe('QuestionAsked', () => {
     });
   });
 
-  describe('questionText and questionOptions', () => {
-    it('returns the question text and options', () => {
+  describe('question', () => {
+    it('returns the question number text and options', () => {
       const state = new QuestionAsked(exampleRounds, 0, 0);
 
-      expect(state.questionText).toBe('Question 1');
-      expect(state.questionOptions).toEqual([
-        'Answer 1',
-        'Answer 1b',
-        'Answer 1c',
-      ]);
+      expect(state.question).toEqual({
+        number: 0,
+        text: 'Question 1',
+        options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+      });
     });
   });
 });

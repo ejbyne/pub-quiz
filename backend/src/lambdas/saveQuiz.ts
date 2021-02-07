@@ -11,7 +11,7 @@ interface Event {
       rounds: {
         roundName: string;
         questions: {
-          question: string;
+          text: string;
           answer: string;
           options?: string[];
         }[];

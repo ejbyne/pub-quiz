@@ -12,6 +12,13 @@ export class QuestionAsked extends BaseQuizState {
     super(QuizStatus.QUESTION_ASKED, rounds, roundNumber, questionNumber);
   }
 
+  get question(): { number: number; text: string; options?: string[] } {
+    const { text, options } = this.rounds[this.roundNumber].questions[
+      this.questionNumber
+    ];
+    return { number: this.questionNumber, text, options };
+  }
+
   nextState(): QuizState {
     if (this.isLastQuestionInRound) {
       return new RoundFinished(this.rounds, this.roundNumber);

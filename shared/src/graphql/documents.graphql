@@ -20,9 +20,11 @@ query QuizSummary($quizId: ID!) {
           roundName
           numberOfQuestions
         }
-        questionNumber
-        questionText
-        questionOptions
+        question {
+          number
+          text
+          options
+        }
       }
       ... on QuestionAnswered {
         roundSummary {
@@ -30,10 +32,12 @@ query QuizSummary($quizId: ID!) {
           roundName
           numberOfQuestions
         }
-        questionNumber
-        questionText
-        questionOptions
-        questionAnswer
+        question {
+          number
+          text
+          options
+          answer
+        }
       }
       ... on RoundFinished {
         roundSummary {
@@ -81,9 +85,11 @@ mutation NextQuizState($input: NextQuizStateInput!) {
         roundName
         numberOfQuestions
       }
-      questionNumber
-      questionText
-      questionOptions
+      question {
+        number
+        text
+        options
+      }
     }
     ... on QuestionAnswered {
       roundSummary {
@@ -91,10 +97,12 @@ mutation NextQuizState($input: NextQuizStateInput!) {
         roundName
         numberOfQuestions
       }
-      questionNumber
-      questionText
-      questionOptions
-      questionAnswer
+      question {
+        number
+        text
+        options
+        answer
+      }
     }
     ... on RoundFinished {
       roundSummary {
@@ -130,9 +138,11 @@ subscription QuizState($quizId: ID!) {
         roundName
         numberOfQuestions
       }
-      questionNumber
-      questionText
-      questionOptions
+      question {
+        number
+        text
+        options
+      }
     }
     ... on QuestionAnswered {
       roundSummary {
@@ -140,10 +150,12 @@ subscription QuizState($quizId: ID!) {
         roundName
         numberOfQuestions
       }
-      questionNumber
-      questionText
-      questionOptions
-      questionAnswer
+      question {
+        number
+        text
+        options
+        answer
+      }
     }
     ... on RoundFinished {
       roundSummary {

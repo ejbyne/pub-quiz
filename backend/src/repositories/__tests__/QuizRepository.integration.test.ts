@@ -14,7 +14,7 @@ const exampleRounds = [
     roundName: 'Round 1',
     questions: [
       {
-        question: 'A question',
+        text: 'A question',
         answer: 'An answer',
       },
     ],

@@ -19,19 +19,19 @@ export const QuestionSheet: React.FC<{}> = () => {
         {round.questions.map(
           (question?: Question) =>
             question && (
-              <li key={question.questionNumber}>
+              <li key={question.number}>
                 <p className="font-semibold my-2">
-                  Question {question.questionNumber + 1}
+                  Question {question.number + 1}
                 </p>
-                <p>{question.questionText}</p>
-                {question.questionAnswer && (
+                <p>{question.text}</p>
+                {question.answer && (
                   <p className="font-semibold my-2">
-                    Answer: {question.questionAnswer}
+                    Answer: {question.answer}
                 </p>
                 )}
-                {question.questionOptions ? (
+                {question.options ? (
                   <ul className="list-alphabet ml-4 my-2">
-                    {question.questionOptions.map((option) => (
+                    {question.options.map((option) => (
                       <li key={option}>
                         <span className="flex items-baseline">
                           <input
@@ -51,7 +51,7 @@ export const QuestionSheet: React.FC<{}> = () => {
                 ) : (
                   <input
                     className="w-full my-2 text-input"
-                    placeholder={`Answer ${question.questionNumber + 1}`}
+                    placeholder={`Answer ${question.number + 1}`}
                     // onChange={(e) => setQuizId(e.currentTarget.value)}
                   />
                 )}

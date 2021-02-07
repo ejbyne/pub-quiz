@@ -31,8 +31,9 @@ input RoundInput {
 }
 
 input QuestionInput {
-  question: String!
+  text: String!
   answer: String!
+  options: [String!]
 }
 
 input JoinQuizInput {
@@ -62,8 +63,16 @@ type RoundSummary {
   numberOfQuestions: Int!
 }
 
-type Answer {
-  question: String!
+type Question {
+  number: Int!
+  text: String!
+  options: [String!]
+}
+
+type QuestionWithAnswer {
+  number: Int!
+  text: String!
+  options: [String!]
   answer: String!
 }
 
@@ -96,26 +105,20 @@ type QuestionAsked implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
-  questionNumber: Int!
-  questionText: String!
-  questionOptions: [String!]
+  question: Question!
 }
 
 type QuestionAnswered implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
-  questionNumber: Int!
-  questionText: String!
-  questionAnswer: String!
-  questionOptions: [String!]
+  question: QuestionWithAnswer!
 }
 
 type RoundFinished implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
-  answers: [Answer!]
 }
 
 type QuizFinished implements QuizState {

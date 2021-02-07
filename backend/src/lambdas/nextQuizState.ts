@@ -20,10 +20,12 @@ export interface NextStateEvent {
     roundName: string;
     numberOfQuestions: number;
   };
-  questionNumber?: number;
-  questionText?: string;
-  questionAnswer?: string;
-  questionOptions?: string[];
+  question?: {
+    number: number;
+    text: string;
+    options?: string[];
+    answer?: string;
+  };
 }
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;

@@ -38,10 +38,7 @@ export const quizReducer = (
 
         const questions = addNewQuestion(
           [],
-          state.questionNumber,
-          state.questionText,
-          state.questionOptions,
-          (state as QuestionAnswered).questionAnswer
+          state.question
         );
 
         return {
@@ -85,10 +82,7 @@ export const quizReducer = (
 
             const questions = addNewQuestion(
               round.questions,
-              state.questionNumber,
-              state.questionText,
-              state.questionOptions,
-              (state as QuestionAnswered).questionAnswer
+              state.question
             );
 
             return {
@@ -124,19 +118,11 @@ const addNewRound = (
 
 const addNewQuestion = (
   questions: Question[],
-  questionNumber: number,
-  questionText: string,
-  questionOptions?: string[] | null,
-  questionAnswer?: string
+  question: Question,
 ): Question[] => {
   const updatedQuestions = [...questions];
 
-  updatedQuestions[questionNumber] = {
-    questionNumber,
-    questionText,
-    questionOptions,
-    questionAnswer,
-  };
+  updatedQuestions[question.number] = question;
 
   return updatedQuestions;
 };

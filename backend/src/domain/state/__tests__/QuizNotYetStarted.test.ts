@@ -30,7 +30,7 @@ describe('QuizNotYetStarted', () => {
         roundName: 'Round 2',
         questions: [
           {
-            question: 'Question 3',
+            text: 'Question 3',
             answer: 'Answer 3',
           },
         ],

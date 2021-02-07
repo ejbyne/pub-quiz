@@ -10,7 +10,7 @@ describe('BaseQuizState', () => {
         exampleRounds
       );
 
-      expect(quizState.roundSummary).toBe(undefined);
+      expect(quizState.roundSummary).toBeUndefined();
     });
 
     it('returns the round summary if there is a current round', () => {

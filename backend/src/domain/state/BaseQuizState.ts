@@ -32,23 +32,10 @@ export class BaseQuizState {
     };
   }
 
-  get questionText(): string | undefined {
-    return this.currentQuestion?.question;
-  }
-
-  get questionAnswer(): string | undefined {
-    return this.currentQuestion?.answer;
-  }
-
-  get questionOptions(): string[] | undefined {
-    return this.currentQuestion?.options;
-  }
-
-  private get currentQuestion(): Question | undefined {
-    if (this.roundNumber === undefined || this.questionNumber === undefined) {
-      return undefined;
-    }
-    return this.rounds[this.roundNumber].questions[this.questionNumber];
+  get question():
+    | { number: number; text: string; options?: string[]; answer?: string }
+    | undefined {
+    return undefined;
   }
 
   get nextRoundWithQuestions(): number {

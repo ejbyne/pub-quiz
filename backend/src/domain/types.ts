@@ -11,7 +11,7 @@ export interface Round {
 }
 
 export interface Question {
-  question: string;
+  text: string;
   answer: string;
   options?: string[];
 }

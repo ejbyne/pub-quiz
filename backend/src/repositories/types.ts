@@ -6,7 +6,7 @@ export interface QuizEntity {
   rounds: {
     roundName: string;
     questions: {
-      question: string;
+      text: string;
       answer: string;
     }[];
   }[];

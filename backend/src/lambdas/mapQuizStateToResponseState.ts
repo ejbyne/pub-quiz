@@ -9,8 +9,5 @@ export const mapQuizStateToResponseState = (
   quizId,
   status: state.status,
   roundSummary: state.roundSummary,
-  questionNumber: state.questionNumber,
-  questionText: state.questionText,
-  questionAnswer: state.questionAnswer,
-  questionOptions: state.questionOptions,
+  question: state.question,
 });

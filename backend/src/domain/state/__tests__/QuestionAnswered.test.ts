@@ -37,11 +37,11 @@ describe('QuestionAnswered', () => {
           roundName: 'Round 1',
           questions: [
             {
-              question: 'Question 1',
+              text: 'Question 1',
               answer: 'Answer 1',
             },
             {
-              question: 'Question 2',
+              text: 'Question 2',
               answer: 'Answer 2',
             },
           ],
@@ -64,17 +64,16 @@ describe('QuestionAnswered', () => {
     });
   });
 
-  describe('questionText, questionAnswer and questionOptions', () => {
-    it('returns the question text, answer and options', () => {
+  describe('questions', () => {
+    it('returns the question number, text, answer and options', () => {
       const state = new QuestionAnswered(exampleRounds, 0, 0);
 
-      expect(state.questionText).toBe('Question 1');
-      expect(state.questionAnswer).toBe('Answer 1');
-      expect(state.questionOptions).toEqual([
-        'Answer 1',
-        'Answer 1b',
-        'Answer 1c',
-      ]);
+      expect(state.question).toEqual({
+        number: 0,
+        text: 'Question 1',
+        options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+        answer: 'Answer 1',
+      });
     });
   });
 });

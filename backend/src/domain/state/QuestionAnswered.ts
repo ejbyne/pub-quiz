@@ -13,6 +13,18 @@ export class QuestionAnswered extends BaseQuizState {
     super(QuizStatus.QUESTION_ANSWERED, rounds, roundNumber, questionNumber);
   }
 
+  get question(): {
+    number: number;
+    text: string;
+    options?: string[];
+    answer: string;
+  } {
+    const question = this.rounds[this.roundNumber].questions[
+      this.questionNumber
+    ];
+    return { ...question, number: this.questionNumber };
+  }
+
   nextState(): QuizState {
     if (this.isLastQuestionInRound) {
       if (this.nextRoundWithQuestions === -1) {

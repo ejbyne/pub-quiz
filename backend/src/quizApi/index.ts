@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { XmlEntities } from 'html-entities';
 import { shuffle } from 'lodash';
-import { Round } from '../domain/Quiz';
+import {Round} from "../domain/types";
 
 const entities = new XmlEntities();
 
@@ -36,7 +36,7 @@ export const generateRounds = async (): Promise<Round[]> => {
           roundName: categoryName,
           questions: apiResult.results.map(
             ({ question, correct_answer, incorrect_answers }: ApiQuestion) => ({
-              question: entities.decode(question) as string,
+              text: entities.decode(question) as string,
               answer: entities.decode(correct_answer) as string,
               options: shuffle([
                 entities.decode(correct_answer),
