@@ -1,7 +1,12 @@
 import React from 'react';
 import {App} from '../components/App';
 import {render} from '@testing-library/react';
-import {exampleQuiz} from '@pub-quiz/shared/src/testSupport/testFixtures';
+import {
+    exampleQuestionAnsweredState,
+    exampleQuestionAskedState,
+    exampleQuizSummary, exampleRoundFinishedState,
+    exampleRoundStartedState
+} from '@pub-quiz/shared/src/testSupport/testFixtures';
 import {createMockGraphQlClient} from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import {TestAppContainer} from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import {QuizStatus} from '@pub-quiz/shared/src/graphql/types';
@@ -10,7 +15,7 @@ import {receiveNextQuizState} from '../testSupport/receiveNextQuizState';
 describe('round', () => {
     it('starts the first round', async () => {
         const initialQuizState = {
-            ...exampleQuiz,
+            ...exampleQuizSummary,
             rounds: [],
         };
 
@@ -22,33 +27,16 @@ describe('round', () => {
             </TestAppContainer>,
         );
 
-        receiveNextQuizState({
-            __typename: 'RoundStarted',
-            quizId: 'RANDOM_ID',
-            status: QuizStatus.RoundStarted,
-            roundSummary: {
-                roundNumber: 0,
-                roundName: 'The first round',
-                numberOfQuestions: 10,
-            },
-        });
+        receiveNextQuizState(exampleRoundStartedState);
 
-        expect(await findByText('Round 1 started')).toBeTruthy();
+        expect(await findByText('Round 1')).toBeTruthy();
         expect(await findByText('The first round')).toBeTruthy();
     });
 
     it('asks the first question', async () => {
         const initialQuizState = {
-            ...exampleQuiz,
-            state: {
-                quizId: 'RANDOM_ID',
-                status: QuizStatus.RoundStarted,
-                roundSummary: {
-                    roundNumber: 0,
-                    roundName: 'The first round',
-                    numberOfQuestions: 10,
-                },
-            },
+            ...exampleQuizSummary,
+            state: exampleRoundStartedState,
             rounds: [
                 {
                     roundNumber: 0,
@@ -67,20 +55,7 @@ describe('round', () => {
             </TestAppContainer>,
         );
 
-        receiveNextQuizState({
-            __typename: 'QuestionAsked',
-            quizId: 'RANDOM_ID',
-            status: QuizStatus.QuestionAsked,
-            roundSummary: {
-                roundNumber: 0,
-                roundName: 'The first round',
-                numberOfQuestions: 10,
-            },
-            question: {
-                number: 0,
-                text: 'The first question'
-            }
-        });
+        receiveNextQuizState(exampleQuestionAskedState);
 
         expect(await findByText('Question 1')).toBeTruthy();
         expect(await findByText('The first question')).toBeTruthy();
@@ -88,20 +63,8 @@ describe('round', () => {
 
     it('asks the second question', async () => {
         const initialQuizState = {
-            ...exampleQuiz,
-            state: {
-                quizId: 'RANDOM_ID',
-                status: QuizStatus.QuestionAsked,
-                roundSummary: {
-                    roundNumber: 0,
-                    roundName: 'The first round',
-                    numberOfQuestions: 10,
-                },
-                question: {
-                    number: 0,
-                    text: 'The first question',
-                },
-            },
+            ...exampleQuizSummary,
+            state: exampleQuestionAskedState,
             rounds: [
                 {
                     roundNumber: 0,
@@ -126,14 +89,7 @@ describe('round', () => {
         );
 
         receiveNextQuizState({
-            __typename: 'QuestionAsked',
-            quizId: 'RANDOM_ID',
-            status: QuizStatus.QuestionAsked,
-            roundSummary: {
-                roundNumber: 0,
-                roundName: 'The first round',
-                numberOfQuestions: 10,
-            },
+            ...exampleQuestionAskedState,
             question: {
                 number: 1,
                 text: 'The second question',
@@ -149,15 +105,9 @@ describe('round', () => {
 
     it('finishes a round', async () => {
         const initialQuizState = {
-            ...exampleQuiz,
+            ...exampleQuizSummary,
             state: {
-                quizId: 'RANDOM_ID',
-                status: QuizStatus.QuestionAsked,
-                roundSummary: {
-                    roundNumber: 0,
-                    roundName: 'The first round',
-                    numberOfQuestions: 2,
-                },
+                ...exampleQuestionAskedState,
                 question: {
                     number: 1,
                     text: 'The last question',
@@ -184,32 +134,15 @@ describe('round', () => {
             </TestAppContainer>,
         );
 
-        receiveNextQuizState({
-            __typename: 'RoundFinished',
-            quizId: 'RANDOM_ID',
-            status: QuizStatus.RoundFinished,
-            roundSummary: {
-                roundNumber: 0,
-                roundName: 'Round 1',
-                numberOfQuestions: 10,
-            },
-        });
+        receiveNextQuizState(exampleRoundFinishedState);
 
         expect(await findByText('Round 1 completed')).toBeTruthy();
     });
 
     it('shows the question answers', async () => {
         const initialQuizState = {
-            ...exampleQuiz,
-            state: {
-                quizId: 'RANDOM_ID',
-                status: QuizStatus.RoundFinished,
-                roundSummary: {
-                    roundNumber: 0,
-                    roundName: 'The first round',
-                    numberOfQuestions: 10,
-                },
-            },
+            ...exampleQuizSummary,
+            state: exampleRoundFinishedState,
             rounds: [
                 {
                     roundNumber: 0,
@@ -231,21 +164,7 @@ describe('round', () => {
             </TestAppContainer>,
         );
 
-        receiveNextQuizState({
-            __typename: 'QuestionAnswered',
-            quizId: 'RANDOM_ID',
-            status: QuizStatus.QuestionAnswered,
-            roundSummary: {
-                roundNumber: 0,
-                roundName: 'The first round',
-                numberOfQuestions: 10,
-            },
-            question: {
-                number: 0,
-                text: 'The first question',
-                answer: 'The first answer',
-            }
-        });
+        receiveNextQuizState(exampleQuestionAnsweredState);
 
         expect(await findByText('Question 1')).toBeTruthy();
         expect(await findByText('The first question')).toBeTruthy();
@@ -254,15 +173,14 @@ describe('round', () => {
 
     it('finishes the quiz', async () => {
         const initialQuizState = {
-            ...exampleQuiz,
+            ...exampleQuizSummary,
             state: {
-                quizId: 'RANDOM_ID',
-                status: QuizStatus.RoundFinished,
-                roundSummary: {
-                    roundNumber: 0,
-                    roundName: 'Round 1',
-                    numberOfQuestions: 2,
-                },
+                ...exampleQuestionAnsweredState,
+                question: {
+                    number: 1,
+                    text: 'The second question',
+                    answer: 'The second answer',
+                }
             },
             rounds: [
                 {

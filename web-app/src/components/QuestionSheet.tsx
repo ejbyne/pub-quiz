@@ -14,7 +14,7 @@ export const QuestionSheet: React.FC<{}> = () => {
       <h1 className="text-2xl text-center mb-4">
         Round {round.roundNumber + 1}
       </h1>
-      <h2 className="text-lg font-light text-center mb-4">{round.roundName}</h2>
+      <h2 className="text-xl text-center mb-4">{round.roundName}</h2>
       <ul>
         {round.questions.map(
           (question?: Question) =>

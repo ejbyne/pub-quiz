@@ -11,7 +11,7 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
-  src/shared/graphql/fragmentTypes.json:
+  src/graphql/fragmentTypes.json:
     plugins:
       - fragment-matcher
     config:

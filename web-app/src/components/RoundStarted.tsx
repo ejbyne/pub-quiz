@@ -12,9 +12,9 @@ export const RoundStarted: React.FC<{}> = () => {
   return (
     <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col justify-center items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg relative">
       <h1 className="text-2xl text-center mb-4">
-        Round {round.roundNumber + 1} started
+        Round {round.roundNumber + 1}
       </h1>
-      <h2 className="text-lg font-light text-center mb-4">{round.roundName}</h2>
+      <h2 className="text-xl text-center mb-4">{round.roundName}</h2>
       <p className="text-lg font-light text-center">
         {round.numberOfQuestions} questions
       </p>

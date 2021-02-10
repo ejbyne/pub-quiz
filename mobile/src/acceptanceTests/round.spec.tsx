@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from '../components/App';
 import { render } from '@testing-library/react-native';
-import { exampleQuiz } from '@pub-quiz/shared/src/testSupport/testFixtures';
+import { exampleQuizSummary } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { QuizStatus } from '../../../shared/src/graphql/types';
@@ -10,7 +10,7 @@ import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 describe('round', () => {
   it('starts the first round', async () => {
     const initialQuizState = {
-      ...exampleQuiz,
+      ...exampleQuizSummary,
       rounds: [],
     };
 
@@ -39,7 +39,7 @@ describe('round', () => {
 
   it('asks the first question', async () => {
     const initialQuizState = {
-      ...exampleQuiz,
+      ...exampleQuizSummary,
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundStarted,
@@ -86,7 +86,7 @@ describe('round', () => {
 
   it('asks the second question', async () => {
     const initialQuizState = {
-      ...exampleQuiz,
+      ...exampleQuizSummary,
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuestionAsked,
@@ -143,7 +143,7 @@ describe('round', () => {
 
   it('finishes a round', async () => {
     const initialQuizState = {
-      ...exampleQuiz,
+      ...exampleQuizSummary,
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuestionAsked,
@@ -192,7 +192,7 @@ describe('round', () => {
 
   it('finishes the quiz', async () => {
     const initialQuizState = {
-      ...exampleQuiz,
+      ...exampleQuizSummary,
       state: {
         quizId: 'RANDOM_ID',
         status: QuizStatus.RoundFinished,

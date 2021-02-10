@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
-import { exampleQuiz } from '@pub-quiz/shared/src/testSupport/testFixtures';
+import { exampleQuizSummary } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { App } from '../components/App';
@@ -10,7 +10,7 @@ jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 
 describe('registration', () => {
   it('allows a player to register for a quiz with the provided id', async () => {
-    const mockQuizSummary = jest.fn().mockReturnValue(exampleQuiz);
+    const mockQuizSummary = jest.fn().mockReturnValue(exampleQuizSummary);
 
     const mockJoinQuiz = jest.fn().mockReturnValue({
       quizId: 'RANDOM_ID',

@@ -9,7 +9,7 @@ export const RoundFinished: React.FC<{}> = () => {
 
   return (
     <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col justify-center items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg relative">
-      <h1 className="text-2xl text-center mb-4">
+      <h1 className="text-2xl text-center m-4">
         Round {round.roundNumber + 1} completed
       </h1>
     </section>
