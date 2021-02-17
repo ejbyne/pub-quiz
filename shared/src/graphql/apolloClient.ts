@@ -1,6 +1,5 @@
 import { createAuthLink, AUTH_TYPE } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
-import fetch from 'cross-fetch';
 
 import {
   InMemoryCache,
