@@ -1,4 +1,12 @@
-import {QuestionAnswered, QuestionAsked, QuizStatus, QuizSummary, RoundFinished, RoundStarted} from '../graphql/types';
+import {
+    QuestionAnswered,
+    QuestionAsked,
+    QuizNotYetStarted,
+    QuizStatus,
+    QuizSummary,
+    RoundFinished,
+    RoundStarted
+} from '../graphql/types';
 
 export const exampleQuizSummary: QuizSummary = {
     __typename: 'QuizSummary',
@@ -6,9 +14,10 @@ export const exampleQuizSummary: QuizSummary = {
     quizName: 'Random Quiz',
     playerNames: null,
     state: {
+        __typename: 'QuizNotYetStarted',
         quizId: 'RANDOM_ID',
         status: QuizStatus.QuizNotYetStarted,
-    },
+    } as QuizNotYetStarted,
 };
 
 export const exampleRoundStartedState: RoundStarted = {

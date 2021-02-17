@@ -1,6 +1,24 @@
 {
     "private": true,
     "workspaces": {
-        "packages": ["backend", "mobile", "web-app", "shared"]
+        "packages": ["backend", "mobile", "web-app", "shared"],
+        "nohoist": [
+            "**/react-native",
+            "**/react-native/**",
+            "**/react",
+            "**/react/**",
+            "**/jest",
+            "**/jest/**",
+            "**/babel-jest",
+            "**/babel-jest/**",
+            "**/@apollo/react-hooks",
+            "**/@apollo/react-hooks/**",
+            "**/aws-appsync-auth-link",
+            "**/aws-appsync-auth-link/**",
+            "**/aws-appsync-subscription-link",
+            "**/aws-appsync-subscription-link/**",
+            "**/graphql",
+            "**/graphql/**"
+        ]
     }
 }

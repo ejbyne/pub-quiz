@@ -2,8 +2,6 @@ import React, { useContext, useState } from "react";
 import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { useJoinQuizMutation } from "@pub-quiz/shared/src/graphql/types";
 
-import QuizImage from '../assets/images/quiz.svg';
-
 export const Registration: React.FC = () => {
   const [, updateQuiz] = useContext(QuizContext);
   const [playerName, setPlayerName] = useState<string>("");
