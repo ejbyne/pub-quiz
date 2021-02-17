@@ -10,15 +10,7 @@
             "**/jest",
             "**/jest/**",
             "**/babel-jest",
-            "**/babel-jest/**",
-            "**/@apollo/react-hooks",
-            "**/@apollo/react-hooks/**",
-            "**/aws-appsync-auth-link",
-            "**/aws-appsync-auth-link/**",
-            "**/aws-appsync-subscription-link",
-            "**/aws-appsync-subscription-link/**",
-            "**/graphql",
-            "**/graphql/**"
+            "**/babel-jest/**"
         ]
     }
 }
