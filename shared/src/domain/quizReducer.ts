@@ -122,7 +122,7 @@ const addNewQuestion = (
 ): Question[] => {
   const updatedQuestions = [...questions];
 
-  updatedQuestions[question.number] = question;
+  updatedQuestions[question?.number] = question;
 
   return updatedQuestions;
 };
