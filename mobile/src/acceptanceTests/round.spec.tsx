@@ -76,8 +76,10 @@ describe('round', () => {
         roundName: 'The first round',
         numberOfQuestions: 10,
       },
-      questionNumber: 0,
-      questionText: 'The first question',
+      question: {
+        number: 0,
+        text: 'The first question',
+      },
     });
 
     expect(await findByText('Question 1')).toBeTruthy();
@@ -95,8 +97,10 @@ describe('round', () => {
           roundName: 'The first round',
           numberOfQuestions: 10,
         },
-        questionNumber: 0,
-        questionText: 'The first question',
+        question: {
+          number: 0,
+          text: 'The first question',
+        },
       },
       rounds: [
         {
@@ -105,8 +109,8 @@ describe('round', () => {
           numberOfQuestions: 10,
           questions: [
             {
-              questionNumber: 0,
-              questionText: 'The first question',
+              number: 0,
+              text: 'The first question',
             },
           ],
         },
@@ -130,8 +134,10 @@ describe('round', () => {
         roundName: 'The first round',
         numberOfQuestions: 10,
       },
-      questionNumber: 1,
-      questionText: 'The second question',
+      question: {
+        number: 1,
+        text: 'The second question',
+      },
     });
 
     expect(await findByText('Question 1')).toBeTruthy();
@@ -152,8 +158,10 @@ describe('round', () => {
           roundName: 'The first round',
           numberOfQuestions: 2,
         },
-        questionNumber: 1,
-        questionText: 'The last question',
+        question: {
+          number: 1,
+          text: 'The last question',
+        },
       },
       rounds: [
         {
@@ -161,8 +169,8 @@ describe('round', () => {
           roundName: 'The first round',
           numberOfQuestions: 2,
           questions: [
-            { questionNumber: 0, questionText: 'The first question' },
-            { questionNumber: 1, questionText: 'The last question' },
+            { number: 0, text: 'The first question' },
+            { number: 1, text: 'The last question' },
           ],
         },
       ],
@@ -208,8 +216,8 @@ describe('round', () => {
           roundName: 'The first round',
           numberOfQuestions: 2,
           questions: [
-            { questionNumber: 0, questionText: 'The first question' },
-            { questionNumber: 1, questionText: 'The last question' },
+            { number: 0, text: 'The first question' },
+            { number: 1, text: 'The last question' },
           ],
         },
       ],

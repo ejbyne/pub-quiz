@@ -8,6 +8,11 @@ module.exports = {
       {
         alias: {
           react: path.join(__dirname, 'node_modules/react'),
+          '@apollo/react-hooks': path.join(
+            __dirname,
+            'node_modules/@apollo/react-hooks',
+          ),
+          '@apollo/client': path.join(__dirname, 'node_modules/@apollo/client'),
         },
       },
     ],

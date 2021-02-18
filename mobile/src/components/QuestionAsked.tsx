@@ -14,9 +14,9 @@ export const QuestionAsked: React.FC<{}> = () => {
       <Text>Round {round.roundNumber + 1}</Text>
       <Text>{round.roundName}</Text>
       {round.questions.map((question: Question) => (
-        <View key={question.questionNumber}>
-          <Text>Question {question.questionNumber + 1}</Text>
-          <Text>{question.questionText}</Text>
+        <View key={question.number}>
+          <Text>Question {question.number + 1}</Text>
+          <Text>{question.text}</Text>
           <TextInput placeholder="Your answer" />
         </View>
       ))}

@@ -16,8 +16,5 @@ module.exports = {
       },
     }),
   },
-  watchFolders: [
-    path.join(__dirname, '..', 'node_modules'),
-    path.join(__dirname, '..', 'shared'),
-  ],
+  watchFolders: [path.resolve(__dirname, '../node_modules/@pub-quiz/shared')],
 };
