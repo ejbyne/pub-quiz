@@ -34,7 +34,7 @@ it('finishes the quiz', async () => {
   const { findByText } = render(
     <TestAppContainer
       client={createMockGraphQlClient()}
-      initialState={initialQuizState}>
+      initialQuizState={initialQuizState}>
       <App />
     </TestAppContainer>,
   );

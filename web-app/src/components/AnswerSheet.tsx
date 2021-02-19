@@ -1,13 +1,36 @@
 import React, { useContext } from "react";
-import { QuestionAsked } from "@pub-quiz/shared/src/graphql/types";
+import { QuestionAsked, useSubmitAnswersMutation } from '@pub-quiz/shared/src/graphql/types';
 import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
-import { Question } from "@pub-quiz/shared/src/domain/types";
+import { Question } from "@pub-quiz/shared/src/domain/quizTypes";
 import { QuestionAnswered } from "@pub-quiz/shared/src/graphql/types";
+import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
 
-export const QuestionSheet: React.FC<{}> = () => {
+export const AnswerSheet: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
+  const [answerSheet, updateAnswerSheet] = useContext(AnswerSheetContext);
   const state = quiz.state as QuestionAsked | QuestionAnswered;
   const round = quiz.rounds[state.roundSummary.roundNumber];
+  const answers = answerSheet.rounds[round.roundNumber];
+
+  const [submitAnswers, { called }] = useSubmitAnswersMutation({
+    variables: {
+      input: {
+        quizId: state.quizId,
+        playerName: answerSheet.playerName!,
+        roundNumber: round.roundNumber,
+        answers,
+      },
+    },
+  });
+
+  const changeAnswer = (questionNumber: number, answer: string) => updateAnswerSheet({
+    type: 'AnswerChanged',
+    payload: {
+      roundNumber: round.roundNumber,
+      questionNumber,
+      answer: answer,
+    }
+  })
 
   return (
     <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg absolute top-24 bottom-4 text-gray-200 overflow-y-auto">
@@ -35,11 +58,14 @@ export const QuestionSheet: React.FC<{}> = () => {
                       <li key={option}>
                         <span className="flex items-baseline">
                           <input
+                            className="ml-2"
                             type="radio"
                             id={option}
-                            name={option}
+                            name={`Question ${question.number} + 1`}
                             value={option}
-                            className="ml-2"
+                            checked={answers?.[question.number]?.answer === option}
+                            onClick={e => changeAnswer(question.number, e.currentTarget.value)}
+                            onChange={() => {}}
                           />
                           <label htmlFor={option} className="ml-2 align">
                             {option}
@@ -52,13 +78,23 @@ export const QuestionSheet: React.FC<{}> = () => {
                   <input
                     className="w-full my-2 text-input"
                     placeholder={`Answer ${question.number + 1}`}
-                    // onChange={(e) => setQuizId(e.currentTarget.value)}
+                    onChange={e => changeAnswer(question.number, e.currentTarget.value)}
+                    value={answers?.[question.number]?.answer ?? ''}
                   />
                 )}
               </li>
             )
         )}
       </ul>
+      <button className="button mt-6" onClick={async () => {
+        try {
+          await submitAnswers();
+        } catch (error) {
+          console.error('error submitting answers', error);
+        }
+      }}
+      disabled={called || state.question.number < round.numberOfQuestions - 1}>
+        Submit answers</button>
     </section>
   );
 };

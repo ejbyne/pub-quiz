@@ -16,7 +16,7 @@ describe('starting the quiz', () => {
     const {findByText} = render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialState={initialQuizState}>
+        initialQuizState={initialQuizState}>
         <App/>
       </TestAppContainer>,
     );

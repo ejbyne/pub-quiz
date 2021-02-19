@@ -1,6 +1,9 @@
 {
   "name": "@pub-quiz/shared",
   "version": "1.0.0",
+  "exports": {
+    "./": "./src/"
+  },
   "scripts": {
     "test": "jest",
     "codegen": "graphql-codegen"

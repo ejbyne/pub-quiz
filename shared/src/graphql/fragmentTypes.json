@@ -4,6 +4,7 @@
       "QuizNotYetStarted",
       "RoundStarted",
       "QuestionAsked",
+      "QuestionAnswered",
       "RoundFinished",
       "QuizFinished"
     ]

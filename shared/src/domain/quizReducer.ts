@@ -1,4 +1,4 @@
-import { Quiz, QuizAction, Round, Question } from "./types";
+import { Quiz, QuizAction, Round, Question } from "./quizTypes";
 import {
   QuizStatus,
   RoundStarted,

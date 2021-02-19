@@ -4,7 +4,7 @@ import { client } from '@pub-quiz/shared/src/graphql/apolloClient';
 import { App } from './App';
 import { quizReducer } from '@pub-quiz/shared/src/domain/quizReducer';
 import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
-import { Quiz, QuizAction } from '@pub-quiz/shared/src/domain/types';
+import { Quiz, QuizAction } from '@pub-quiz/shared/src/domain/quizTypes';
 
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(

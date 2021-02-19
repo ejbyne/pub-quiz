@@ -29,6 +29,7 @@ export type Mutation = {
   saveQuiz: Scalars['Boolean'];
   joinQuiz: PlayerJoined;
   nextQuizState: QuizState;
+  submitAnswers: Scalars['Boolean'];
 };
 
 
@@ -49,6 +50,11 @@ export type MutationJoinQuizArgs = {
 
 export type MutationNextQuizStateArgs = {
   input: NextQuizStateInput;
+};
+
+
+export type MutationSubmitAnswersArgs = {
+  input: SubmitAnswersInput;
 };
 
 export type Subscription = {
@@ -96,6 +102,17 @@ export type NextQuizStateInput = {
   quizId: Scalars['ID'];
 };
 
+export type SubmitAnswersInput = {
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+  roundNumber: Scalars['Int'];
+  answers: Array<Maybe<PlayerAnswerInput>>;
+};
+
+export type PlayerAnswerInput = {
+  answer?: Maybe<Scalars['String']>;
+};
+
 export type QuizGenerated = {
   __typename?: 'QuizGenerated';
   quizId: Scalars['ID'];
@@ -124,8 +141,8 @@ export type Question = {
   options?: Maybe<Array<Scalars['String']>>;
 };
 
-export type AnsweredQuestion = {
-  __typename?: 'AnsweredQuestion';
+export type QuestionWithAnswer = {
+  __typename?: 'QuestionWithAnswer';
   number: Scalars['Int'];
   text: Scalars['String'];
   options?: Maybe<Array<Scalars['String']>>;
@@ -172,7 +189,7 @@ export type QuestionAnswered = QuizState & {
   quizId: Scalars['ID'];
   status: QuizStatus;
   roundSummary: RoundSummary;
-  question: AnsweredQuestion;
+  question: QuestionWithAnswer;
 };
 
 export type RoundFinished = QuizState & {
@@ -231,8 +248,8 @@ export type QuizSummaryQuery = (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
       ), question: (
-        { __typename?: 'AnsweredQuestion' }
-        & Pick<AnsweredQuestion, 'number' | 'text' | 'options' | 'answer'>
+        { __typename?: 'QuestionWithAnswer' }
+        & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
       ) }
     ) | (
       { __typename?: 'RoundFinished' }
@@ -284,6 +301,16 @@ export type JoinQuizMutation = (
   ) }
 );
 
+export type SubmitAnswersMutationVariables = Exact<{
+  input: SubmitAnswersInput;
+}>;
+
+
+export type SubmitAnswersMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'submitAnswers'>
+);
+
 export type NextQuizStateMutationVariables = Exact<{
   input: NextQuizStateInput;
 }>;
@@ -318,8 +345,8 @@ export type NextQuizStateMutation = (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ), question: (
-      { __typename?: 'AnsweredQuestion' }
-      & Pick<AnsweredQuestion, 'number' | 'text' | 'options' | 'answer'>
+      { __typename?: 'QuestionWithAnswer' }
+      & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
     { __typename?: 'RoundFinished' }
@@ -381,8 +408,8 @@ export type QuizStateSubscription = (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ), question: (
-      { __typename?: 'AnsweredQuestion' }
-      & Pick<AnsweredQuestion, 'number' | 'text' | 'options' | 'answer'>
+      { __typename?: 'QuestionWithAnswer' }
+      & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
     { __typename?: 'RoundFinished' }
@@ -572,6 +599,36 @@ export function useJoinQuizMutation(baseOptions?: Apollo.MutationHookOptions<Joi
 export type JoinQuizMutationHookResult = ReturnType<typeof useJoinQuizMutation>;
 export type JoinQuizMutationResult = Apollo.MutationResult<JoinQuizMutation>;
 export type JoinQuizMutationOptions = Apollo.BaseMutationOptions<JoinQuizMutation, JoinQuizMutationVariables>;
+export const SubmitAnswersDocument = gql`
+    mutation SubmitAnswers($input: SubmitAnswersInput!) {
+  submitAnswers(input: $input)
+}
+    `;
+export type SubmitAnswersMutationFn = Apollo.MutationFunction<SubmitAnswersMutation, SubmitAnswersMutationVariables>;
+
+/**
+ * __useSubmitAnswersMutation__
+ *
+ * To run a mutation, you first call `useSubmitAnswersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitAnswersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitAnswersMutation, { data, loading, error }] = useSubmitAnswersMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSubmitAnswersMutation(baseOptions?: Apollo.MutationHookOptions<SubmitAnswersMutation, SubmitAnswersMutationVariables>) {
+        return Apollo.useMutation<SubmitAnswersMutation, SubmitAnswersMutationVariables>(SubmitAnswersDocument, baseOptions);
+      }
+export type SubmitAnswersMutationHookResult = ReturnType<typeof useSubmitAnswersMutation>;
+export type SubmitAnswersMutationResult = Apollo.MutationResult<SubmitAnswersMutation>;
+export type SubmitAnswersMutationOptions = Apollo.BaseMutationOptions<SubmitAnswersMutation, SubmitAnswersMutationVariables>;
 export const NextQuizStateDocument = gql`
     mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {

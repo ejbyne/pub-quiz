@@ -68,6 +68,10 @@ mutation JoinQuiz($input: JoinQuizInput!) {
   }
 }
 
+mutation SubmitAnswers($input: SubmitAnswersInput!) {
+  submitAnswers(input: $input)
+}
+
 mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {
     quizId

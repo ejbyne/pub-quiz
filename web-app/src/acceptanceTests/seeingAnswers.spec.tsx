@@ -11,7 +11,7 @@ import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 import React from 'react';
 
 describe('seeing answers', () => {
-  it('shows the question answers', async () => {
+  it('shows the question answeers', async () => {
     const initialQuizState = {
       ...exampleQuizSummary,
       state: exampleRoundFinishedState,
@@ -31,7 +31,7 @@ describe('seeing answers', () => {
     const { findByText } = render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialState={initialQuizState}>
+        initialQuizState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );

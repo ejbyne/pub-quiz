@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
 import { useJoinQuizMutation } from "@pub-quiz/shared/src/graphql/types";
+import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
 
 export const Registration: React.FC = () => {
   const [, updateQuiz] = useContext(QuizContext);
+  const [, updateAnswerSheet] = useContext(AnswerSheetContext);
   const [playerName, setPlayerName] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("");
 
@@ -44,6 +46,7 @@ export const Registration: React.FC = () => {
           try {
             await joinQuiz();
             updateQuiz({ type: "JoinedQuiz", payload: { quizId } });
+            updateAnswerSheet({ type: 'PlayerJoined', payload: { playerName }});
           } catch (error) {
             // Do nothing: we display error message below
           }

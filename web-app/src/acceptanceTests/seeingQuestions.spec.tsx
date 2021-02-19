@@ -10,7 +10,7 @@ import { App } from '../components/App';
 import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 import React from 'react';
 
-describe('asking questions', () => {
+describe('seeing questions', () => {
   it('asks the first question', async () => {
     const initialQuizState = {
       ...exampleQuizSummary,
@@ -28,7 +28,7 @@ describe('asking questions', () => {
     const { findByText } = render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialState={initialQuizState}>
+        initialQuizState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -61,7 +61,7 @@ describe('asking questions', () => {
     const { findByText } = render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialState={initialQuizState}>
+        initialQuizState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );
@@ -107,7 +107,7 @@ describe('asking questions', () => {
     const { findByText } = render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialState={initialQuizState}>
+        initialQuizState={initialQuizState}>
         <App />
       </TestAppContainer>,
     );

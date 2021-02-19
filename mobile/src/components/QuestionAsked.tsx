@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 import { QuestionAsked as QuestionAskedState } from '@pub-quiz/shared/src/graphql/types';
-import { Question } from '@pub-quiz/shared/src/domain/types';
+import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
 
 export const QuestionAsked: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
