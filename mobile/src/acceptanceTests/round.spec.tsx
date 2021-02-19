@@ -4,7 +4,7 @@ import { render } from '@testing-library/react-native';
 import { exampleQuizSummary } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
-import { QuizStatus } from '../../../shared/src/graphql/types';
+import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
 import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 
 describe('round', () => {

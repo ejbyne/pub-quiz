@@ -1,7 +1,17 @@
 {
     "private": true,
     "workspaces": {
-        "packages": ["backend", "mobile", "web-app", "shared"],
-        "nohoist": ["**/**"]
+        "packages": [
+            "backend",
+            "mobile",
+            "web-app",
+            "shared"
+        ],
+        "nohoist": [
+            "**/**"
+        ]
+    },
+    "devDependencies": {
+        "prettier": "^2.2.1"
     }
 }
