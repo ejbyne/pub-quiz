@@ -10,6 +10,7 @@ interface Event {
 interface PlayerJoinedEvent {
   quizId: string;
   playerName: string;
+  reconnect?: boolean;
 }
 
 const quizTableName = process.env.QUIZ_TABLE_NAME as string;
@@ -21,10 +22,22 @@ export const joinQuiz: Handler<Event> = async (
   _,
   callback
 ): Promise<PlayerJoinedEvent | void> => {
-  const { quizId, playerName } = event.arguments.input;
+  const { quizId, playerName, reconnect } = event.arguments.input;
 
   try {
     console.log(`Player ${playerName} joining quiz with id ${quizId}`);
+
+    const quiz = await quizRepository.get(quizId);
+
+    if (quiz.playerNames?.includes(playerName)) {
+      if (reconnect) {
+        return {
+          quizId,
+          playerName,
+        };
+      }
+      callback(`A player with the name ${playerName} already exists`);
+    }
 
     await quizRepository.addPlayerName(quizId, playerName);
 

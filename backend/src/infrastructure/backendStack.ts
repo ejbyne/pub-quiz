@@ -14,7 +14,7 @@ export class PubQuizBackendStack extends cdk.Stack {
         fieldLogLevel: FieldLogLevel.ALL,
       },
       schema: Schema.fromAsset(
-        require.resolve('@pub-quiz/shared/src/graphql/schema.graphql')
+        require.resolve('../../../shared/src/graphql/schema.graphql')
       ),
     });
 
