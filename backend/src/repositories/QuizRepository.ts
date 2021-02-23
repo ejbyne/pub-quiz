@@ -1,7 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../domain/Quiz';
-import { QuizEntity } from './types';
+import { QuizEntity, SubmitAnswersCommand } from './types';
 import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
 import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
 import { QuizState } from '../domain/types';
@@ -35,14 +35,21 @@ export class QuizRepository {
       throw new Error(`The quiz ID does not exist`);
     }
 
-    const { quizName, rounds, state, playerNames } = Item as QuizEntity;
+    const {
+      quizName,
+      rounds,
+      state,
+      playerNames,
+      answers,
+    } = Item as QuizEntity;
 
     return new Quiz(
       quizId,
       quizName,
       rounds,
       mapEntityStateToQuizState(state, rounds),
-      playerNames as string[] | undefined
+      playerNames as string[] | undefined,
+      answers as Record<string, { answer: string }[][]>
     );
   }
 
@@ -55,6 +62,7 @@ export class QuizRepository {
       playerNames: quiz.playerNames?.length
         ? this.documentClient.createSet(quiz.playerNames)
         : undefined,
+      answers: quiz.answers ?? {},
     };
 
     const params = {
@@ -109,5 +117,24 @@ export class QuizRepository {
 
     const result = await this.documentClient.scan(params).promise();
     return result.Items as Quiz[];
+  }
+
+  async saveAnswers(command: SubmitAnswersCommand) {
+    const { quizId, roundNumber, playerName, answers } = command;
+    const savedQuiz = await this.get(quizId);
+
+    const playerAnswers = savedQuiz.answers[playerName] ?? [];
+    playerAnswers[roundNumber] = answers;
+
+    await this.documentClient
+      .update({
+        TableName: this.tableName,
+        Key: { quizId },
+        UpdateExpression: `SET answers.${playerName} = :playerAnswers`,
+        ExpressionAttributeValues: {
+          ':playerAnswers': playerAnswers,
+        },
+      })
+      .promise();
   }
 }

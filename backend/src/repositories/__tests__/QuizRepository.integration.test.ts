@@ -108,4 +108,35 @@ describe('QuizRepository integration tests', () => {
       questionNumber: 0,
     });
   });
+
+  it("saves a player's answers for a round", async () => {
+    await quizRepository.save(
+      new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAsked(exampleRounds, 0, 0)
+      )
+    );
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Ed',
+      answers: [{ answer: "Ed's answer" }],
+    });
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Henry',
+      answers: [{ answer: "Henry's answer" }],
+    });
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.answers).toEqual({
+      Ed: [[{ answer: "Ed's answer" }]],
+      Henry: [[{ answer: "Henry's answer" }]],
+    });
+  });
 });

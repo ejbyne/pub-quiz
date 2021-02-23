@@ -12,9 +12,20 @@ export interface QuizEntity {
   }[];
   state: QuizEntityState;
   playerNames?: DocumentClient.DynamoDbSet;
+  answers: Record<string, { answer: string }[][]>;
 }
+
 export interface QuizEntityState {
   status: QuizStatus;
   roundNumber?: number;
   questionNumber?: number;
+}
+
+export interface SubmitAnswersCommand {
+  quizId: string;
+  playerName: string;
+  roundNumber: number;
+  answers: {
+    answer: string;
+  }[];
 }
