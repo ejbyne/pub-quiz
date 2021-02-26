@@ -79,7 +79,7 @@ export class QuizRepository {
     const playerNames = savedQuiz.playerNames?.values as string[] | undefined;
 
     if (playerNames?.includes(newPlayerName)) {
-      throw new Error(`A player with the name ${newPlayerName} already exists`);
+      return undefined;
     }
 
     await this.documentClient

@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda';
 import { QuizRepository } from '../repositories/QuizRepository';
-import { mapQuizStateToResponseState } from './mapQuizStateToResponseState';
-import { NextStateEvent } from './nextQuizState';
+import { NextStateEvent } from './nextQuizStateLambda';
+import { quizSummaryInteractor } from '../interactors/quizSummaryInteractor';
 
 interface Event {
   arguments: {
@@ -9,7 +9,7 @@ interface Event {
   };
 }
 
-interface QuizSummaryResponse {
+export interface QuizSummaryResponse {
   quizId: string;
   quizName: string;
   playerNames?: string[];
@@ -20,7 +20,7 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 
 const quizRepository = new QuizRepository(quizTableName);
 
-export const quizSummary: Handler<Event> = async (
+export const quizSummaryLambda: Handler<Event> = async (
   event,
   _,
   callback
@@ -29,17 +29,7 @@ export const quizSummary: Handler<Event> = async (
 
   try {
     console.log(`Getting summary for quiz with id ${quizId}`);
-
-    const quiz = await quizRepository.get(quizId);
-
-    const { quizName, playerNames, state } = quiz;
-
-    return {
-      quizId,
-      quizName,
-      playerNames,
-      state: mapQuizStateToResponseState(quizId, state),
-    };
+    return quizSummaryInteractor(event.arguments, quizRepository);
   } catch (error) {
     callback(error.message);
   }

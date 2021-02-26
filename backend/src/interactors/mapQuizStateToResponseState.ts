@@ -1,5 +1,5 @@
 import { QuizState } from '../domain/types';
-import { NextStateEvent } from './nextQuizState';
+import { NextStateEvent } from '../lambdas/nextQuizStateLambda';
 
 export const mapQuizStateToResponseState = (
   quizId: string,

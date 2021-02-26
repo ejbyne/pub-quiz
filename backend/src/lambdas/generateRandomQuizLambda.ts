@@ -17,7 +17,7 @@ const quizTableName = process.env.QUIZ_TABLE_NAME as string;
 
 const quizRepository = new QuizRepository(quizTableName);
 
-export const generateRandomQuiz: Handler<Event> = async (
+export const generateRandomQuizLambda: Handler<Event> = async (
   event
 ): Promise<{ quizId: string; quizName: string }> => {
   const { quizName } = event.arguments.input;

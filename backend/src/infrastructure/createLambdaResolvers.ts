@@ -16,8 +16,8 @@ export const createLambdaResolvers = (
     'GenerateRandomQuizLambda',
     {
       functionName: 'generate-random-quiz-resolver',
-      entry: Path.join(__dirname, '../lambdas/generateRandomQuiz.ts'),
-      handler: 'generateRandomQuiz',
+      entry: Path.join(__dirname, '../lambdas/generateRandomQuizLambda.ts'),
+      handler: 'generateRandomQuizLambda',
       runtime: Runtime.NODEJS_12_X,
       environment: {
         QUIZ_TABLE_NAME: quizTable.tableName,
@@ -27,8 +27,8 @@ export const createLambdaResolvers = (
 
   const saveQuizLambda = new NodejsFunction(scope, 'SaveQuizLambda', {
     functionName: 'save-quiz-resolver',
-    entry: Path.join(__dirname, '../lambdas/saveQuiz.ts'),
-    handler: 'saveQuiz',
+    entry: Path.join(__dirname, '../lambdas/saveQuizLambda.ts'),
+    handler: 'saveQuizLambda',
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -37,8 +37,8 @@ export const createLambdaResolvers = (
 
   const joinQuizLambda = new NodejsFunction(scope, 'JoinQuizLambda', {
     functionName: 'join-quiz-resolver',
-    entry: Path.join(__dirname, '../lambdas/joinQuiz.ts'),
-    handler: 'joinQuiz',
+    entry: Path.join(__dirname, '../lambdas/joinQuizLambda.ts'),
+    handler: 'joinQuizLambda',
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -47,8 +47,8 @@ export const createLambdaResolvers = (
 
   const nextQuizStateLambda = new NodejsFunction(scope, 'NextQuizStateLamba', {
     functionName: 'next-quiz-state-resolver',
-    entry: Path.join(__dirname, '../lambdas/nextQuizState.ts'),
-    handler: 'nextQuizState',
+    entry: Path.join(__dirname, '../lambdas/nextQuizStateLambda.ts'),
+    handler: 'nextQuizStateLambda',
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -57,8 +57,8 @@ export const createLambdaResolvers = (
 
   const quizSummaryLambda = new NodejsFunction(scope, 'QuizSummaryLambda', {
     functionName: 'quiz-summary-resolver',
-    entry: Path.join(__dirname, '../lambdas/quizSummary.ts'),
-    handler: 'quizSummary',
+    entry: Path.join(__dirname, '../lambdas/quizSummaryLambda.ts'),
+    handler: 'quizSummaryLambda',
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
@@ -67,8 +67,8 @@ export const createLambdaResolvers = (
 
   const submitAnswersLambda = new NodejsFunction(scope, 'SubmitAnswersLambda', {
     functionName: 'submit-answers-resolver',
-    entry: Path.join(__dirname, '../lambdas/submitAnswers.ts'),
-    handler: 'submitAnswers',
+    entry: Path.join(__dirname, '../lambdas/submitAnswersLambda.ts'),
+    handler: 'submitAnswersLambda',
     runtime: Runtime.NODEJS_12_X,
     environment: {
       QUIZ_TABLE_NAME: quizTable.tableName,
