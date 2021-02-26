@@ -20,27 +20,25 @@ export const TestAppContainer: React.FC<{
   initialQuizState?: Quiz;
   initialAnswerSheetState?: AnswerSheet;
 }> = ({
-        client,
-        initialQuizState = { rounds: [] },
-        initialAnswerSheetState = { playerName: 'Ed', rounds: [] },
-        children,
-      }) => {
+  client,
+  initialQuizState = { rounds: [] },
+  initialAnswerSheetState = { playerName: 'Ed', rounds: [] },
+  children,
+}) => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
     quizReducer,
     initialQuizState,
   );
   mockUpdateQuiz = updateQuiz;
 
-  const [answerSheet, updateAnswerSheet] = useReducer<Reducer<AnswerSheet, AnswerSheetAction>>(
-    answerSheetReducer,
-    initialAnswerSheetState,
-  );
+  const [answerSheet, updateAnswerSheet] = useReducer<
+    Reducer<AnswerSheet, AnswerSheetAction>
+  >(answerSheetReducer, initialAnswerSheetState);
 
   return (
     <ApolloProvider client={client as any}>
       <QuizContext.Provider value={[quiz, updateQuiz]}>
         <AnswerSheetContext.Provider value={[answerSheet, updateAnswerSheet]}>
-
           {children}
         </AnswerSheetContext.Provider>
       </QuizContext.Provider>

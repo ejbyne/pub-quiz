@@ -40,7 +40,6 @@ input QuestionInput {
 input JoinQuizInput {
   quizId: ID!
   playerName: String!
-  reconnect: Boolean
 }
 
 input NextQuizStateInput {
