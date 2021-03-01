@@ -1,8 +1,11 @@
-import React, { useContext } from "react";
-import { QuestionAsked, useSubmitAnswersMutation } from '@pub-quiz/shared/src/graphql/types';
-import { QuizContext } from "@pub-quiz/shared/src/context/quizContext";
-import { Question } from "@pub-quiz/shared/src/domain/quizTypes";
-import { QuestionAnswered } from "@pub-quiz/shared/src/graphql/types";
+import React, { useContext } from 'react';
+import {
+  QuestionAsked,
+  useSubmitAnswersMutation,
+} from '@pub-quiz/shared/src/graphql/types';
+import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
+import { QuestionAnswered } from '@pub-quiz/shared/src/graphql/types';
 import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
 
 export const AnswerSheet: React.FC<{}> = () => {
@@ -23,22 +26,23 @@ export const AnswerSheet: React.FC<{}> = () => {
     },
   });
 
-  const changeAnswer = (questionNumber: number, answer: string) => updateAnswerSheet({
-    type: 'AnswerChanged',
-    payload: {
-      roundNumber: round.roundNumber,
-      questionNumber,
-      answer: answer,
-    }
-  })
+  const changeAnswer = (questionNumber: number, answer: string) =>
+    updateAnswerSheet({
+      type: 'AnswerChanged',
+      payload: {
+        roundNumber: round.roundNumber,
+        questionNumber,
+        answer: answer,
+      },
+    });
 
   return (
-    <section className="w-full lg:w-1/2 px-4 py-8 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg absolute top-24 bottom-4 text-gray-200 overflow-y-auto">
+    <section className="w-full lg:w-1/2 px-4 py-4 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
       <h1 className="text-2xl text-center mb-4">
         Round {round.roundNumber + 1}
       </h1>
       <h2 className="text-xl text-center mb-4">{round.roundName}</h2>
-      <ul>
+      <ul className="flex-grow">
         {round.questions.map(
           (question?: Question) =>
             question && (
@@ -50,7 +54,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                 {question.answer && (
                   <p className="font-semibold my-2">
                     Answer: {question.answer}
-                </p>
+                  </p>
                 )}
                 {question.options ? (
                   <ul className="list-alphabet ml-4 my-2">
@@ -63,8 +67,15 @@ export const AnswerSheet: React.FC<{}> = () => {
                             id={option}
                             name={`Question ${question.number} + 1`}
                             value={option}
-                            checked={answers?.[question.number]?.answer === option}
-                            onClick={e => changeAnswer(question.number, e.currentTarget.value)}
+                            checked={
+                              answers?.[question.number]?.answer === option
+                            }
+                            onClick={(e) =>
+                              changeAnswer(
+                                question.number,
+                                e.currentTarget.value,
+                              )
+                            }
                             onChange={() => {}}
                           />
                           <label htmlFor={option} className="ml-2 align">
@@ -78,23 +89,29 @@ export const AnswerSheet: React.FC<{}> = () => {
                   <input
                     className="w-full my-2 text-input"
                     placeholder={`Answer ${question.number + 1}`}
-                    onChange={e => changeAnswer(question.number, e.currentTarget.value)}
+                    onChange={(e) =>
+                      changeAnswer(question.number, e.currentTarget.value)
+                    }
                     value={answers?.[question.number]?.answer ?? ''}
                   />
                 )}
               </li>
-            )
+            ),
         )}
       </ul>
-      <button className="button mt-6" onClick={async () => {
-        try {
-          await submitAnswers();
-        } catch (error) {
-          console.error('error submitting answers', error);
-        }
-      }}
-      disabled={called || state.question.number < round.numberOfQuestions - 1}>
-        Submit answers</button>
+      <button
+        className="button mt-6"
+        onClick={async () => {
+          try {
+            await submitAnswers();
+          } catch (error) {
+            console.error('error submitting answers', error);
+          }
+        }}
+        disabled={called || state.question.number < round.numberOfQuestions - 1}
+      >
+        Submit answers
+      </button>
     </section>
   );
 };

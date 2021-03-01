@@ -4,11 +4,11 @@
 
 @layer components {
   .text-input {
-    @apply mb-2 py-2 px-3 text-lg bg-white rounded text-gray-700 focus:outline-none;
+    @apply py-2 px-3 text-lg bg-white rounded text-gray-700 focus:outline-none;
   }
 
   .button {
-    @apply mb-2 bg-gray-200 hover:bg-gray-100 text-lg text-gray-700 font-medium py-2 px-4 border-2 border-gray-400 rounded
+    @apply bg-gray-200 hover:bg-green-100 disabled:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed text-lg text-gray-700 font-medium py-2 px-4 border-2 border-gray-400 rounded
   }
 }
 
