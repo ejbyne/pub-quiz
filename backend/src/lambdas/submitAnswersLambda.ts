@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda';
-import { QuizRepository } from '../repositories/QuizRepository';
+import { quizRepository } from './config';
 
-interface Event {
+interface SubmitAnswersRequest {
   arguments: {
     input: {
       quizId: string;
@@ -14,11 +14,7 @@ interface Event {
   };
 }
 
-const quizTableName = process.env.QUIZ_TABLE_NAME as string;
-
-const quizRepository = new QuizRepository(quizTableName);
-
-export const submitAnswersLambda: Handler<Event> = async (
+export const submitAnswersLambda: Handler<SubmitAnswersRequest> = async (
   event
 ): Promise<boolean> => {
   await quizRepository.saveAnswers(event.arguments.input);

@@ -1,10 +1,8 @@
 import { Handler } from 'aws-lambda';
-import { QuizRepository } from '../repositories/QuizRepository';
-import { Quiz } from '../domain/Quiz';
-import { QuizNotYetStarted } from '../domain/state/QuizNotYetStarted';
 import { saveQuizInteractor } from '../interactors/saveQuizInteractor';
+import { quizRepository } from './config';
 
-interface Event {
+interface SaveQuizRequest {
   arguments: {
     input: {
       quizName: string;
@@ -20,11 +18,7 @@ interface Event {
   };
 }
 
-const quizTableName = process.env.QUIZ_TABLE_NAME as string;
-
-const quizRepository = new QuizRepository(quizTableName);
-
-export const saveQuizLambda: Handler<Event> = async (
+export const saveQuizLambda: Handler<SaveQuizRequest> = async (
   event
 ): Promise<boolean> => {
   const command = event.arguments.input;

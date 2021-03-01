@@ -1,9 +1,9 @@
 import { Handler } from 'aws-lambda';
-import { QuizRepository } from '../repositories/QuizRepository';
-import { NextStateEvent } from './nextQuizStateLambda';
+import { NextQuizStateResponse } from './nextQuizStateLambda';
 import { quizSummaryInteractor } from '../interactors/quizSummaryInteractor';
+import { quizRepository } from './config';
 
-interface Event {
+interface QuizSummaryRequest {
   arguments: {
     quizId: string;
   };
@@ -13,14 +13,10 @@ export interface QuizSummaryResponse {
   quizId: string;
   quizName: string;
   playerNames?: string[];
-  state: NextStateEvent;
+  state: NextQuizStateResponse;
 }
 
-const quizTableName = process.env.QUIZ_TABLE_NAME as string;
-
-const quizRepository = new QuizRepository(quizTableName);
-
-export const quizSummaryLambda: Handler<Event> = async (
+export const quizSummaryLambda: Handler<QuizSummaryRequest> = async (
   event,
   _,
   callback

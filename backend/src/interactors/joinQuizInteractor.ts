@@ -1,4 +1,5 @@
 import { QuizRepository } from '../repositories/QuizRepository';
+import { JoinQuizResponse } from '../lambdas/joinQuizLambda';
 
 export interface JoinQuizCommand {
   quizId: string;
@@ -9,7 +10,7 @@ export interface JoinQuizCommand {
 export const joinQuizInteractor = async (
   { quizId, playerName }: JoinQuizCommand,
   quizRepository: QuizRepository
-): Promise<{ quizId: string; playerName: string }> => {
+): Promise<JoinQuizResponse> => {
   await quizRepository.addPlayerName(quizId, playerName);
   return {
     quizId,

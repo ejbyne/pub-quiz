@@ -1,11 +1,11 @@
 import { Handler } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
-import { QuizRepository } from '../repositories/QuizRepository';
 import { Quiz } from '../domain/Quiz';
 import { QuizNotYetStarted } from '../domain/state/QuizNotYetStarted';
 import { generateRounds } from '../quizApi';
+import { quizRepository } from './config';
 
-interface Event {
+interface GenerateRandomQuizRequest {
   arguments: {
     input: {
       quizName: string;
@@ -13,13 +13,14 @@ interface Event {
   };
 }
 
-const quizTableName = process.env.QUIZ_TABLE_NAME as string;
+interface GenerateRandomQuizResponse {
+  quizId: string;
+  quizName: string;
+}
 
-const quizRepository = new QuizRepository(quizTableName);
-
-export const generateRandomQuizLambda: Handler<Event> = async (
+export const generateRandomQuizLambda: Handler<GenerateRandomQuizRequest> = async (
   event
-): Promise<{ quizId: string; quizName: string }> => {
+): Promise<GenerateRandomQuizResponse> => {
   const { quizName } = event.arguments.input;
   const quizId = uuid();
   const rounds = await generateRounds();

@@ -1,9 +1,9 @@
 import { Handler } from 'aws-lambda';
 import { QuizStatus } from '../domain/types';
-import { QuizRepository } from '../repositories/QuizRepository';
 import { nextQuizStateInteractor } from '../interactors/nextQuizStateInteractor';
+import { quizRepository } from './config';
 
-interface Event {
+interface NextQuizStateRequest {
   arguments: {
     input: {
       quizId: string;
@@ -11,7 +11,7 @@ interface Event {
   };
 }
 
-export interface NextStateEvent {
+export interface NextQuizStateResponse {
   __typename: string;
   quizId: string;
   status: QuizStatus;
@@ -28,15 +28,11 @@ export interface NextStateEvent {
   };
 }
 
-const quizTableName = process.env.QUIZ_TABLE_NAME as string;
-
-const quizRepository = new QuizRepository(quizTableName);
-
-export const nextQuizStateLambda: Handler<Event> = async (
+export const nextQuizStateLambda: Handler<NextQuizStateRequest> = async (
   event,
   _,
   callback
-): Promise<NextStateEvent | void> => {
+): Promise<NextQuizStateResponse | void> => {
   const command = event.arguments.input;
   console.log(`Updating state for quiz with id ${command.quizId}`);
   try {

@@ -1,10 +1,10 @@
 import { QuizState } from '../domain/types';
-import { NextStateEvent } from '../lambdas/nextQuizStateLambda';
+import { NextQuizStateResponse } from '../lambdas/nextQuizStateLambda';
 
 export const mapQuizStateToResponseState = (
   quizId: string,
   state: QuizState
-): NextStateEvent => ({
+): NextQuizStateResponse => ({
   __typename: state.constructor.name,
   quizId,
   status: state.status,
