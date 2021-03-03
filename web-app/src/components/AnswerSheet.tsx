@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
 import {
   QuestionAsked,
+  QuizStatus,
   useSubmitAnswersMutation,
 } from '@pub-quiz/shared/src/graphql/types';
 import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
 import { QuestionAnswered } from '@pub-quiz/shared/src/graphql/types';
 import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
+import { ReactComponent as Tick } from '../assets/icons/tick.svg';
+import { ReactComponent as Cross } from '../assets/icons/cross.svg';
 
 export const AnswerSheet: React.FC<{}> = () => {
   const [quiz] = useContext(QuizContext);
@@ -36,35 +39,52 @@ export const AnswerSheet: React.FC<{}> = () => {
       },
     });
 
+  const showAnswers = state.status === QuizStatus.QuestionAnswered;
+
   return (
-    <section className="w-full lg:w-1/2 px-4 py-4 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
+    <section className="w-full lg:w-1/2 px-6 py-6 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
       <h1 className="text-2xl text-center mb-4">
         Round {round.roundNumber + 1}
       </h1>
       <h2 className="text-xl text-center mb-4">{round.roundName}</h2>
-      <ul className="flex-grow">
+      <div className="flex-grow">
         {round.questions.map(
           (question?: Question) =>
             question && (
-              <li key={question.number}>
-                <p className="font-semibold my-2">
+              <div
+                key={`questionContainer${question.number}`}
+                className={`grid grid-cols-${showAnswers ? '2' : '1'} gap-2`}
+              >
+                <h3
+                  key={`questionTitle${question.number}`}
+                  className="font-semibold my-2"
+                >
                   Question {question.number + 1}
-                </p>
-                <p>{question.text}</p>
+                </h3>
                 {question.answer && (
-                  <p className="font-semibold my-2">
-                    Answer: {question.answer}
-                  </p>
+                  <h3
+                    key={`answerTitle${question.number}`}
+                    className="font-semibold my-2"
+                  >
+                    Answer
+                  </h3>
+                )}
+                <p key={`questionText${question.number}`}>{question.text}</p>
+                {question.answer && (
+                  <p key={`answerText${question.number}`}>{question.answer}</p>
                 )}
                 {question.options ? (
-                  <ul className="list-alphabet ml-4 my-2">
-                    {question.options.map((option) => (
-                      <li key={option}>
+                  <ul
+                    key={`questionOptions${question.number}`}
+                    className="list-alphabet ml-4 my-2"
+                  >
+                    {question.options.map((option, index) => (
+                      <li key={`questionOptions${question.number}.${index}`}>
                         <span className="flex items-baseline">
                           <input
                             className="ml-2"
                             type="radio"
-                            id={option}
+                            id={`${question?.number}-option-${option}`}
                             name={`Question ${question.number} + 1`}
                             value={option}
                             checked={
@@ -78,7 +98,10 @@ export const AnswerSheet: React.FC<{}> = () => {
                             }
                             onChange={() => {}}
                           />
-                          <label htmlFor={option} className="ml-2 align">
+                          <label
+                            htmlFor={`${question?.number}-option-${option}`}
+                            className="ml-2 align"
+                          >
                             {option}
                           </label>
                         </span>
@@ -87,6 +110,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                   </ul>
                 ) : (
                   <input
+                    key={`questionInput${question.number}`}
                     className="w-full my-2 text-input"
                     placeholder={`Answer ${question.number + 1}`}
                     onChange={(e) =>
@@ -95,23 +119,72 @@ export const AnswerSheet: React.FC<{}> = () => {
                     value={answers?.[question.number]?.answer ?? ''}
                   />
                 )}
-              </li>
+                {question.answer && (
+                  <ul
+                    key={`score${question.number}`}
+                    className="flex items-end my-2"
+                  >
+                    <li>
+                      <input
+                        type="radio"
+                        id={`${question?.number}-score-incorrect`}
+                        name="none"
+                        className="hidden"
+                        onClick={(e) => {}}
+                        onChange={() => {}}
+                      />
+                      <label htmlFor={`${question?.number}-score-incorrect`}>
+                        <div className="w-12 h-10 bg-gray-400 flex justify-center items-center cursor-pointer rounded-l border-2 border-r border-white">
+                          <Cross className="w-5" title="Mark incorrect" />
+                        </div>
+                      </label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        id={`${question?.number}-score-correct`}
+                        name="correct"
+                        className="hidden"
+                        onClick={(e) => {}}
+                        onChange={() => {}}
+                      />
+                      <label htmlFor={`${question?.number}-score-correct`}>
+                        <div className="w-12 h-10 bg-gray-400 flex justify-center items-center cursor-pointer rounded-r border-2 border-l border-white">
+                          <Tick className="w-5" title="Mark correct" />
+                        </div>
+                      </label>
+                    </li>
+                  </ul>
+                )}
+              </div>
             ),
         )}
-      </ul>
-      <button
-        className="button mt-6"
-        onClick={async () => {
-          try {
-            await submitAnswers();
-          } catch (error) {
-            console.error('error submitting answers', error);
+      </div>
+      {showAnswers ? (
+        <button
+          className="button mt-6"
+          onClick={() => {}}
+          disabled={state.question.number < round.numberOfQuestions - 1}
+        >
+          Submit marks
+        </button>
+      ) : (
+        <button
+          className="button mt-6"
+          onClick={async () => {
+            try {
+              await submitAnswers();
+            } catch (error) {
+              console.error('error submitting answers', error);
+            }
+          }}
+          disabled={
+            called || state.question.number < round.numberOfQuestions - 1
           }
-        }}
-        disabled={called || state.question.number < round.numberOfQuestions - 1}
-      >
-        Submit answers
-      </button>
+        >
+          Submit answers
+        </button>
+      )}
     </section>
   );
 };
