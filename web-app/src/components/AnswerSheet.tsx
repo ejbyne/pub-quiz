@@ -28,7 +28,7 @@ export const AnswerSheet: React.FC<{}> = () => {
         quizId: state.quizId,
         playerName: answerSheet.playerName!,
         roundNumber: round.roundNumber,
-        answers: answers?.map((answer) => ({ answer: answer?.answer })),
+        answers: answers?.map((answer) => answer?.answer ?? null),
       },
     },
   });
@@ -39,7 +39,7 @@ export const AnswerSheet: React.FC<{}> = () => {
         quizId: state.quizId,
         playerName: answerSheet.playerName!,
         roundNumber: round.roundNumber,
-        marks: answers?.map((answer) => ({ mark: answer?.mark })),
+        marks: answers?.map((answer) => answer?.mark ?? null),
       },
     },
   });

@@ -71,7 +71,7 @@ describe('submitting marks', () => {
           quizId: 'RANDOM_ID',
           playerName: 'Henry',
           roundNumber: 0,
-          marks: [{ mark: 1 }, { mark: 0 }],
+          marks: [1, 0],
         },
       },
       undefined,

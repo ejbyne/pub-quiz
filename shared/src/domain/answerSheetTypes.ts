@@ -1,7 +1,7 @@
 export interface AnswerSheet {
   playerName?: string;
   rounds: {
-    answer: string;
+    answer?: string;
     mark?: number;
   }[][];
 }

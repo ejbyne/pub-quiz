@@ -1,7 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { Quiz } from '../domain/Quiz';
-import { QuizEntity, SubmitAnswersCommand } from './types';
+import { QuizEntity, SubmitAnswersCommand, SubmitMarksCommand } from './types';
 import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
 import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
 import { QuizState } from '../domain/types';
@@ -119,12 +119,36 @@ export class QuizRepository {
     return result.Items as Quiz[];
   }
 
-  async saveAnswers(command: SubmitAnswersCommand) {
+  async saveAnswers(command: SubmitAnswersCommand): Promise<void> {
     const { quizId, roundNumber, playerName, answers } = command;
     const savedQuiz = await this.get(quizId);
 
     const playerAnswers = savedQuiz.answers[playerName] ?? [];
-    playerAnswers[roundNumber] = answers;
+    playerAnswers[roundNumber] = answers.map((answer) => ({ answer }));
+
+    await this.documentClient
+      .update({
+        TableName: this.tableName,
+        Key: { quizId },
+        UpdateExpression: `SET answers.${playerName} = :playerAnswers`,
+        ExpressionAttributeValues: {
+          ':playerAnswers': playerAnswers,
+        },
+      })
+      .promise();
+  }
+
+  async saveMarks(command: SubmitMarksCommand): Promise<void> {
+    const { quizId, roundNumber, playerName, marks } = command;
+    const savedQuiz = await this.get(quizId);
+
+    const playerAnswers = savedQuiz.answers[playerName] ?? [];
+    playerAnswers[roundNumber] = playerAnswers[roundNumber].map(
+      ({ answer }, index) => ({
+        answer,
+        mark: marks[index],
+      })
+    );
 
     await this.documentClient
       .update({

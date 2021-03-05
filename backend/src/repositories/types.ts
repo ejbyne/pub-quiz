@@ -25,7 +25,12 @@ export interface SubmitAnswersCommand {
   quizId: string;
   playerName: string;
   roundNumber: number;
-  answers: {
-    answer: string;
-  }[];
+  answers: string[];
+}
+
+export interface SubmitMarksCommand {
+  quizId: string;
+  playerName: string;
+  roundNumber: number;
+  marks: number[];
 }

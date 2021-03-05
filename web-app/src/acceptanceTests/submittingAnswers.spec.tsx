@@ -67,10 +67,7 @@ describe('submitting answers', () => {
           quizId: 'RANDOM_ID',
           playerName: 'Ed',
           roundNumber: 0,
-          answers: [
-            { answer: 'My first answer' },
-            { answer: 'My second answer' },
-          ],
+          answers: ['My first answer', 'My second answer'],
         },
       },
       undefined,

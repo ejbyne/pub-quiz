@@ -112,22 +112,14 @@ export type SubmitAnswersInput = {
   quizId: Scalars['ID'];
   playerName: Scalars['String'];
   roundNumber: Scalars['Int'];
-  answers: Array<Maybe<PlayerAnswerInput>>;
+  answers: Array<Maybe<Scalars['String']>>;
 };
 
 export type SubmitMarksInput = {
   quizId: Scalars['ID'];
   playerName: Scalars['String'];
   roundNumber: Scalars['Int'];
-  marks: Array<Maybe<PlayerMarksInput>>;
-};
-
-export type PlayerAnswerInput = {
-  answer?: Maybe<Scalars['String']>;
-};
-
-export type PlayerMarksInput = {
-  mark?: Maybe<Scalars['Int']>;
+  marks: Array<Maybe<Scalars['Int']>>;
 };
 
 export type QuizGenerated = {
