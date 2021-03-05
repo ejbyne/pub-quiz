@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import {
+  QuestionAnswered,
   QuestionAsked,
   QuizStatus,
   useSubmitAnswersMutation,
@@ -7,7 +8,6 @@ import {
 } from '@pub-quiz/shared/src/graphql/types';
 import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
-import { QuestionAnswered } from '@pub-quiz/shared/src/graphql/types';
 import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
 import { ReactComponent as Tick } from '../assets/icons/tick.svg';
 import { ReactComponent as Cross } from '../assets/icons/cross.svg';
@@ -64,6 +64,8 @@ export const AnswerSheet: React.FC<{}> = () => {
       },
     });
 
+  const showQuestions = state.status === QuizStatus.QuestionAsked;
+  const roundFinished = state.status === QuizStatus.RoundFinished;
   const showAnswers = state.status === QuizStatus.QuestionAnswered;
 
   return (
@@ -198,24 +200,7 @@ export const AnswerSheet: React.FC<{}> = () => {
             ),
         )}
       </div>
-      {showAnswers ? (
-        <button
-          className="button mt-6"
-          onClick={async () => {
-            try {
-              await submitMarks();
-            } catch (error) {
-              console.error('error submitting answers', error);
-            }
-          }}
-          disabled={
-            submitMarksCalled ||
-            answers?.some(({ answer, mark }) => answer && mark === undefined)
-          }
-        >
-          Submit marks
-        </button>
-      ) : (
+      {showQuestions && (
         <button
           className="button mt-6"
           onClick={async () => {
@@ -231,6 +216,29 @@ export const AnswerSheet: React.FC<{}> = () => {
           }
         >
           Submit answers
+        </button>
+      )}
+      {roundFinished && (
+        <h2 className="text-xl text-center mb-4">
+          Round {round.roundNumber + 1} completed
+        </h2>
+      )}
+      {showAnswers && (
+        <button
+          className="button mt-6"
+          onClick={async () => {
+            try {
+              await submitMarks();
+            } catch (error) {
+              console.error('error submitting answers', error);
+            }
+          }}
+          disabled={
+            submitMarksCalled ||
+            answers?.some(({ answer, mark }) => answer && mark === undefined)
+          }
+        >
+          Submit marks
         </button>
       )}
     </section>
