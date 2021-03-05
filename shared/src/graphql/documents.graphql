@@ -72,6 +72,10 @@ mutation SubmitAnswers($input: SubmitAnswersInput!) {
   submitAnswers(input: $input)
 }
 
+mutation SubmitMarks($input: SubmitMarksInput!) {
+  submitMarks(input: $input)
+}
+
 mutation NextQuizState($input: NextQuizStateInput!) {
   nextQuizState(input: $input) {
     quizId

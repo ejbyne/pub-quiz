@@ -9,7 +9,7 @@ import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGr
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 
 describe('submitting answers', () => {
-  it('submits the player\'s answers', async () => {
+  it("submits the player's answers", async () => {
     const mockSubmitAnswers = jest.fn().mockReturnValue(true);
 
     const initialQuizState = {
@@ -36,29 +36,46 @@ describe('submitting answers', () => {
 
     await act(async () => {
       await render(
-        <TestAppContainer client={createMockGraphQlClient({
-          mockMutationResolvers: {
-            submitAnswers: mockSubmitAnswers,
-          },
-        })} initialQuizState={initialQuizState}>
+        <TestAppContainer
+          client={createMockGraphQlClient({
+            mockMutationResolvers: {
+              submitAnswers: mockSubmitAnswers,
+            },
+          })}
+          initialQuizState={initialQuizState}
+        >
           <App />
         </TestAppContainer>,
       );
 
-      userEvent.type(await screen.findByPlaceholderText('Answer 1'), 'My first answer');
-      userEvent.type(await screen.findByPlaceholderText('Answer 2'), 'My second answer');
+      userEvent.type(
+        await screen.findByPlaceholderText('Answer 1'),
+        'My first answer',
+      );
+      userEvent.type(
+        await screen.findByPlaceholderText('Answer 2'),
+        'My second answer',
+      );
 
       userEvent.click(await screen.findByText('Submit answers'));
     });
 
-    expect(mockSubmitAnswers.mock.calls[0][1]).toEqual({
-      input: {
-        quizId: 'RANDOM_ID',
-        playerName: 'Ed',
-        roundNumber: 0,
-        answers: [{ answer: 'My first answer' }, { answer: 'My second answer' }],
+    expect(mockSubmitAnswers).toHaveBeenCalledWith(
+      undefined,
+      {
+        input: {
+          quizId: 'RANDOM_ID',
+          playerName: 'Ed',
+          roundNumber: 0,
+          answers: [
+            { answer: 'My first answer' },
+            { answer: 'My second answer' },
+          ],
+        },
       },
-    });
+      undefined,
+      expect.anything(),
+    );
   });
 
   it('disables the submit button until all questions in the round have been asked', async () => {
@@ -72,25 +89,29 @@ describe('submitting answers', () => {
           roundNumber: 0,
           roundName: 'The first round',
           numberOfQuestions: 2,
-          questions: [
-            { number: 0, text: 'The first question' },
-          ],
+          questions: [{ number: 0, text: 'The first question' }],
         },
       ],
     };
 
     await act(async () => {
       await render(
-        <TestAppContainer client={createMockGraphQlClient({
-          mockMutationResolvers: {
-            submitAnswers: mockSubmitAnswers,
-          },
-        })} initialQuizState={initialQuizState}>
+        <TestAppContainer
+          client={createMockGraphQlClient({
+            mockMutationResolvers: {
+              submitAnswers: mockSubmitAnswers,
+            },
+          })}
+          initialQuizState={initialQuizState}
+        >
           <App />
         </TestAppContainer>,
       );
 
-      userEvent.type(await screen.findByPlaceholderText('Answer 1'), 'My first answer');
+      userEvent.type(
+        await screen.findByPlaceholderText('Answer 1'),
+        'My first answer',
+      );
 
       userEvent.click(await screen.findByText('Submit answers'));
     });

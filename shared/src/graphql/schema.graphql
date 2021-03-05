@@ -8,6 +8,7 @@ type Mutation {
   joinQuiz(input: JoinQuizInput!): PlayerJoined!
   nextQuizState(input: NextQuizStateInput!): QuizState!
   submitAnswers(input: SubmitAnswersInput!): Boolean!
+  submitMarks(input: SubmitMarksInput!): Boolean!
 }
 
 type Subscription {
@@ -53,8 +54,19 @@ input SubmitAnswersInput {
   answers: [PlayerAnswerInput]!
 }
 
+input SubmitMarksInput {
+  quizId: ID!
+  playerName: String!
+  roundNumber: Int!
+  marks: [PlayerMarksInput]!
+}
+
 input PlayerAnswerInput {
   answer: String
+}
+
+input PlayerMarksInput {
+  mark: Int
 }
 
 type QuizGenerated {

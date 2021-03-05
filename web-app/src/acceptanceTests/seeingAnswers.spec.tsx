@@ -11,7 +11,7 @@ import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 import React from 'react';
 
 describe('seeing answers', () => {
-  it('shows the question answeers', async () => {
+  it('shows the question answers', async () => {
     const initialQuizState = {
       ...exampleQuizSummary,
       state: exampleRoundFinishedState,
@@ -31,7 +31,8 @@ describe('seeing answers', () => {
     const { findByText } = render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialQuizState={initialQuizState}>
+        initialQuizState={initialQuizState}
+      >
         <App />
       </TestAppContainer>,
     );
@@ -40,6 +41,6 @@ describe('seeing answers', () => {
 
     expect(await findByText('Question 1')).toBeTruthy();
     expect(await findByText('The first question')).toBeTruthy();
-    expect(await findByText('Answer: The first answer')).toBeTruthy();
+    expect(await findByText('Correct answer: The first answer')).toBeTruthy();
   });
 });
