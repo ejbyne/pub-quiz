@@ -1,9 +1,10 @@
 import {
   exampleQuestionAskedState,
   exampleQuizSummary,
-  exampleRoundFinishedState, exampleRoundStartedState,
+  exampleRoundFinishedState,
+  exampleRoundStartedState,
 } from '@pub-quiz/shared/src/testSupport/testFixtures';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { App } from '../components/App';
@@ -25,18 +26,19 @@ describe('seeing questions', () => {
       ],
     };
 
-    const { findByText } = render(
+    render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialQuizState={initialQuizState}>
+        initialQuizState={initialQuizState}
+      >
         <App />
       </TestAppContainer>,
     );
 
     receiveNextQuizState(exampleQuestionAskedState);
 
-    expect(await findByText('Question 1')).toBeTruthy();
-    expect(await findByText('The first question')).toBeTruthy();
+    expect(await screen.findByText('Question 1')).toBeTruthy();
+    expect(await screen.findByText('The first question')).toBeTruthy();
   });
 
   it('asks the second question', async () => {
@@ -58,10 +60,11 @@ describe('seeing questions', () => {
       ],
     };
 
-    const { findByText } = render(
+    render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialQuizState={initialQuizState}>
+        initialQuizState={initialQuizState}
+      >
         <App />
       </TestAppContainer>,
     );
@@ -74,11 +77,11 @@ describe('seeing questions', () => {
       },
     });
 
-    expect(await findByText('Question 1')).toBeTruthy();
-    expect(await findByText('The first question')).toBeTruthy();
+    expect(await screen.findByText('Question 1')).toBeTruthy();
+    expect(await screen.findByText('The first question')).toBeTruthy();
 
-    expect(await findByText('Question 2')).toBeTruthy();
-    expect(await findByText('The second question')).toBeTruthy();
+    expect(await screen.findByText('Question 2')).toBeTruthy();
+    expect(await screen.findByText('The second question')).toBeTruthy();
   });
 
   it('finishes a round', async () => {
@@ -104,16 +107,50 @@ describe('seeing questions', () => {
       ],
     };
 
-    const { findByText } = render(
+    render(
       <TestAppContainer
         client={createMockGraphQlClient()}
-        initialQuizState={initialQuizState}>
+        initialQuizState={initialQuizState}
+      >
         <App />
       </TestAppContainer>,
     );
 
     receiveNextQuizState(exampleRoundFinishedState);
 
-    expect(await findByText('Round 1 completed')).toBeTruthy();
+    expect(await screen.findByText('Round 1 completed')).toBeTruthy();
+  });
+
+  it('reloads the round data in case the player is missing any questions', async () => {
+    const initialQuizState = {
+      ...exampleQuizSummary,
+      state: {
+        ...exampleQuestionAskedState,
+        question: {
+          number: 1,
+          text: 'The last question',
+        },
+      },
+      rounds: [
+        {
+          roundNumber: 0,
+          roundName: 'The first round',
+          numberOfQuestions: 2,
+          questions: [{ number: 1, text: 'The last question' }],
+        },
+      ],
+    };
+
+    render(
+      <TestAppContainer
+        client={createMockGraphQlClient()}
+        initialQuizState={initialQuizState}
+      >
+        <App />
+      </TestAppContainer>,
+    );
+
+    expect(await screen.findByText('The first question')).toBeInTheDocument();
+    expect(await screen.findByText('The last question')).toBeInTheDocument();
   });
 });

@@ -4,6 +4,20 @@ query QuizSummary($quizId: ID!) {
     quizName
     playerNames
 
+    currentRound {
+      ... on QuestionWithoutAnswer {
+        number
+        text
+        options
+      }
+      ... on QuestionWithAnswer {
+        number
+        text
+        options
+        answer
+      }
+    }
+
     state {
       quizId
       status

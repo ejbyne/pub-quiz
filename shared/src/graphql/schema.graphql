@@ -70,6 +70,7 @@ type QuizSummary {
   quizId: ID!
   quizName: String!
   playerNames: [String!]
+  currentRound: [Question!]
   state: QuizState!
 }
 
@@ -79,7 +80,9 @@ type RoundSummary {
   numberOfQuestions: Int!
 }
 
-type Question {
+union Question = QuestionWithoutAnswer | QuestionWithAnswer
+
+type QuestionWithoutAnswer {
   number: Int!
   text: String!
   options: [String!]
@@ -121,7 +124,7 @@ type QuestionAsked implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
-  question: Question!
+  question: QuestionWithoutAnswer!
 }
 
 type QuestionAnswered implements QuizState {

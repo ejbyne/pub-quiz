@@ -1,25 +1,25 @@
-import { Quiz, QuizAction, Round, Question } from "./quizTypes";
+import { Quiz, QuizAction, Round, Question } from './quizTypes';
 import {
   QuizStatus,
   RoundStarted,
   RoundFinished,
   QuestionAsked,
   RoundSummary,
-} from "../graphql/types";
-import { QuestionAnswered } from "../graphql/types";
+} from '../graphql/types';
+import { QuestionAnswered } from '../graphql/types';
 
 export const quizReducer = (
   quiz: Quiz = { rounds: [] },
-  action: QuizAction
+  action: QuizAction,
 ): Quiz => {
-  if (action.type === "JoinedQuiz") {
+  if (action.type === 'JoinedQuiz') {
     return {
       ...quiz,
       ...action.payload,
     };
   }
 
-  if (action.type === "QuizSummaryReceived") {
+  if (action.type === 'QuizSummaryReceived') {
     switch (action.payload.state.status) {
       case QuizStatus.RoundStarted:
       case QuizStatus.RoundFinished: {
@@ -36,15 +36,14 @@ export const quizReducer = (
       case QuizStatus.QuestionAnswered: {
         const state = action.payload.state as QuestionAsked | QuestionAnswered;
 
-        const questions = addNewQuestion(
-          [],
-          state.question
-        );
-
         return {
           ...quiz,
           ...action.payload,
-          rounds: addNewRound(quiz.rounds, state.roundSummary, questions),
+          rounds: addNewRound(
+            quiz.rounds,
+            state.roundSummary,
+            action.payload.currentRound ?? [],
+          ),
         };
       }
 
@@ -56,7 +55,7 @@ export const quizReducer = (
     }
   }
 
-  if (action.type === "NextQuizStateReceived") {
+  if (action.type === 'NextQuizStateReceived') {
     switch (action.payload.status) {
       case QuizStatus.RoundStarted: {
         const state = action.payload as RoundStarted;
@@ -80,10 +79,7 @@ export const quizReducer = (
               return round;
             }
 
-            const questions = addNewQuestion(
-              round.questions,
-              state.question
-            );
+            const questions = addNewQuestion(round.questions, state.question);
 
             return {
               ...round,
@@ -104,7 +100,7 @@ export const quizReducer = (
 const addNewRound = (
   rounds: Round[],
   newRoundSummary: RoundSummary,
-  questions: Question[] = []
+  questions: Question[] = [],
 ): Round[] => {
   const updatedRounds = [...rounds];
 

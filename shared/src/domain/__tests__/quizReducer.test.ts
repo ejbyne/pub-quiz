@@ -301,6 +301,11 @@ describe('quiz reducer', () => {
       payload: {
         quizId: 'RANDOM_ID',
         quizName: 'A quiz',
+        currentRound: [
+          { number: 0, text: 'The first question' },
+          { number: 1, text: 'The second question' },
+          { number: 2, text: 'The third question' },
+        ],
         state: {
           quizId: 'RANDOM_ID',
           status: QuizStatus.QuestionAsked,
@@ -310,8 +315,8 @@ describe('quiz reducer', () => {
             numberOfQuestions: 10,
           },
           question: {
-            number: 3,
-            text: 'Question 4',
+            number: 2,
+            text: 'The third question',
           },
         } as QuizState,
       },
@@ -323,13 +328,61 @@ describe('quiz reducer', () => {
         roundName: 'Round 1',
         numberOfQuestions: 10,
         questions: [
-          undefined,
-          undefined,
-          undefined,
+          { number: 0, text: 'The first question' },
+          { number: 1, text: 'The second question' },
+          { number: 2, text: 'The third question' },
+        ],
+      },
+    ]);
+  });
+
+  it('should store round and question information for a player who joins during the answers', () => {
+    const quiz = { rounds: [] };
+
+    const result = quizReducer(quiz, {
+      type: 'QuizSummaryReceived',
+      payload: {
+        quizId: 'RANDOM_ID',
+        quizName: 'A quiz',
+        currentRound: [
+          { number: 0, text: 'The first question', answer: 'The first answer' },
           {
-            number: 3,
-            text: 'Question 4',
+            number: 1,
+            text: 'The second question',
+            answer: 'The second answer',
           },
+          { number: 2, text: 'The third question', answer: 'The third answer' },
+        ],
+        state: {
+          quizId: 'RANDOM_ID',
+          status: QuizStatus.QuestionAnswered,
+          roundSummary: {
+            roundNumber: 0,
+            roundName: 'Round 1',
+            numberOfQuestions: 10,
+          },
+          question: {
+            number: 2,
+            text: 'The third question',
+            answer: 'The third answer',
+          },
+        } as QuizState,
+      },
+    });
+
+    expect(result.rounds).toEqual([
+      {
+        roundNumber: 0,
+        roundName: 'Round 1',
+        numberOfQuestions: 10,
+        questions: [
+          { number: 0, text: 'The first question', answer: 'The first answer' },
+          {
+            number: 1,
+            text: 'The second question',
+            answer: 'The second answer',
+          },
+          { number: 2, text: 'The third question', answer: 'The third answer' },
         ],
       },
     ]);

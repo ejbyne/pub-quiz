@@ -133,6 +133,7 @@ export type QuizSummary = {
   quizId: Scalars['ID'];
   quizName: Scalars['String'];
   playerNames?: Maybe<Array<Scalars['String']>>;
+  currentRound?: Maybe<Array<Question>>;
   state: QuizState;
 };
 
@@ -143,8 +144,10 @@ export type RoundSummary = {
   numberOfQuestions: Scalars['Int'];
 };
 
-export type Question = {
-  __typename?: 'Question';
+export type Question = QuestionWithoutAnswer | QuestionWithAnswer;
+
+export type QuestionWithoutAnswer = {
+  __typename?: 'QuestionWithoutAnswer';
   number: Scalars['Int'];
   text: Scalars['String'];
   options?: Maybe<Array<Scalars['String']>>;
@@ -190,7 +193,7 @@ export type QuestionAsked = QuizState & {
   quizId: Scalars['ID'];
   status: QuizStatus;
   roundSummary: RoundSummary;
-  question: Question;
+  question: QuestionWithoutAnswer;
 };
 
 export type QuestionAnswered = QuizState & {
@@ -230,7 +233,13 @@ export type QuizSummaryQuery = (
   & { quizSummary: (
     { __typename?: 'QuizSummary' }
     & Pick<QuizSummary, 'quizId' | 'quizName' | 'playerNames'>
-    & { state: (
+    & { currentRound?: Maybe<Array<(
+      { __typename?: 'QuestionWithoutAnswer' }
+      & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
+    ) | (
+      { __typename?: 'QuestionWithAnswer' }
+      & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
+    )>>, state: (
       { __typename?: 'QuizNotYetStarted' }
       & Pick<QuizNotYetStarted, 'quizId' | 'status'>
     ) | (
@@ -247,8 +256,8 @@ export type QuizSummaryQuery = (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
       ), question: (
-        { __typename?: 'Question' }
-        & Pick<Question, 'number' | 'text' | 'options'>
+        { __typename?: 'QuestionWithoutAnswer' }
+        & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
       ) }
     ) | (
       { __typename?: 'QuestionAnswered' }
@@ -354,8 +363,8 @@ export type NextQuizStateMutation = (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ), question: (
-      { __typename?: 'Question' }
-      & Pick<Question, 'number' | 'text' | 'options'>
+      { __typename?: 'QuestionWithoutAnswer' }
+      & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) }
   ) | (
     { __typename?: 'QuestionAnswered' }
@@ -417,8 +426,8 @@ export type QuizStateSubscription = (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ), question: (
-      { __typename?: 'Question' }
-      & Pick<Question, 'number' | 'text' | 'options'>
+      { __typename?: 'QuestionWithoutAnswer' }
+      & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) }
   ) | (
     { __typename?: 'QuestionAnswered' }
@@ -450,6 +459,19 @@ export const QuizSummaryDocument = gql`
     quizId
     quizName
     playerNames
+    currentRound {
+      ... on QuestionWithoutAnswer {
+        number
+        text
+        options
+      }
+      ... on QuestionWithAnswer {
+        number
+        text
+        options
+        answer
+      }
+    }
     state {
       quizId
       status

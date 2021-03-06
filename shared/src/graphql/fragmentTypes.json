@@ -1,5 +1,9 @@
 {
   "possibleTypes": {
+    "Question": [
+      "QuestionWithoutAnswer",
+      "QuestionWithAnswer"
+    ],
     "QuizState": [
       "QuizNotYetStarted",
       "RoundStarted",
