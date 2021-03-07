@@ -13,6 +13,11 @@ export interface QuizSummaryResponse {
   quizId: string;
   quizName: string;
   playerNames?: string[];
+  currentRound?: {
+    text: string;
+    options?: string[];
+    answer?: string;
+  }[];
   state: NextQuizStateResponse;
 }
 

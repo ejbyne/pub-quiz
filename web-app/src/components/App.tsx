@@ -10,7 +10,6 @@ import BeerDarkImage from '../assets/images/beer-dark.svg';
 
 export const App: React.FC = () => {
   const [quiz, updateQuiz] = useContext(QuizContext);
-
   const CurrentStep = getComponentFromStatus(quiz?.state?.status);
 
   useQuizSummaryQuery({

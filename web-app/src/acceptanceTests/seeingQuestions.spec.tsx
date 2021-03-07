@@ -10,8 +10,19 @@ import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGr
 import { App } from '../components/App';
 import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 import React from 'react';
+import ReactRouterDom from 'react-router-dom';
+
+jest.mock('react-router-dom', () => ({
+  useLocation: jest.fn(),
+}));
 
 describe('seeing questions', () => {
+  beforeEach(() => {
+    (ReactRouterDom.useLocation as jest.Mock).mockReturnValue({
+      search: '',
+    });
+  });
+
   it('asks the first question', async () => {
     const initialQuizState = {
       ...exampleQuizSummary,
@@ -122,35 +133,48 @@ describe('seeing questions', () => {
   });
 
   it('reloads the round data in case the player is missing any questions', async () => {
-    const initialQuizState = {
+    const mockQuizSummaryQuery = jest.fn().mockResolvedValue({
       ...exampleQuizSummary,
       state: {
         ...exampleQuestionAskedState,
         question: {
           number: 1,
-          text: 'The last question',
+          text: 'The second question',
         },
       },
-      rounds: [
+      currentRound: [
         {
-          roundNumber: 0,
-          roundName: 'The first round',
-          numberOfQuestions: 2,
-          questions: [{ number: 1, text: 'The last question' }],
+          __typename: 'QuestionWithoutAnswer',
+          number: 0,
+          text: 'The first question',
+        },
+        {
+          __typename: 'QuestionWithoutAnswer',
+          number: 1,
+          text: 'The second question',
         },
       ],
-    };
+    });
 
     render(
       <TestAppContainer
-        client={createMockGraphQlClient()}
-        initialQuizState={initialQuizState}
+        client={createMockGraphQlClient({
+          mockQueryResolvers: {
+            quizSummary: mockQuizSummaryQuery,
+          },
+        })}
+        initialQuizState={{
+          quizId: 'RANDOM_ID',
+          rounds: [],
+        }}
       >
         <App />
       </TestAppContainer>,
     );
 
+    expect(mockQuizSummaryQuery).toHaveBeenCalled();
+
     expect(await screen.findByText('The first question')).toBeInTheDocument();
-    expect(await screen.findByText('The last question')).toBeInTheDocument();
+    expect(await screen.findByText('The second question')).toBeInTheDocument();
   });
 });

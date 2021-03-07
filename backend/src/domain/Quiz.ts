@@ -1,4 +1,4 @@
-import { QuizState, Round } from './types';
+import { Question, QuizState, Round } from './types';
 
 export class Quiz {
   quizId: string;

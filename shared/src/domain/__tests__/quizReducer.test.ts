@@ -312,7 +312,7 @@ describe('quiz reducer', () => {
           roundSummary: {
             roundNumber: 0,
             roundName: 'Round 1',
-            numberOfQuestions: 10,
+            numberOfQuestions: 3,
           },
           question: {
             number: 2,
@@ -326,7 +326,7 @@ describe('quiz reducer', () => {
       {
         roundNumber: 0,
         roundName: 'Round 1',
-        numberOfQuestions: 10,
+        numberOfQuestions: 3,
         questions: [
           { number: 0, text: 'The first question' },
           { number: 1, text: 'The second question' },
@@ -351,7 +351,7 @@ describe('quiz reducer', () => {
             text: 'The second question',
             answer: 'The second answer',
           },
-          { number: 2, text: 'The third question', answer: 'The third answer' },
+          { number: 2, text: 'The third question' },
         ],
         state: {
           quizId: 'RANDOM_ID',
@@ -359,12 +359,12 @@ describe('quiz reducer', () => {
           roundSummary: {
             roundNumber: 0,
             roundName: 'Round 1',
-            numberOfQuestions: 10,
+            numberOfQuestions: 3,
           },
           question: {
-            number: 2,
-            text: 'The third question',
-            answer: 'The third answer',
+            number: 1,
+            text: 'The second question',
+            answer: 'The second answer',
           },
         } as QuizState,
       },
@@ -374,7 +374,7 @@ describe('quiz reducer', () => {
       {
         roundNumber: 0,
         roundName: 'Round 1',
-        numberOfQuestions: 10,
+        numberOfQuestions: 3,
         questions: [
           { number: 0, text: 'The first question', answer: 'The first answer' },
           {
@@ -382,7 +382,7 @@ describe('quiz reducer', () => {
             text: 'The second question',
             answer: 'The second answer',
           },
-          { number: 2, text: 'The third question', answer: 'The third answer' },
+          { number: 2, text: 'The third question' },
         ],
       },
     ]);

@@ -84,15 +84,11 @@ export const AnswerSheet: React.FC<{}> = () => {
               >
                 <h3
                   key={`questionTitle${question.number}`}
-                  className={`col-span-${
-                    showAnswers ? '2' : '1'
-                  } font-semibold my-2 text-center`}
+                  className="col-span-2 font-semibold my-2"
                 >
                   Question {question.number + 1}
                 </h3>
-                <p key={`questionText${question.number}`} className="my-2">
-                  {question.text}
-                </p>
+                <p key={`questionText${question.number}`}>{question.text}</p>
                 {question.options ? (
                   <ul
                     key={`questionOptions${question.number}`}
@@ -219,7 +215,7 @@ export const AnswerSheet: React.FC<{}> = () => {
         </button>
       )}
       {roundFinished && (
-        <h2 className="text-xl text-center mb-4">
+        <h2 className="text-xl text-center mt-10 mb-6 semi-bold">
           Round {round.roundNumber + 1} completed
         </h2>
       )}

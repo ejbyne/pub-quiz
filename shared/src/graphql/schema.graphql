@@ -51,14 +51,14 @@ input SubmitAnswersInput {
   quizId: ID!
   playerName: String!
   roundNumber: Int!
-  answers: [String]!
+  answers: [String]
 }
 
 input SubmitMarksInput {
   quizId: ID!
   playerName: String!
   roundNumber: Int!
-  marks: [Int]!
+  marks: [Int]
 }
 
 type QuizGenerated {

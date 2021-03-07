@@ -7,7 +7,6 @@ import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGr
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { App } from '../components/App';
 
-// const mockUseLocation = jest.fn();
 jest.mock('react-router-dom', () => ({
   useLocation: jest.fn(),
 }));

@@ -35,4 +35,22 @@ describe('QuestionAsked', () => {
       });
     });
   });
+
+  describe('currentRound', () => {
+    it('returns all of the questions which have been asked in the round', () => {
+      const state = new QuestionAsked(exampleRounds, 0, 1);
+
+      expect(state.currentRound).toEqual([
+        {
+          number: 0,
+          text: 'Question 1',
+          options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+        },
+        {
+          number: 1,
+          text: 'Question 2',
+        },
+      ]);
+    });
+  });
 });

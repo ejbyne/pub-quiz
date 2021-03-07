@@ -1,4 +1,4 @@
-import { QuizState, QuizStatus, Round } from '../types';
+import { Question, QuizState, QuizStatus, Round } from '../types';
 import { BaseQuizState } from './BaseQuizState';
 import { QuizFinished } from './QuizFinished';
 import { RoundStarted } from './RoundStarted';
@@ -23,6 +23,29 @@ export class QuestionAnswered extends BaseQuizState {
       this.questionNumber
     ];
     return { ...question, number: this.questionNumber };
+  }
+
+  get currentRound(): {
+    number: number;
+    text: string;
+    options?: string[];
+    answer?: string;
+  }[] {
+    const allQuestions = this.rounds[this.roundNumber].questions.map(
+      (question, index) => ({
+        ...question,
+        number: index,
+      })
+    );
+    const answeredQuestions = allQuestions.slice(0, this.questionNumber + 1);
+    const unansweredQuestions = allQuestions
+      .slice(this.questionNumber + 1)
+      .map(({ number, text, options }) => ({
+        number,
+        text,
+        options,
+      }));
+    return [...answeredQuestions, ...unansweredQuestions];
   }
 
   nextState(): QuizState {

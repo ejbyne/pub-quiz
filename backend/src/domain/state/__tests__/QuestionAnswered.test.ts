@@ -76,4 +76,49 @@ describe('QuestionAnswered', () => {
       });
     });
   });
+
+  describe('currentRound', () => {
+    it('returns all of the questions plus the answers which have been given in the round', () => {
+      const rounds = [
+        {
+          roundName: 'Round 1',
+          questions: [
+            {
+              text: 'Question 1',
+              answer: 'Answer 1',
+              options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+            },
+            {
+              text: 'Question 2',
+              answer: 'Answer 2',
+            },
+            {
+              text: 'Question 3',
+              answer: 'Answer 3',
+            },
+          ],
+        },
+      ];
+
+      const state = new QuestionAnswered(rounds, 0, 1);
+
+      expect(state.currentRound).toEqual([
+        {
+          number: 0,
+          text: 'Question 1',
+          options: ['Answer 1', 'Answer 1b', 'Answer 1c'],
+          answer: 'Answer 1',
+        },
+        {
+          number: 1,
+          text: 'Question 2',
+          answer: 'Answer 2',
+        },
+        {
+          number: 2,
+          text: 'Question 3',
+        },
+      ]);
+    });
+  });
 });
