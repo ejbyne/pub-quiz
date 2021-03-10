@@ -4,6 +4,7 @@ import {
   QuestionAsked,
   RoundFinished,
   QuizFinished,
+  RoundMarked,
 } from '../graphql/types';
 import { QuestionAnswered } from '../graphql/types';
 
@@ -28,8 +29,9 @@ export interface Question {
 export type NextQuizState =
   | RoundStarted
   | QuestionAsked
-  | QuestionAnswered
   | RoundFinished
+  | QuestionAnswered
+  | RoundMarked
   | QuizFinished;
 
 export type QuizAction =
