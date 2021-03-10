@@ -1,5 +1,6 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { QuizStatus } from '../domain/types';
+
 export interface QuizEntity {
   quizId: string;
   quizName: string;
@@ -25,12 +26,12 @@ export interface SubmitAnswersCommand {
   quizId: string;
   playerName: string;
   roundNumber: number;
-  answers: string[];
+  answers?: string[];
 }
 
 export interface SubmitMarksCommand {
   quizId: string;
   playerName: string;
   roundNumber: number;
-  marks: number[];
+  marks?: number[];
 }

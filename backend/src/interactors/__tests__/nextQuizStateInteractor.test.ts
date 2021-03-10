@@ -21,7 +21,7 @@ describe('nextQuizStateInteractor', () => {
 
     const quizRespository = { get: jest.fn(), updateState: jest.fn() };
     quizRespository.get.mockResolvedValue(
-      new Quiz('RANDOM_ID', 'A quiz', rounds, new RoundStarted(rounds, 0))
+      new Quiz('RANDOM_ID', 'A quiz', rounds, new RoundStarted(rounds, {}, 0))
     );
 
     const result = await nextQuizStateInteractor(
@@ -33,7 +33,7 @@ describe('nextQuizStateInteractor', () => {
 
     expect(quizRespository.updateState).toHaveBeenCalledWith(
       'RANDOM_ID',
-      new QuestionAsked(rounds, 0, 0)
+      new QuestionAsked(rounds, {}, 0, 0)
     );
 
     expect(result).toEqual({

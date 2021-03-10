@@ -5,7 +5,7 @@ import { QuestionAsked } from '../QuestionAsked';
 describe('QuestionAsked', () => {
   describe('nextState', () => {
     it('should return the next question if the first question has been asked', () => {
-      const state = new QuestionAsked(exampleRounds, 0, 0);
+      const state = new QuestionAsked(exampleRounds, {}, 0, 0);
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.QUESTION_ASKED,
@@ -15,7 +15,7 @@ describe('QuestionAsked', () => {
     });
 
     it('should finish the round if there are no more questions', () => {
-      const state = new QuestionAsked(exampleRounds, 0, 1);
+      const state = new QuestionAsked(exampleRounds, {}, 0, 1);
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.ROUND_FINISHED,
@@ -26,7 +26,7 @@ describe('QuestionAsked', () => {
 
   describe('question', () => {
     it('returns the question number text and options', () => {
-      const state = new QuestionAsked(exampleRounds, 0, 0);
+      const state = new QuestionAsked(exampleRounds, {}, 0, 0);
 
       expect(state.question).toEqual({
         number: 0,
@@ -38,7 +38,7 @@ describe('QuestionAsked', () => {
 
   describe('currentRound', () => {
     it('returns all of the questions which have been asked in the round', () => {
-      const state = new QuestionAsked(exampleRounds, 0, 1);
+      const state = new QuestionAsked(exampleRounds, {}, 0, 1);
 
       expect(state.currentRound).toEqual([
         {

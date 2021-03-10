@@ -8,8 +8,9 @@
       "QuizNotYetStarted",
       "RoundStarted",
       "QuestionAsked",
-      "QuestionAnswered",
       "RoundFinished",
+      "QuestionAnswered",
+      "RoundMarked",
       "QuizFinished"
     ]
   }

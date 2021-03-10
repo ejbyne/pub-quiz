@@ -99,8 +99,9 @@ enum QuizStatus {
   QUIZ_NOT_YET_STARTED
   ROUND_STARTED
   QUESTION_ASKED
-  QUESTION_ANSWERED
   ROUND_FINISHED
+  QUESTION_ANSWERED
+  ROUND_MARKED
   QUIZ_FINISHED
 }
 
@@ -127,6 +128,12 @@ type QuestionAsked implements QuizState {
   question: QuestionWithoutAnswer!
 }
 
+type RoundFinished implements QuizState {
+  quizId: ID!
+  status: QuizStatus!
+  roundSummary: RoundSummary!
+}
+
 type QuestionAnswered implements QuizState {
   quizId: ID!
   status: QuizStatus!
@@ -134,7 +141,7 @@ type QuestionAnswered implements QuizState {
   question: QuestionWithAnswer!
 }
 
-type RoundFinished implements QuizState {
+type RoundMarked implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!

@@ -1,4 +1,4 @@
-import { Question, QuizState, Round } from './types';
+import { AnswersByPlayerName, QuizState, Round } from './types';
 
 export class Quiz {
   quizId: string;
@@ -6,7 +6,7 @@ export class Quiz {
   rounds: Round[];
   state: QuizState;
   playerNames?: string[];
-  answers: Record<string, { answer: string }[][]>;
+  answers: AnswersByPlayerName;
 
   constructor(
     quizId: string,
@@ -14,7 +14,7 @@ export class Quiz {
     rounds: Round[],
     state: QuizState,
     playerNames?: string[],
-    answers?: Record<string, { answer: string }[][]>
+    answers?: AnswersByPlayerName
   ) {
     this.quizId = quizId;
     this.quizName = quizName;

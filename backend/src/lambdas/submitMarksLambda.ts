@@ -7,7 +7,7 @@ interface SubmitMarksRequest {
       quizId: string;
       playerName: string;
       roundNumber: number;
-      marks: number[];
+      marks?: number[];
     };
   };
 }

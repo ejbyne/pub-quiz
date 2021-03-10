@@ -4,7 +4,7 @@ import { RoundStarted } from '../RoundStarted';
 
 describe('RoundStarted', () => {
   it('should return the first question after the round has started', () => {
-    const state = new RoundStarted(exampleRounds, 0);
+    const state = new RoundStarted(exampleRounds, {}, 0);
 
     expect(state.nextState()).toMatchObject({
       status: QuizStatus.QUESTION_ASKED,

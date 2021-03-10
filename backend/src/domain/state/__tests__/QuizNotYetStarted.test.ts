@@ -4,7 +4,7 @@ import { QuizNotYetStarted } from '../QuizNotYetStarted';
 
 describe('QuizNotYetStarted', () => {
   it('should start the first round if the quiz has not yet started', () => {
-    const state = new QuizNotYetStarted(exampleRounds)
+    const state = new QuizNotYetStarted(exampleRounds, {});
 
     expect(state.nextState()).toMatchObject({
       status: QuizStatus.ROUND_STARTED,
@@ -13,7 +13,7 @@ describe('QuizNotYetStarted', () => {
   });
 
   it('should finish the game if there are no rounds at all', () => {
-    const state = new QuizNotYetStarted([])
+    const state = new QuizNotYetStarted([], {});
 
     expect(state.nextState()).toMatchObject({
       status: QuizStatus.QUIZ_FINISHED,
@@ -37,7 +37,7 @@ describe('QuizNotYetStarted', () => {
       },
     ];
 
-    const state = new QuizNotYetStarted(roundsWithNoQuestionsInFirstRound)
+    const state = new QuizNotYetStarted(roundsWithNoQuestionsInFirstRound, {});
 
     expect(state.nextState()).toMatchObject({
       status: QuizStatus.ROUND_STARTED,

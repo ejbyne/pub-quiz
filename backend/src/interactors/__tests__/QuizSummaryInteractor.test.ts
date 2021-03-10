@@ -22,7 +22,7 @@ describe('quizSummaryInteractor', () => {
 
     const quizRespository = { get: jest.fn(), updateState: jest.fn() };
     quizRespository.get.mockResolvedValue(
-      new Quiz('RANDOM_ID', 'A quiz', rounds, new RoundStarted(rounds, 0))
+      new Quiz('RANDOM_ID', 'A quiz', rounds, new RoundStarted(rounds, {}, 0))
     );
 
     const result = await quizSummaryInteractor(
@@ -65,7 +65,12 @@ describe('quizSummaryInteractor', () => {
 
     const quizRespository = { get: jest.fn(), updateState: jest.fn() };
     quizRespository.get.mockResolvedValue(
-      new Quiz('RANDOM_ID', 'A quiz', rounds, new QuestionAsked(rounds, 0, 1))
+      new Quiz(
+        'RANDOM_ID',
+        'A quiz',
+        rounds,
+        new QuestionAsked(rounds, {}, 0, 1)
+      )
     );
 
     const result = await quizSummaryInteractor(
@@ -102,7 +107,7 @@ describe('quizSummaryInteractor', () => {
         'RANDOM_ID',
         'A quiz',
         rounds,
-        new QuestionAnswered(rounds, 0, 1)
+        new QuestionAnswered(rounds, {}, 0, 1)
       )
     );
 

@@ -1,19 +1,29 @@
-import { Question, QuizState, QuizStatus, Round, RoundSummary } from '../types';
+import {
+  Answer,
+  AnswersByPlayerName,
+  QuizState,
+  QuizStatus,
+  Round,
+  RoundSummary,
+} from '../types';
 
 export class BaseQuizState {
   status: QuizStatus;
   rounds: Round[];
+  answers: AnswersByPlayerName;
   roundNumber?: number;
   questionNumber?: number;
 
   constructor(
     status: QuizStatus,
     rounds: Round[],
+    answers: AnswersByPlayerName,
     roundNumber?: number,
     questionNumber?: number
   ) {
     this.status = status;
     this.rounds = rounds;
+    this.answers = answers;
     this.roundNumber = roundNumber;
     this.questionNumber = questionNumber;
   }

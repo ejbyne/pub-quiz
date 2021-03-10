@@ -4,6 +4,7 @@ import { QuizFinished } from './state/QuizFinished';
 import { QuizNotYetStarted } from './state/QuizNotYetStarted';
 import { RoundFinished } from './state/RoundFinished';
 import { RoundStarted } from './state/RoundStarted';
+import { RoundMarked } from './state/RoundMarked';
 
 export interface Round {
   roundName: string;
@@ -16,12 +17,20 @@ export interface Question {
   options?: string[];
 }
 
+export interface Answer {
+  answer: string;
+  mark?: number;
+}
+
+export type AnswersByPlayerName = Record<string, Answer[][]>;
+
 export type QuizState =
   | QuizNotYetStarted
   | RoundStarted
   | RoundFinished
   | QuestionAsked
   | QuestionAnswered
+  | RoundMarked
   | QuizFinished;
 
 export enum QuizStatus {
@@ -30,6 +39,7 @@ export enum QuizStatus {
   ROUND_FINISHED = 'ROUND_FINISHED',
   QUESTION_ASKED = 'QUESTION_ASKED',
   QUESTION_ANSWERED = 'QUESTION_ANSWERED',
+  ROUND_MARKED = 'ROUND_MARKED',
   QUIZ_FINISHED = 'QUIZ_FINISHED',
 }
 

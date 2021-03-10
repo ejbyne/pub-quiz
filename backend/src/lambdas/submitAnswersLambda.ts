@@ -7,9 +7,7 @@ interface SubmitAnswersRequest {
       quizId: string;
       playerName: string;
       roundNumber: number;
-      answers: {
-        answer: string;
-      }[];
+      answers?: string[];
     };
   };
 }

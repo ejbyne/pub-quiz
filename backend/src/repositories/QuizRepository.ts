@@ -4,7 +4,7 @@ import { Quiz } from '../domain/Quiz';
 import { QuizEntity, SubmitAnswersCommand, SubmitMarksCommand } from './types';
 import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
 import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
-import { QuizState } from '../domain/types';
+import { AnswersByPlayerName, QuizState } from '../domain/types';
 
 export class QuizRepository {
   private documentClient: DocumentClient;
@@ -47,9 +47,9 @@ export class QuizRepository {
       quizId,
       quizName,
       rounds,
-      mapEntityStateToQuizState(state, rounds),
+      mapEntityStateToQuizState(state, rounds, answers),
       playerNames as string[] | undefined,
-      answers as Record<string, { answer: string }[][]>
+      answers as AnswersByPlayerName
     );
   }
 
@@ -120,7 +120,7 @@ export class QuizRepository {
   }
 
   async saveAnswers(command: SubmitAnswersCommand): Promise<void> {
-    const { quizId, roundNumber, playerName, answers } = command;
+    const { quizId, roundNumber, playerName, answers = [] } = command;
     const savedQuiz = await this.get(quizId);
 
     const playerAnswers = savedQuiz.answers[playerName] ?? [];
@@ -139,7 +139,7 @@ export class QuizRepository {
   }
 
   async saveMarks(command: SubmitMarksCommand): Promise<void> {
-    const { quizId, roundNumber, playerName, marks } = command;
+    const { quizId, roundNumber, playerName, marks = [] } = command;
     const savedQuiz = await this.get(quizId);
 
     const playerAnswers = savedQuiz.answers[playerName] ?? [];

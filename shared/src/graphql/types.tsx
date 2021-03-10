@@ -165,8 +165,9 @@ export enum QuizStatus {
   QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
   RoundStarted = 'ROUND_STARTED',
   QuestionAsked = 'QUESTION_ASKED',
-  QuestionAnswered = 'QUESTION_ANSWERED',
   RoundFinished = 'ROUND_FINISHED',
+  QuestionAnswered = 'QUESTION_ANSWERED',
+  RoundMarked = 'ROUND_MARKED',
   QuizFinished = 'QUIZ_FINISHED'
 }
 
@@ -196,6 +197,13 @@ export type QuestionAsked = QuizState & {
   question: QuestionWithoutAnswer;
 };
 
+export type RoundFinished = QuizState & {
+  __typename?: 'RoundFinished';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+};
+
 export type QuestionAnswered = QuizState & {
   __typename?: 'QuestionAnswered';
   quizId: Scalars['ID'];
@@ -204,8 +212,8 @@ export type QuestionAnswered = QuizState & {
   question: QuestionWithAnswer;
 };
 
-export type RoundFinished = QuizState & {
-  __typename?: 'RoundFinished';
+export type RoundMarked = QuizState & {
+  __typename?: 'RoundMarked';
   quizId: Scalars['ID'];
   status: QuizStatus;
   roundSummary: RoundSummary;
@@ -260,6 +268,13 @@ export type QuizSummaryQuery = (
         & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
       ) }
     ) | (
+      { __typename?: 'RoundFinished' }
+      & Pick<RoundFinished, 'quizId' | 'status'>
+      & { roundSummary: (
+        { __typename?: 'RoundSummary' }
+        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ) }
+    ) | (
       { __typename?: 'QuestionAnswered' }
       & Pick<QuestionAnswered, 'quizId' | 'status'>
       & { roundSummary: (
@@ -270,8 +285,8 @@ export type QuizSummaryQuery = (
         & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
       ) }
     ) | (
-      { __typename?: 'RoundFinished' }
-      & Pick<RoundFinished, 'quizId' | 'status'>
+      { __typename?: 'RoundMarked' }
+      & Pick<RoundMarked, 'quizId' | 'status'>
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
@@ -367,6 +382,13 @@ export type NextQuizStateMutation = (
       & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) }
   ) | (
+    { __typename?: 'RoundFinished' }
+    & Pick<RoundFinished, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
+  ) | (
     { __typename?: 'QuestionAnswered' }
     & Pick<QuestionAnswered, 'quizId' | 'status'>
     & { roundSummary: (
@@ -377,8 +399,8 @@ export type NextQuizStateMutation = (
       & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
-    { __typename?: 'RoundFinished' }
-    & Pick<RoundFinished, 'quizId' | 'status'>
+    { __typename?: 'RoundMarked' }
+    & Pick<RoundMarked, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
@@ -430,6 +452,13 @@ export type QuizStateSubscription = (
       & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) }
   ) | (
+    { __typename?: 'RoundFinished' }
+    & Pick<RoundFinished, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
+  ) | (
     { __typename?: 'QuestionAnswered' }
     & Pick<QuestionAnswered, 'quizId' | 'status'>
     & { roundSummary: (
@@ -440,12 +469,8 @@ export type QuizStateSubscription = (
       & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
-    { __typename?: 'RoundFinished' }
-    & Pick<RoundFinished, 'quizId' | 'status'>
-    & { roundSummary: (
-      { __typename?: 'RoundSummary' }
-      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ) }
+    { __typename?: 'RoundMarked' }
+    & Pick<RoundMarked, 'quizId' | 'status'>
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
@@ -494,6 +519,13 @@ export const QuizSummaryDocument = gql`
           options
         }
       }
+      ... on RoundFinished {
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
+      }
       ... on QuestionAnswered {
         roundSummary {
           roundNumber
@@ -507,7 +539,7 @@ export const QuizSummaryDocument = gql`
           answer
         }
       }
-      ... on RoundFinished {
+      ... on RoundMarked {
         roundSummary {
           roundNumber
           roundName
@@ -724,6 +756,13 @@ export const NextQuizStateDocument = gql`
         options
       }
     }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+    }
     ... on QuestionAnswered {
       roundSummary {
         roundNumber
@@ -737,7 +776,7 @@ export const NextQuizStateDocument = gql`
         answer
       }
     }
-    ... on RoundFinished {
+    ... on RoundMarked {
       roundSummary {
         roundNumber
         roundName
@@ -824,6 +863,13 @@ export const QuizStateDocument = gql`
         number
         text
         options
+      }
+    }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
       }
     }
     ... on QuestionAnswered {

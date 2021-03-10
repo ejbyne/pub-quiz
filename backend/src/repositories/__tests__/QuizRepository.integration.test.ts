@@ -25,7 +25,7 @@ const exampleQuiz: Quiz = new Quiz(
   EXAMPLE_QUIZ_ID,
   "Ed's quiz",
   exampleRounds,
-  new QuizNotYetStarted(exampleRounds)
+  new QuizNotYetStarted(exampleRounds, {})
 );
 
 describe('QuizRepository integration tests', () => {
@@ -88,7 +88,7 @@ describe('QuizRepository integration tests', () => {
 
     await quizRepository.updateState(
       EXAMPLE_QUIZ_ID,
-      new QuestionAsked(exampleRounds, 0, 0)
+      new QuestionAsked(exampleRounds, {}, 0, 0)
     );
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
@@ -105,7 +105,7 @@ describe('QuizRepository integration tests', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAsked(exampleRounds, 0, 0)
+        new QuestionAsked(exampleRounds, {}, 0, 0)
       )
     );
 
@@ -136,7 +136,7 @@ describe('QuizRepository integration tests', () => {
         EXAMPLE_QUIZ_ID,
         "Ed's quiz",
         exampleRounds,
-        new QuestionAsked(exampleRounds, 0, 0)
+        new QuestionAsked(exampleRounds, {}, 0, 0)
       )
     );
 

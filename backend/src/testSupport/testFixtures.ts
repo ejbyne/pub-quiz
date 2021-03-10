@@ -1,4 +1,6 @@
-export const exampleRounds = [
+import { Round } from '../domain/types';
+
+export const exampleRounds: Round[] = [
   {
     roundName: 'Round 1',
     questions: [

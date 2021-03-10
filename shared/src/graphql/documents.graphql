@@ -40,6 +40,13 @@ query QuizSummary($quizId: ID!) {
           options
         }
       }
+      ... on RoundFinished {
+        roundSummary {
+          roundNumber
+          roundName
+          numberOfQuestions
+        }
+      }
       ... on QuestionAnswered {
         roundSummary {
           roundNumber
@@ -53,7 +60,7 @@ query QuizSummary($quizId: ID!) {
           answer
         }
       }
-      ... on RoundFinished {
+      ... on RoundMarked {
         roundSummary {
           roundNumber
           roundName
@@ -113,6 +120,13 @@ mutation NextQuizState($input: NextQuizStateInput!) {
         options
       }
     }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+    }
     ... on QuestionAnswered {
       roundSummary {
         roundNumber
@@ -126,7 +140,7 @@ mutation NextQuizState($input: NextQuizStateInput!) {
         answer
       }
     }
-    ... on RoundFinished {
+    ... on RoundMarked {
       roundSummary {
         roundNumber
         roundName
@@ -164,6 +178,13 @@ subscription QuizState($quizId: ID!) {
         number
         text
         options
+      }
+    }
+    ... on RoundFinished {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
       }
     }
     ... on QuestionAnswered {

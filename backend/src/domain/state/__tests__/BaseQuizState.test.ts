@@ -7,7 +7,8 @@ describe('BaseQuizState', () => {
     it('returns undefined if there is no current round', () => {
       const quizState = new BaseQuizState(
         QuizStatus.QUIZ_NOT_YET_STARTED,
-        exampleRounds
+        exampleRounds,
+        {}
       );
 
       expect(quizState.roundSummary).toBeUndefined();
@@ -17,6 +18,7 @@ describe('BaseQuizState', () => {
       const quizState = new BaseQuizState(
         QuizStatus.ROUND_STARTED,
         exampleRounds,
+        {},
         0
       );
 

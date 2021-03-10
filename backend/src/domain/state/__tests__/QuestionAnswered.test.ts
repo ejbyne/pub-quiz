@@ -5,7 +5,7 @@ import { QuestionAnswered } from '../QuestionAnswered';
 describe('QuestionAnswered', () => {
   describe('nextState', () => {
     it('should return the next answer if the first question has been answered', () => {
-      const state = new QuestionAnswered(exampleRounds, 0, 0);
+      const state = new QuestionAnswered(exampleRounds, {}, 0, 0);
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.QUESTION_ANSWERED,
@@ -14,17 +14,17 @@ describe('QuestionAnswered', () => {
       });
     });
 
-    it('should move to the next round if all of the questions have been answered', () => {
-      const state = new QuestionAnswered(exampleRounds, 0, 1);
+    it('should show the marks if all of the questions have been answered', () => {
+      const state = new QuestionAnswered(exampleRounds, {}, 0, 1);
 
       expect(state.nextState()).toMatchObject({
-        status: QuizStatus.ROUND_STARTED,
-        roundNumber: 1,
+        status: QuizStatus.ROUND_MARKED,
+        roundNumber: 0,
       });
     });
 
     it('should finish the quiz at the end of the last round', () => {
-      const state = new QuestionAnswered(exampleRounds, 1, 0);
+      const state = new QuestionAnswered(exampleRounds, {}, 1, 0);
 
       expect(state.nextState()).toMatchObject({
         status: QuizStatus.QUIZ_FINISHED,
@@ -54,6 +54,7 @@ describe('QuestionAnswered', () => {
 
       const state = new QuestionAnswered(
         roundsWithNoQuestionsInSecondRound,
+        {},
         0,
         1
       );
@@ -66,7 +67,7 @@ describe('QuestionAnswered', () => {
 
   describe('questions', () => {
     it('returns the question number, text, answer and options', () => {
-      const state = new QuestionAnswered(exampleRounds, 0, 0);
+      const state = new QuestionAnswered(exampleRounds, {}, 0, 0);
 
       expect(state.question).toEqual({
         number: 0,
@@ -100,7 +101,7 @@ describe('QuestionAnswered', () => {
         },
       ];
 
-      const state = new QuestionAnswered(rounds, 0, 1);
+      const state = new QuestionAnswered(rounds, {}, 0, 1);
 
       expect(state.currentRound).toEqual([
         {
