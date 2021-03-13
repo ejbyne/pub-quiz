@@ -66,6 +66,24 @@ query QuizSummary($quizId: ID!) {
           roundName
           numberOfQuestions
         }
+        marks {
+          playerName
+          rounds {
+            marks
+            roundTotal
+          }
+          quizTotal
+        }
+      }
+      ... on QuizFinished {
+        marks {
+          playerName
+          rounds {
+            marks
+            roundTotal
+          }
+          quizTotal
+        }
       }
     }
   }
@@ -146,6 +164,24 @@ mutation NextQuizState($input: NextQuizStateInput!) {
         roundName
         numberOfQuestions
       }
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
+      }
+    }
+    ... on QuizFinished {
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
+      }
     }
   }
 }
@@ -205,6 +241,31 @@ subscription QuizState($quizId: ID!) {
         roundNumber
         roundName
         numberOfQuestions
+      }
+    }
+    ... on RoundMarked {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
+      }
+    }
+    ... on QuizFinished {
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
       }
     }
   }

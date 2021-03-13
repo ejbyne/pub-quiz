@@ -112,14 +112,14 @@ export type SubmitAnswersInput = {
   quizId: Scalars['ID'];
   playerName: Scalars['String'];
   roundNumber: Scalars['Int'];
-  answers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  answers: Array<Maybe<Scalars['String']>>;
 };
 
 export type SubmitMarksInput = {
   quizId: Scalars['ID'];
   playerName: Scalars['String'];
   roundNumber: Scalars['Int'];
-  marks?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  marks: Array<Maybe<Scalars['Int']>>;
 };
 
 export type QuizGenerated = {
@@ -159,6 +159,19 @@ export type QuestionWithAnswer = {
   text: Scalars['String'];
   options?: Maybe<Array<Scalars['String']>>;
   answer: Scalars['String'];
+};
+
+export type PlayerMarks = {
+  __typename?: 'PlayerMarks';
+  playerName: Scalars['String'];
+  rounds: Array<PlayerMarksForRound>;
+  quizTotal: Scalars['Int'];
+};
+
+export type PlayerMarksForRound = {
+  __typename?: 'PlayerMarksForRound';
+  marks: Array<Scalars['Int']>;
+  roundTotal: Scalars['Int'];
 };
 
 export enum QuizStatus {
@@ -217,12 +230,14 @@ export type RoundMarked = QuizState & {
   quizId: Scalars['ID'];
   status: QuizStatus;
   roundSummary: RoundSummary;
+  marks: Array<PlayerMarks>;
 };
 
 export type QuizFinished = QuizState & {
   __typename?: 'QuizFinished';
   quizId: Scalars['ID'];
   status: QuizStatus;
+  marks: Array<PlayerMarks>;
 };
 
 export type PlayerJoined = {
@@ -290,10 +305,25 @@ export type QuizSummaryQuery = (
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-      ) }
+      ), marks: Array<(
+        { __typename?: 'PlayerMarks' }
+        & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+        & { rounds: Array<(
+          { __typename?: 'PlayerMarksForRound' }
+          & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+        )> }
+      )> }
     ) | (
       { __typename?: 'QuizFinished' }
       & Pick<QuizFinished, 'quizId' | 'status'>
+      & { marks: Array<(
+        { __typename?: 'PlayerMarks' }
+        & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+        & { rounds: Array<(
+          { __typename?: 'PlayerMarksForRound' }
+          & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+        )> }
+      )> }
     ) }
   ) }
 );
@@ -404,10 +434,25 @@ export type NextQuizStateMutation = (
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ) }
+    ), marks: Array<(
+      { __typename?: 'PlayerMarks' }
+      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+      & { rounds: Array<(
+        { __typename?: 'PlayerMarksForRound' }
+        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+      )> }
+    )> }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
+    & { marks: Array<(
+      { __typename?: 'PlayerMarks' }
+      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+      & { rounds: Array<(
+        { __typename?: 'PlayerMarksForRound' }
+        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+      )> }
+    )> }
   ) }
 );
 
@@ -471,9 +516,28 @@ export type QuizStateSubscription = (
   ) | (
     { __typename?: 'RoundMarked' }
     & Pick<RoundMarked, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ), marks: Array<(
+      { __typename?: 'PlayerMarks' }
+      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+      & { rounds: Array<(
+        { __typename?: 'PlayerMarksForRound' }
+        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+      )> }
+    )> }
   ) | (
     { __typename?: 'QuizFinished' }
     & Pick<QuizFinished, 'quizId' | 'status'>
+    & { marks: Array<(
+      { __typename?: 'PlayerMarks' }
+      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+      & { rounds: Array<(
+        { __typename?: 'PlayerMarksForRound' }
+        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+      )> }
+    )> }
   )> }
 );
 
@@ -544,6 +608,24 @@ export const QuizSummaryDocument = gql`
           roundNumber
           roundName
           numberOfQuestions
+        }
+        marks {
+          playerName
+          rounds {
+            marks
+            roundTotal
+          }
+          quizTotal
+        }
+      }
+      ... on QuizFinished {
+        marks {
+          playerName
+          rounds {
+            marks
+            roundTotal
+          }
+          quizTotal
         }
       }
     }
@@ -782,6 +864,24 @@ export const NextQuizStateDocument = gql`
         roundName
         numberOfQuestions
       }
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
+      }
+    }
+    ... on QuizFinished {
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
+      }
     }
   }
 }
@@ -890,6 +990,31 @@ export const QuizStateDocument = gql`
         roundNumber
         roundName
         numberOfQuestions
+      }
+    }
+    ... on RoundMarked {
+      roundSummary {
+        roundNumber
+        roundName
+        numberOfQuestions
+      }
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
+      }
+    }
+    ... on QuizFinished {
+      marks {
+        playerName
+        rounds {
+          marks
+          roundTotal
+        }
+        quizTotal
       }
     }
   }

@@ -4,7 +4,7 @@ import { Quiz } from '../domain/Quiz';
 import { QuizEntity, SubmitAnswersCommand, SubmitMarksCommand } from './types';
 import { mapEntityStateToQuizState } from './mapEntityStateToQuizState';
 import { mapQuizStateToEntityState } from './mapQuizStateToEntityState';
-import { AnswersByPlayerName, QuizState } from '../domain/types';
+import { Answer, AnswersByPlayerName, QuizState } from '../domain/types';
 
 export class QuizRepository {
   private documentClient: DocumentClient;
@@ -123,7 +123,10 @@ export class QuizRepository {
     const { quizId, roundNumber, playerName, answers = [] } = command;
     const savedQuiz = await this.get(quizId);
 
-    const playerAnswers = savedQuiz.answers[playerName] ?? [];
+    const playerAnswers = this.prepareAnswerSheet(
+      roundNumber,
+      savedQuiz.answers[playerName]
+    );
     playerAnswers[roundNumber] = answers.map((answer) => ({ answer }));
 
     await this.documentClient
@@ -142,7 +145,11 @@ export class QuizRepository {
     const { quizId, roundNumber, playerName, marks = [] } = command;
     const savedQuiz = await this.get(quizId);
 
-    const playerAnswers = savedQuiz.answers[playerName] ?? [];
+    const playerAnswers = this.prepareAnswerSheet(
+      roundNumber,
+      savedQuiz.answers[playerName]
+    );
+
     playerAnswers[roundNumber] = playerAnswers[roundNumber].map(
       ({ answer }, index) => ({
         answer,
@@ -160,5 +167,18 @@ export class QuizRepository {
         },
       })
       .promise();
+  }
+
+  private prepareAnswerSheet(
+    roundNumber: number,
+    savedAnswers: Answer[][]
+  ): Answer[][] {
+    const updatedAnswers: Answer[][] = Array(roundNumber + 1).fill([]);
+    if (savedAnswers) {
+      savedAnswers.forEach((round, index) => {
+        updatedAnswers[index] = round;
+      });
+    }
+    return updatedAnswers;
   }
 }

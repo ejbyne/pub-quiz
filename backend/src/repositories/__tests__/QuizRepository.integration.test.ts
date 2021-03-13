@@ -130,6 +130,40 @@ describe('QuizRepository integration tests', () => {
     });
   });
 
+  it('handles saving answers where not all rounds are provided', async () => {
+    await quizRepository.save(
+      new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAsked(exampleRounds, {}, 0, 0)
+      )
+    );
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Ed',
+      answers: ["Ed's 1st answer round 1"],
+    });
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 2,
+      playerName: 'Ed',
+      answers: ["Ed's 1st answer round 3"],
+    });
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.answers).toEqual({
+      Ed: [
+        [{ answer: "Ed's 1st answer round 1" }],
+        [],
+        [{ answer: "Ed's 1st answer round 3" }],
+      ],
+    });
+  });
+
   it("saves a player's marks for a round", async () => {
     await quizRepository.save(
       new Quiz(
@@ -157,6 +191,43 @@ describe('QuizRepository integration tests', () => {
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
     expect(savedQuiz.answers).toEqual({
       Ed: [[{ answer: "Ed's answer", mark: 1 }]],
+    });
+  });
+
+  it("handles saving a player's marks where not all rounds are provided", async () => {
+    await quizRepository.save(
+      new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAsked(exampleRounds, {}, 0, 0)
+      )
+    );
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 2,
+      playerName: 'Ed',
+      answers: ["Ed's 1st answer round 3"],
+    });
+
+    await quizRepository.saveMarks({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Ed',
+      marks: [1],
+    });
+
+    await quizRepository.saveMarks({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 2,
+      playerName: 'Ed',
+      marks: [1],
+    });
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.answers).toEqual({
+      Ed: [[], [], [{ answer: "Ed's 1st answer round 3", mark: 1 }]],
     });
   });
 });

@@ -28,7 +28,7 @@ export const AnswerSheet: React.FC<{}> = () => {
         quizId: state.quizId,
         playerName: answerSheet.playerName!,
         roundNumber: round.roundNumber,
-        answers: answers?.map((answer) => answer?.answer ?? null),
+        answers: answers?.map((answer) => answer?.answer ?? null) ?? [],
       },
     },
   });
@@ -39,7 +39,7 @@ export const AnswerSheet: React.FC<{}> = () => {
         quizId: state.quizId,
         playerName: answerSheet.playerName!,
         roundNumber: round.roundNumber,
-        marks: answers?.map((answer) => answer?.mark ?? null),
+        marks: answers?.map((answer) => answer?.mark ?? null) ?? [],
       },
     },
   });
@@ -113,6 +113,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                               )
                             }
                             onChange={() => {}}
+                            disabled={!showQuestions}
                           />
                           <label
                             htmlFor={`${question.number}-option-${option}`}
@@ -133,6 +134,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                       changeAnswer(question.number, e.currentTarget.value)
                     }
                     value={answers?.[question.number]?.answer ?? ''}
+                    disabled={!showQuestions}
                   />
                 )}
                 {question.answer && (
@@ -231,7 +233,9 @@ export const AnswerSheet: React.FC<{}> = () => {
           }}
           disabled={
             submitMarksCalled ||
-            answers?.some(({ answer, mark }) => answer && mark === undefined)
+            answers?.some(
+              (answer) => answer?.answer && answer?.mark === undefined,
+            )
           }
         >
           Submit marks

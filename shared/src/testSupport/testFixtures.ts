@@ -83,4 +83,5 @@ export const exampleRoundMarkedState: RoundMarked = {
     roundName: 'The first round',
     numberOfQuestions: 10,
   },
+  marks: [],
 };

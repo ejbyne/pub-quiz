@@ -51,14 +51,14 @@ input SubmitAnswersInput {
   quizId: ID!
   playerName: String!
   roundNumber: Int!
-  answers: [String]
+  answers: [String]!
 }
 
 input SubmitMarksInput {
   quizId: ID!
   playerName: String!
   roundNumber: Int!
-  marks: [Int]
+  marks: [Int]!
 }
 
 type QuizGenerated {
@@ -93,6 +93,17 @@ type QuestionWithAnswer {
   text: String!
   options: [String!]
   answer: String!
+}
+
+type PlayerMarks {
+  playerName: String!
+  rounds: [PlayerMarksForRound!]!
+  quizTotal: Int!
+}
+
+type PlayerMarksForRound {
+  marks: [Int!]!
+  roundTotal: Int!
 }
 
 enum QuizStatus {
@@ -145,11 +156,13 @@ type RoundMarked implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
+  marks: [PlayerMarks!]!
 }
 
 type QuizFinished implements QuizState {
   quizId: ID!
   status: QuizStatus!
+  marks: [PlayerMarks!]!
 }
 
 type PlayerJoined {
