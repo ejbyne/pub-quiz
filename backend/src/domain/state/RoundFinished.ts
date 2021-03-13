@@ -1,6 +1,13 @@
-import { AnswersByPlayerName, QuizState, QuizStatus, Round } from '../types';
+import {
+  AnswersByPlayerName,
+  Mark,
+  QuizState,
+  QuizStatus,
+  Round,
+} from '../types';
 import { BaseQuizState } from './BaseQuizState';
 import { QuestionAnswered } from './QuestionAnswered';
+import { MarksCalculator } from '../MarksCalculator';
 
 export class RoundFinished extends BaseQuizState {
   status: QuizStatus.ROUND_FINISHED;

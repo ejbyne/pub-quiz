@@ -1,5 +1,12 @@
-import { AnswersByPlayerName, QuizState, QuizStatus, Round } from '../types';
+import {
+  AnswersByPlayerName,
+  Mark,
+  QuizState,
+  QuizStatus,
+  Round,
+} from '../types';
 import { BaseQuizState } from './BaseQuizState';
+import { MarksCalculator } from '../MarksCalculator';
 
 export class QuizFinished extends BaseQuizState {
   status: QuizStatus.QUIZ_FINISHED;
@@ -8,6 +15,10 @@ export class QuizFinished extends BaseQuizState {
 
   constructor(rounds: Round[], answers: AnswersByPlayerName) {
     super(QuizStatus.QUIZ_FINISHED, rounds, answers);
+  }
+
+  get marks(): Mark[] {
+    return new MarksCalculator(this.answers).calculateMarks();
   }
 
   nextState(): QuizState {

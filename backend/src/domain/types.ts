@@ -24,6 +24,15 @@ export interface Answer {
 
 export type AnswersByPlayerName = Record<string, Answer[][]>;
 
+export interface Mark {
+  playerName: string;
+  rounds: {
+    marks: (number | undefined)[];
+    roundTotal: number;
+  }[];
+  quizTotal: number;
+}
+
 export type QuizState =
   | QuizNotYetStarted
   | RoundStarted

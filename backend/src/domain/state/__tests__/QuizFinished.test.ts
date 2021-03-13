@@ -1,15 +1,13 @@
-import { RoundMarked } from '../RoundMarked';
 import { exampleRounds } from '../../../testSupport/testFixtures';
+import { QuizFinished } from '../QuizFinished';
 import { QuizStatus } from '../../types';
 
-describe('RoundMarked', () => {
+describe('QuizFinished', () => {
   describe('nextState', () => {
-    it('should move to the next round', () => {
-      const state = new RoundMarked(exampleRounds, {}, 0);
-
+    it('remains in the finished state', () => {
+      const state = new QuizFinished(exampleRounds, {});
       expect(state.nextState()).toMatchObject({
-        status: QuizStatus.ROUND_STARTED,
-        roundNumber: 1,
+        status: QuizStatus.QUIZ_FINISHED,
       });
     });
   });
@@ -19,7 +17,7 @@ describe('RoundMarked', () => {
       const answers = {
         Ed: [[{ answer: 'Round 1 - Answer 1', mark: 1 }]],
       };
-      const state = new RoundMarked(exampleRounds, answers, 0);
+      const state = new QuizFinished(exampleRounds, answers);
 
       expect(state.marks).toEqual([
         {

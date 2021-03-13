@@ -1,5 +1,4 @@
 import {
-  Answer,
   AnswersByPlayerName,
   QuizState,
   QuizStatus,
