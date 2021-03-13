@@ -26,6 +26,14 @@ export interface NextQuizStateResponse {
     options?: string[];
     answer?: string;
   };
+  marks?: {
+    playerName: string;
+    rounds: {
+      marks: number[];
+      roundTotal: number;
+    }[];
+    quizTotal: number;
+  }[];
 }
 
 export const nextQuizStateLambda: Handler<NextQuizStateRequest> = async (

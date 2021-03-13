@@ -1,7 +1,7 @@
 import { BaseQuizState } from './BaseQuizState';
 import {
   AnswersByPlayerName,
-  Mark,
+  PlayerMarks,
   QuizState,
   QuizStatus,
   Round,
@@ -23,7 +23,7 @@ export class RoundMarked extends BaseQuizState {
     super(QuizStatus.ROUND_MARKED, rounds, answers, roundNumber);
   }
 
-  get marks(): Mark[] {
+  get marks(): PlayerMarks[] {
     return new MarksCalculator(this.answers).calculateMarks();
   }
 

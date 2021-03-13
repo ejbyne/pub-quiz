@@ -24,10 +24,10 @@ export interface Answer {
 
 export type AnswersByPlayerName = Record<string, Answer[][]>;
 
-export interface Mark {
+export interface PlayerMarks {
   playerName: string;
   rounds: {
-    marks: (number | undefined)[];
+    marks: number[];
     roundTotal: number;
   }[];
   quizTotal: number;

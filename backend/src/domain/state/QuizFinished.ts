@@ -1,6 +1,6 @@
 import {
   AnswersByPlayerName,
-  Mark,
+  PlayerMarks,
   QuizState,
   QuizStatus,
   Round,
@@ -17,7 +17,7 @@ export class QuizFinished extends BaseQuizState {
     super(QuizStatus.QUIZ_FINISHED, rounds, answers);
   }
 
-  get marks(): Mark[] {
+  get marks(): PlayerMarks[] {
     return new MarksCalculator(this.answers).calculateMarks();
   }
 

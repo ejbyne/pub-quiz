@@ -1,6 +1,6 @@
 import {
   AnswersByPlayerName,
-  Mark,
+  PlayerMarks,
   QuizState,
   QuizStatus,
   Round,

@@ -1,9 +1,9 @@
-import { Answer, AnswersByPlayerName, Mark } from './types';
+import { Answer, AnswersByPlayerName, PlayerMarks } from './types';
 
 export class MarksCalculator {
   constructor(private answers: AnswersByPlayerName) {}
 
-  calculateMarks(): Mark[] {
+  calculateMarks(): PlayerMarks[] {
     return Object.entries(this.answers)
       .map(([playerName, roundAnswers]) => {
         const roundMarks = this.calculateRoundMarks(roundAnswers);
@@ -17,7 +17,7 @@ export class MarksCalculator {
       .sort((a, b) => b.quizTotal - a.quizTotal);
   }
 
-  private calculateRoundMarks(roundAnswers: Answer[][]): Mark['rounds'] {
+  private calculateRoundMarks(roundAnswers: Answer[][]): PlayerMarks['rounds'] {
     return roundAnswers.map((round) => {
       const marks = round?.map((answer) => answer?.mark ?? 0) ?? [];
       return {
@@ -27,7 +27,7 @@ export class MarksCalculator {
     });
   }
 
-  private calculateTotalMark(roundMarks: Mark['rounds']): number {
+  private calculateTotalMark(roundMarks: PlayerMarks['rounds']): number {
     return roundMarks.reduce((sum, round) => sum + round.roundTotal, 0);
   }
 }

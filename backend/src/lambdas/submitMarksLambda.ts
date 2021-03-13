@@ -12,7 +12,7 @@ interface SubmitMarksRequest {
   };
 }
 
-export const submitAnswersLambda: Handler<SubmitMarksRequest> = async (
+export const submitMarksLambda: Handler<SubmitMarksRequest> = async (
   event
 ): Promise<boolean> => {
   await quizRepository.saveMarks(event.arguments.input);
