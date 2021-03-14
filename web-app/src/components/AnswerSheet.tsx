@@ -33,7 +33,7 @@ export const AnswerSheet: React.FC<{}> = () => {
     if (state.status === QuizStatus.RoundFinished) {
       containerRef.current?.scrollTo(0, containerRef.current.scrollHeight);
     }
-  }, [state, containerRef, questionRefs]);
+  }, [state]);
 
   const [
     submitAnswers,
@@ -100,7 +100,7 @@ export const AnswerSheet: React.FC<{}> = () => {
               <div
                 ref={questionRefs[question.number]}
                 key={`questionContainer${question.number}`}
-                className="grid grid-cols-2 gap-2"
+                className="grid grid-cols-2 gap-2 items-baseline"
               >
                 <h3
                   key={`questionTitle${question.number}`}
