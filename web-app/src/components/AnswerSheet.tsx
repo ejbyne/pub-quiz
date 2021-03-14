@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { RefObject, useContext, useEffect, useRef } from 'react';
 import {
   QuestionAnswered,
   QuestionAsked,
@@ -18,6 +18,22 @@ export const AnswerSheet: React.FC<{}> = () => {
   const state = quiz.state as QuestionAsked | QuestionAnswered;
   const round = quiz.rounds[state.roundSummary.roundNumber];
   const answers = answerSheet.rounds[round.roundNumber];
+  const containerRef = useRef<HTMLElement>(null);
+  const questionRefs = [...Array(round.numberOfQuestions)].map(
+    useRef,
+  ) as RefObject<HTMLDivElement>[];
+
+  useEffect(() => {
+    if (
+      state.status === QuizStatus.QuestionAsked ||
+      state.status === QuizStatus.QuestionAnswered
+    ) {
+      questionRefs[state.question.number].current?.scrollIntoView(false);
+    }
+    if (state.status === QuizStatus.RoundFinished) {
+      containerRef.current?.scrollTo(0, containerRef.current.scrollHeight);
+    }
+  }, [state, containerRef, questionRefs]);
 
   const [
     submitAnswers,
@@ -69,7 +85,10 @@ export const AnswerSheet: React.FC<{}> = () => {
   const showAnswers = state.status === QuizStatus.QuestionAnswered;
 
   return (
-    <section className="w-full lg:w-1/2 px-6 py-6 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
+    <section
+      ref={containerRef}
+      className="w-full lg:w-1/2 px-6 py-6 flex flex-col items-stretch bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto"
+    >
       <h1 className="text-2xl text-center mb-4">
         Round {round.roundNumber + 1}
       </h1>
@@ -79,6 +98,7 @@ export const AnswerSheet: React.FC<{}> = () => {
           (question?: Question) =>
             question && (
               <div
+                ref={questionRefs[question.number]}
                 key={`questionContainer${question.number}`}
                 className="grid grid-cols-2 gap-2"
               >

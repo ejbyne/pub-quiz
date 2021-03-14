@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   useGenerateRandomQuizMutation,
   useNextQuizStateMutation,
-} from "@pub-quiz/shared/src/graphql/types";
+} from '@pub-quiz/shared/src/graphql/types';
 
 export const Admin: React.FC = () => {
-  const [quizName, setQuizName] = useState<string>("");
-  const [quizId, setQuizId] = useState<string>("");
+  const [quizName, setQuizName] = useState<string>('');
+  const [quizId, setQuizId] = useState<string>('');
 
-  const [generateQuiz, { called, error }] = useGenerateRandomQuizMutation({
+  const [
+    generateQuiz,
+    { called: generateQuizCalled, error: generateQuizErrors },
+  ] = useGenerateRandomQuizMutation({
     variables: {
       input: {
         quizName,
@@ -17,7 +20,7 @@ export const Admin: React.FC = () => {
     onCompleted: (data) => setQuizId(data.generateRandomQuiz.quizId),
   });
 
-  const generateQuizError = error?.graphQLErrors?.[0];
+  const generateQuizError = generateQuizErrors?.graphQLErrors?.[0];
 
   const [nextState] = useNextQuizStateMutation({
     variables: {
@@ -43,7 +46,10 @@ export const Admin: React.FC = () => {
             placeholder="Quiz ID"
             onChange={(e) => setQuizId(e.currentTarget.value)}
           />
-          <button disabled={called && !error} onClick={() => generateQuiz()}>
+          <button
+            disabled={generateQuizCalled && !generateQuizError}
+            onClick={() => generateQuiz()}
+          >
             Generate quiz
           </button>
           {generateQuizError ? <p>{generateQuizError.message}</p> : null}

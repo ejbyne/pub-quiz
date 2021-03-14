@@ -27,17 +27,27 @@ export const MarkSheet: React.FC<{}> = () => {
                   <th className="w-24 px-1 align-top">Player</th>
                   <th className="w-24 px-1 align-top">Total</th>
                   {state.marks[0]?.rounds.map((_, index) => (
-                    <th className="w-24 px-1 align-top">Round {index + 1}</th>
+                    <th
+                      key={`roundHeader${index}`}
+                      className="w-24 px-1 align-top"
+                    >
+                      Round {index + 1}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {state.marks.map((playerMarks) => (
-                  <tr>
+                  <tr key={playerMarks.playerName}>
                     <td className="px-1 align-top">{playerMarks.playerName}</td>
                     <td className="px-1 align-top">{playerMarks.quizTotal}</td>
-                    {playerMarks.rounds.map((round) => (
-                      <td className="px-1 align-top">{round.roundTotal}</td>
+                    {playerMarks.rounds.map((round, index) => (
+                      <td
+                        key={`player${playerMarks.playerName}round${index}`}
+                        className="px-1 align-top"
+                      >
+                        {round.roundTotal}
+                      </td>
                     ))}
                   </tr>
                 ))}

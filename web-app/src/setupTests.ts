@@ -15,3 +15,6 @@ const mock = () => {
 };
 
 Object.defineProperty(window, 'localStorage', { value: mock() });
+
+HTMLElement.prototype.scrollIntoView = () => {};
+HTMLElement.prototype.scrollTo = () => {};
