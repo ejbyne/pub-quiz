@@ -100,7 +100,7 @@ export const AnswerSheet: React.FC<{}> = () => {
               <div
                 ref={questionRefs[question.number]}
                 key={`questionContainer${question.number}`}
-                className="grid grid-cols-2 gap-2 items-baseline"
+                className="grid grid-cols-2 gap-2 items-baseline pb-4"
               >
                 <h3
                   key={`questionTitle${question.number}`}
