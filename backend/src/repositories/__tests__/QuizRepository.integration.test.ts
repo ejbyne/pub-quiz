@@ -99,7 +99,7 @@ describe('QuizRepository integration tests', () => {
     });
   });
 
-  it("saves a player's answers for a round", async () => {
+  it("saves players' answers for a round", async () => {
     await quizRepository.save(
       new Quiz(
         EXAMPLE_QUIZ_ID,
@@ -164,7 +164,30 @@ describe('QuizRepository integration tests', () => {
     });
   });
 
-  it("saves a player's marks for a round", async () => {
+  it('handles saving answers for a player with a special character in their name', async () => {
+    await quizRepository.save(
+      new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAsked(exampleRounds, {}, 0, 0)
+      )
+    );
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Ed & Henry',
+      answers: ["Ed and Henry's 1st answer round 1"],
+    });
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.answers).toEqual({
+      'Ed & Henry': [[{ answer: "Ed and Henry's 1st answer round 1" }]],
+    });
+  });
+
+  it("saves players' marks for a round", async () => {
     await quizRepository.save(
       new Quiz(
         EXAMPLE_QUIZ_ID,
@@ -181,16 +204,31 @@ describe('QuizRepository integration tests', () => {
       answers: ["Ed's answer"],
     });
 
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Henry',
+      answers: ["Henry's answer"],
+    });
+
     await quizRepository.saveMarks({
       quizId: EXAMPLE_QUIZ_ID,
       roundNumber: 0,
       playerName: 'Ed',
+      marks: [0],
+    });
+
+    await quizRepository.saveMarks({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Henry',
       marks: [1],
     });
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
     expect(savedQuiz.answers).toEqual({
-      Ed: [[{ answer: "Ed's answer", mark: 1 }]],
+      Ed: [[{ answer: "Ed's answer", mark: 0 }]],
+      Henry: [[{ answer: "Henry's answer", mark: 1 }]],
     });
   });
 
@@ -228,6 +266,38 @@ describe('QuizRepository integration tests', () => {
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
     expect(savedQuiz.answers).toEqual({
       Ed: [[], [], [{ answer: "Ed's 1st answer round 3", mark: 1 }]],
+    });
+  });
+
+  it('handles saving marks for a player with a special character in their name', async () => {
+    await quizRepository.save(
+      new Quiz(
+        EXAMPLE_QUIZ_ID,
+        "Ed's quiz",
+        exampleRounds,
+        new QuestionAsked(exampleRounds, {}, 0, 0)
+      )
+    );
+
+    await quizRepository.saveAnswers({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Ed & Henry',
+      answers: ["Ed and Henry's 1st answer round 1"],
+    });
+
+    await quizRepository.saveMarks({
+      quizId: EXAMPLE_QUIZ_ID,
+      roundNumber: 0,
+      playerName: 'Ed & Henry',
+      marks: [1],
+    });
+
+    const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
+    expect(savedQuiz.answers).toEqual({
+      'Ed & Henry': [
+        [{ answer: "Ed and Henry's 1st answer round 1", mark: 1 }],
+      ],
     });
   });
 });

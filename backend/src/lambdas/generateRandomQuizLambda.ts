@@ -19,27 +19,33 @@ interface GenerateRandomQuizResponse {
 }
 
 export const generateRandomQuizLambda: Handler<GenerateRandomQuizRequest> = async (
-  event
-): Promise<GenerateRandomQuizResponse> => {
-  const { quizName } = event.arguments.input;
-  const quizId = uuid();
-  const rounds = await generateRounds();
+  event,
+  _,
+  callback
+): Promise<GenerateRandomQuizResponse | void> => {
+  try {
+    const { quizName } = event.arguments.input;
+    const quizId = uuid();
+    const rounds = await generateRounds();
 
-  console.log(
-    `Saving quiz with name ${quizName}, id ${quizId} and rounds ${rounds}`
-  );
+    console.log(
+      `Saving quiz with name ${quizName}, id ${quizId} and rounds ${rounds}`
+    );
 
-  const newQuiz = new Quiz(
-    quizId,
-    quizName,
-    rounds,
-    new QuizNotYetStarted(rounds)
-  );
+    const newQuiz = new Quiz(
+      quizId,
+      quizName,
+      rounds,
+      new QuizNotYetStarted(rounds)
+    );
 
-  await quizRepository.save(newQuiz);
+    await quizRepository.save(newQuiz);
 
-  return {
-    quizId,
-    quizName,
-  };
+    return {
+      quizId,
+      quizName,
+    };
+  } catch (error) {
+    callback(error.message);
+  }
 };

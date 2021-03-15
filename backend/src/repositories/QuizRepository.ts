@@ -133,7 +133,10 @@ export class QuizRepository {
       .update({
         TableName: this.tableName,
         Key: { quizId },
-        UpdateExpression: `SET answers.${playerName} = :playerAnswers`,
+        UpdateExpression: `SET answers.#playerName = :playerAnswers`,
+        ExpressionAttributeNames: {
+          '#playerName': playerName,
+        },
         ExpressionAttributeValues: {
           ':playerAnswers': playerAnswers,
         },
@@ -161,7 +164,10 @@ export class QuizRepository {
       .update({
         TableName: this.tableName,
         Key: { quizId },
-        UpdateExpression: `SET answers.${playerName} = :playerAnswers`,
+        UpdateExpression: `SET answers.#playerName = :playerAnswers`,
+        ExpressionAttributeNames: {
+          '#playerName': playerName,
+        },
         ExpressionAttributeValues: {
           ':playerAnswers': playerAnswers,
         },

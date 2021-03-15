@@ -19,9 +19,15 @@ interface SaveQuizRequest {
 }
 
 export const saveQuizLambda: Handler<SaveQuizRequest> = async (
-  event
-): Promise<boolean> => {
-  const command = event.arguments.input;
-  console.log(`Saving quiz with name ${command.quizName}`);
-  return saveQuizInteractor(command, quizRepository);
+  event,
+  _,
+  callback
+): Promise<boolean | void> => {
+  try {
+    const command = event.arguments.input;
+    console.log(`Saving quiz with name ${command.quizName}`);
+    return saveQuizInteractor(command, quizRepository);
+  } catch (error) {
+    callback(error.message);
+  }
 };

@@ -13,8 +13,14 @@ interface SubmitAnswersRequest {
 }
 
 export const submitAnswersLambda: Handler<SubmitAnswersRequest> = async (
-  event
-): Promise<boolean> => {
-  await quizRepository.saveAnswers(event.arguments.input);
-  return true;
+  event,
+  _,
+  callback
+): Promise<boolean | void> => {
+  try {
+    await quizRepository.saveAnswers(event.arguments.input);
+    return true;
+  } catch (error) {
+    callback(error.message);
+  }
 };
