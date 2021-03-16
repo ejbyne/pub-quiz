@@ -100,15 +100,20 @@ export const AnswerSheet: React.FC<{}> = () => {
               <div
                 ref={questionRefs[question.number]}
                 key={`questionContainer${question.number}`}
-                className="grid lg:grid-cols-2 gap-3 items-center pb-4"
+                className="grid lg:grid-cols-2 gap-4 py-5 items-baseline"
               >
                 <h3
                   key={`questionTitle${question.number}`}
-                  className="lg:col-span-2 font-semibold my-2"
+                  className="lg:col-span-2 font-semibold"
                 >
                   Question {question.number + 1}
                 </h3>
-                <p key={`questionText${question.number}`}>{question.text}</p>
+                <p
+                  key={`questionText${question.number}`}
+                  className="row-span-2"
+                >
+                  {question.text}
+                </p>
                 {question.options ? (
                   <ul
                     key={`questionOptions${question.number}`}
@@ -158,13 +163,13 @@ export const AnswerSheet: React.FC<{}> = () => {
                   />
                 )}
                 {question.answer && (
-                  <div className="lg:col-start-2 flex justify-between items-center mb-2 text-green-400">
+                  <div className="lg:col-start-2 flex justify-between text-green-400">
                     <p key={`answerText${question.number}`}>
                       Correct answer: {question.answer}
                     </p>
                     <ul
                       key={`score${question.number}`}
-                      className="ml-4 flex justify-end items-end text-white"
+                      className="ml-4 flex justify-end items-start text-white"
                     >
                       <li>
                         <input
