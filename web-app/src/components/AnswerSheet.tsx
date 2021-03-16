@@ -100,11 +100,11 @@ export const AnswerSheet: React.FC<{}> = () => {
               <div
                 ref={questionRefs[question.number]}
                 key={`questionContainer${question.number}`}
-                className="grid grid-cols-2 gap-2 items-baseline pb-4"
+                className="grid lg:grid-cols-2 gap-3 items-center pb-4"
               >
                 <h3
                   key={`questionTitle${question.number}`}
-                  className="col-span-2 font-semibold my-2"
+                  className="lg:col-span-2 font-semibold my-2"
                 >
                   Question {question.number + 1}
                 </h3>
@@ -148,7 +148,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                 ) : (
                   <input
                     key={`questionInput${question.number}`}
-                    className="w-full mb-2 text-input"
+                    className="w-full text-input"
                     placeholder={`Answer ${question.number + 1}`}
                     onChange={(e) =>
                       changeAnswer(question.number, e.currentTarget.value)
@@ -158,7 +158,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                   />
                 )}
                 {question.answer && (
-                  <div className="col-start-2 flex justify-between items-center mb-2 text-green-400">
+                  <div className="lg:col-start-2 flex justify-between items-center mb-2 text-green-400">
                     <p key={`answerText${question.number}`}>
                       Correct answer: {question.answer}
                     </p>
