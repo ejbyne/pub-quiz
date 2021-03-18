@@ -2,6 +2,7 @@ import { Handler } from 'aws-lambda';
 import { NextQuizStateResponse } from './nextQuizStateLambda';
 import { quizSummaryInteractor } from '../interactors/quizSummaryInteractor';
 import { quizRepository } from './config';
+import { PlayerStatus } from '../domain/types';
 
 interface QuizSummaryRequest {
   arguments: {
@@ -13,6 +14,10 @@ export interface QuizSummaryResponse {
   quizId: string;
   quizName: string;
   playerNames?: string[];
+  players?: {
+    name: string;
+    status: PlayerStatus;
+  }[];
   currentRound?: {
     text: string;
     options?: string[];

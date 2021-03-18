@@ -2,7 +2,7 @@ import { Quiz } from '../../domain/Quiz';
 import { RoundStarted } from '../../domain/state/RoundStarted';
 import { quizSummaryInteractor } from '../quizSummaryInteractor';
 import { QuizRepository } from '../../repositories/QuizRepository';
-import { QuizStatus } from '../../domain/types';
+import { PlayerStatus, QuizStatus } from '../../domain/types';
 import { QuestionAsked } from '../../domain/state/QuestionAsked';
 import { QuestionAnswered } from '../../domain/state/QuestionAnswered';
 
@@ -130,5 +130,79 @@ describe('quizSummaryInteractor', () => {
         answer: 'Answer 2',
       },
     ]);
+  });
+
+  it('returns the players in the quiz', async () => {
+    const rounds = [
+      {
+        roundName: 'Round 1',
+        questions: [
+          {
+            text: 'Question 1',
+            answer: 'Answer 1',
+          },
+          {
+            text: 'Question 2',
+            answer: 'Answer 2',
+          },
+        ],
+      },
+    ];
+
+    const quizRespository = { get: jest.fn(), updateState: jest.fn() };
+    quizRespository.get.mockResolvedValue(
+      new Quiz(
+        'RANDOM_ID',
+        'A quiz',
+        rounds,
+        new QuestionAsked(rounds, {}, 0, 1),
+        ['Ed', 'Henry']
+      )
+    );
+
+    const result = await quizSummaryInteractor(
+      { quizId: 'RANDOM_ID' },
+      (quizRespository as unknown) as QuizRepository
+    );
+
+    expect(result.players).toEqual([
+      { name: 'Ed', status: PlayerStatus.PLAYING },
+      { name: 'Henry', status: PlayerStatus.PLAYING },
+    ]);
+  });
+
+  it('handles no players', async () => {
+    const rounds = [
+      {
+        roundName: 'Round 1',
+        questions: [
+          {
+            text: 'Question 1',
+            answer: 'Answer 1',
+          },
+          {
+            text: 'Question 2',
+            answer: 'Answer 2',
+          },
+        ],
+      },
+    ];
+
+    const quizRespository = { get: jest.fn(), updateState: jest.fn() };
+    quizRespository.get.mockResolvedValue(
+      new Quiz(
+        'RANDOM_ID',
+        'A quiz',
+        rounds,
+        new QuestionAsked(rounds, {}, 0, 1)
+      )
+    );
+
+    const result = await quizSummaryInteractor(
+      { quizId: 'RANDOM_ID' },
+      (quizRespository as unknown) as QuizRepository
+    );
+
+    expect(result.players).toBeUndefined();
   });
 });

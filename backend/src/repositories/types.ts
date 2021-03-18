@@ -13,7 +13,7 @@ export interface QuizEntity {
   }[];
   state: QuizEntityState;
   playerNames?: DocumentClient.DynamoDbSet;
-  answers: Record<string, { answer: string }[][]>;
+  answers: Record<string, { answer?: string; mark?: number }[][]>;
 }
 
 export interface QuizEntityState {

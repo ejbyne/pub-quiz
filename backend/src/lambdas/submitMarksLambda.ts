@@ -11,15 +11,23 @@ interface SubmitMarksRequest {
     };
   };
 }
+interface SubmitMarksResponse {
+  quizId: string;
+  playerName: string;
+}
 
 export const submitMarksLambda: Handler<SubmitMarksRequest> = async (
   event,
   _,
   callback
-): Promise<boolean | void> => {
+): Promise<SubmitMarksResponse | void> => {
   try {
     await quizRepository.saveMarks(event.arguments.input);
-    return true;
+    const { quizId, playerName } = event.arguments.input;
+    return {
+      quizId,
+      playerName,
+    };
   } catch (error) {
     callback(error.message);
   }

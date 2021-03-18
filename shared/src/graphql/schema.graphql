@@ -7,8 +7,8 @@ type Mutation {
   saveQuiz(input: SaveQuizInput!): Boolean!
   joinQuiz(input: JoinQuizInput!): PlayerJoined!
   nextQuizState(input: NextQuizStateInput!): QuizState!
-  submitAnswers(input: SubmitAnswersInput!): Boolean!
-  submitMarks(input: SubmitMarksInput!): Boolean!
+  submitAnswers(input: SubmitAnswersInput!): PlayerSubmittedAnswers!
+  submitMarks(input: SubmitMarksInput!): PlayerSubmittedMarks!
 }
 
 type Subscription {
@@ -69,7 +69,8 @@ type QuizGenerated {
 type QuizSummary {
   quizId: ID!
   quizName: String!
-  playerNames: [String!]
+  playerNames: [String!]!
+  players: [Player!]!
   currentRound: [Question!]
   state: QuizState!
 }
@@ -78,6 +79,17 @@ type RoundSummary {
   roundNumber: Int!
   roundName: String!
   numberOfQuestions: Int!
+}
+
+type Player {
+  name: String!
+  status: PlayerStatus!
+}
+
+enum PlayerStatus {
+  PLAYING
+  ANSWERS_SUBMITTED
+  MARKS_SUBMITTED
 }
 
 union Question = QuestionWithoutAnswer | QuestionWithAnswer
@@ -168,4 +180,14 @@ type QuizFinished implements QuizState {
 type PlayerJoined {
   quizId: ID!
   playerName: String!
+}
+
+type PlayerSubmittedAnswers {
+  quizId: ID!
+  playerName: string!
+}
+
+type PlayerSubmittedMarks {
+  quizId: ID!
+  playerName: string!
 }

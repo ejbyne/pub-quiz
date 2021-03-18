@@ -12,14 +12,23 @@ interface SubmitAnswersRequest {
   };
 }
 
+interface SubmitAnswersResponse {
+  quizId: string;
+  playerName: string;
+}
+
 export const submitAnswersLambda: Handler<SubmitAnswersRequest> = async (
   event,
   _,
   callback
-): Promise<boolean | void> => {
+): Promise<SubmitAnswersResponse | void> => {
   try {
     await quizRepository.saveAnswers(event.arguments.input);
-    return true;
+    const { quizId, playerName } = event.arguments.input;
+    return {
+      quizId,
+      playerName,
+    };
   } catch (error) {
     callback(error.message);
   }

@@ -18,7 +18,7 @@ export interface Question {
 }
 
 export interface Answer {
-  answer: string;
+  answer?: string;
   mark?: number;
 }
 
@@ -31,6 +31,17 @@ export interface PlayerMarks {
     roundTotal: number;
   }[];
   quizTotal: number;
+}
+
+export interface Player {
+  name: string;
+  status: PlayerStatus;
+}
+
+export enum PlayerStatus {
+  PLAYING = 'PLAYING',
+  ANSWERS_SUBMITTED = 'ANSWERS_SUBMITTED',
+  MARKS_SUBMITTED = 'MARKS_SUBMITTED',
 }
 
 export type QuizState =

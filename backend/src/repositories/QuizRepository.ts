@@ -48,7 +48,7 @@ export class QuizRepository {
       quizName,
       rounds,
       mapEntityStateToQuizState(state, rounds, answers),
-      playerNames as string[] | undefined,
+      playerNames?.values as string[] | undefined,
       answers as AnswersByPlayerName
     );
   }
@@ -69,14 +69,13 @@ export class QuizRepository {
       TableName: this.tableName,
       Item: entity,
     };
-
     await this.documentClient.put(params).promise();
   }
 
   async addPlayerName(quizId: string, newPlayerName: string): Promise<void> {
     const savedQuiz = await this.get(quizId);
 
-    const playerNames = savedQuiz.playerNames?.values as string[] | undefined;
+    const playerNames = savedQuiz.playerNames;
 
     if (playerNames?.includes(newPlayerName)) {
       return undefined;

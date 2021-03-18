@@ -31,7 +31,7 @@ const exampleQuiz: Quiz = new Quiz(
 describe('QuizRepository integration tests', () => {
   let databaseManager: {
     dynamoClientConfiguration: ServiceConfigurationOptions;
-    tearDownDatabase: () => Promise<any>;
+    tearDownDatabase: () => Promise<void>;
   };
   let quizRepository: QuizRepository;
   const tableName = 'QuizTable';
@@ -64,7 +64,7 @@ describe('QuizRepository integration tests', () => {
     await quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Ed');
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
-    expect(savedQuiz.playerNames?.values).toEqual(['Ed']);
+    expect(savedQuiz.playerNames).toEqual(['Ed']);
   });
 
   it('adds additional player names', async () => {
@@ -74,7 +74,7 @@ describe('QuizRepository integration tests', () => {
     await quizRepository.addPlayerName(EXAMPLE_QUIZ_ID, 'Henry');
 
     const savedQuiz = await quizRepository.get(EXAMPLE_QUIZ_ID);
-    expect(savedQuiz.playerNames?.values).toEqual(['Ed', 'Henry']);
+    expect(savedQuiz.playerNames).toEqual(['Ed', 'Henry']);
   });
 
   it('throws an error if the quiz ID does not exist', async () => {

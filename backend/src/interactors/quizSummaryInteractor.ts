@@ -18,14 +18,15 @@ export const quizSummaryInteractor = async (
   command: QuizSummaryCommand,
   quizRepository: QuizRepository
 ): Promise<QuizSummaryResponse> => {
-  const quiz = await quizRepository.get(command.quizId);
+  const quiz = await quizRepository.get(command.quizId); //?
 
-  const { quizId, quizName, playerNames, state } = quiz;
+  const { quizId, quizName, playerNames, players, state } = quiz;
 
   return {
     quizId,
     quizName,
     playerNames,
+    players,
     currentRound: mapCurrentRoundToCurrentRoundResponse(state),
     state: mapQuizStateToResponseState(quizId, state),
   };
