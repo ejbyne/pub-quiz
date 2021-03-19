@@ -16,7 +16,7 @@ export const App: React.FC = () => {
       <header className="mb-2 w-full px-4 py-2 bg-white rounded flex flex-col lg:flex-row lg:justify-between">
         <div className="flex items-center">
           <img src={BeerDarkImage} alt="Two pints of beer" className="w-14" />
-          <h1 className="ml-2 uppercase text-2xl text-center font-serif select-none text-indigo-900">
+          <h1 className="ml-2 uppercase text-xl lg:text-2xl text-center font-serif select-none text-indigo-900">
             The Online Pub Quiz
           </h1>
         </div>

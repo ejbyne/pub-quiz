@@ -138,7 +138,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                               )
                             }
                             onChange={() => {}}
-                            disabled={!showQuestions}
+                            disabled={showAnswers}
                           />
                           <label
                             htmlFor={`${question.number}-option-${option}`}
@@ -159,7 +159,7 @@ export const AnswerSheet: React.FC<{}> = () => {
                       changeAnswer(question.number, e.currentTarget.value)
                     }
                     value={answers?.[question.number]?.answer ?? ''}
-                    disabled={!showQuestions}
+                    disabled={showAnswers}
                   />
                 )}
                 {question.answer && (
@@ -223,28 +223,26 @@ export const AnswerSheet: React.FC<{}> = () => {
             ),
         )}
       </div>
-      {showQuestions && (
-        <button
-          className="button mt-6"
-          onClick={async () => {
-            try {
-              await submitAnswers();
-            } catch (error) {
-              console.error('error submitting answers', error);
-            }
-          }}
-          disabled={
-            submitAnswersCalled ||
-            state.question.number < round.numberOfQuestions - 1
-          }
-        >
-          Submit answers
-        </button>
-      )}
       {roundFinished && (
-        <h2 className="text-xl text-center mt-10 mb-6 semi-bold">
-          Round {round.roundNumber + 1} completed
-        </h2>
+        <>
+          <h2 className="text-xl text-center mt-10 mb-6 semi-bold">
+            Round {round.roundNumber + 1} completed
+          </h2>
+          <p className="text-center">Please submit your answers</p>
+          <button
+            className="button mt-6"
+            onClick={async () => {
+              try {
+                await submitAnswers();
+              } catch (error) {
+                console.error('error submitting answers', error);
+              }
+            }}
+            disabled={submitAnswersCalled}
+          >
+            Submit answers
+          </button>
+        </>
       )}
       {showAnswers && (
         <button
