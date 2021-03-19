@@ -10,7 +10,10 @@ import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContai
 
 describe('submitting answers', () => {
   it("submits the player's answers", async () => {
-    const mockSubmitAnswers = jest.fn().mockReturnValue(true);
+    const mockSubmitAnswers = jest.fn().mockReturnValue({
+      quizId: 'RANDOM_ID',
+      name: 'Henry',
+    });
 
     const initialQuizState = {
       ...exampleQuizSummary,
@@ -76,7 +79,10 @@ describe('submitting answers', () => {
   });
 
   it('disables the submit button until all questions in the round have been asked', async () => {
-    const mockSubmitAnswers = jest.fn().mockReturnValue(true);
+    const mockSubmitAnswers = jest.fn().mockReturnValue({
+      quizId: 'RANDOM_ID',
+      name: 'Henry',
+    });
 
     const initialQuizState = {
       ...exampleQuizSummary,

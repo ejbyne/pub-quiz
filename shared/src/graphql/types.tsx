@@ -29,8 +29,8 @@ export type Mutation = {
   saveQuiz: Scalars['Boolean'];
   joinQuiz: PlayerJoined;
   nextQuizState: QuizState;
-  submitAnswers: Scalars['Boolean'];
-  submitMarks: Scalars['Boolean'];
+  submitAnswers: PlayerSubmittedAnswers;
+  submitMarks: PlayerSubmittedMarks;
 };
 
 
@@ -133,6 +133,7 @@ export type QuizSummary = {
   quizId: Scalars['ID'];
   quizName: Scalars['String'];
   playerNames?: Maybe<Array<Scalars['String']>>;
+  players?: Maybe<Array<Player>>;
   currentRound?: Maybe<Array<Question>>;
   state: QuizState;
 };
@@ -143,6 +144,18 @@ export type RoundSummary = {
   roundName: Scalars['String'];
   numberOfQuestions: Scalars['Int'];
 };
+
+export type Player = {
+  __typename?: 'Player';
+  name: Scalars['String'];
+  status: PlayerStatus;
+};
+
+export enum PlayerStatus {
+  Playing = 'PLAYING',
+  AnswersSubmitted = 'ANSWERS_SUBMITTED',
+  MarksSubmitted = 'MARKS_SUBMITTED'
+}
 
 export type Question = QuestionWithoutAnswer | QuestionWithAnswer;
 
@@ -246,6 +259,18 @@ export type PlayerJoined = {
   playerName: Scalars['String'];
 };
 
+export type PlayerSubmittedAnswers = {
+  __typename?: 'PlayerSubmittedAnswers';
+  quizId: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type PlayerSubmittedMarks = {
+  __typename?: 'PlayerSubmittedMarks';
+  quizId: Scalars['ID'];
+  name: Scalars['String'];
+};
+
 export type QuizSummaryQueryVariables = Exact<{
   quizId: Scalars['ID'];
 }>;
@@ -256,7 +281,10 @@ export type QuizSummaryQuery = (
   & { quizSummary: (
     { __typename?: 'QuizSummary' }
     & Pick<QuizSummary, 'quizId' | 'quizName' | 'playerNames'>
-    & { currentRound?: Maybe<Array<(
+    & { players?: Maybe<Array<(
+      { __typename?: 'Player' }
+      & Pick<Player, 'name' | 'status'>
+    )>>, currentRound?: Maybe<Array<(
       { __typename?: 'QuestionWithoutAnswer' }
       & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) | (
@@ -371,7 +399,10 @@ export type SubmitAnswersMutationVariables = Exact<{
 
 export type SubmitAnswersMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'submitAnswers'>
+  & { submitAnswers: (
+    { __typename?: 'PlayerSubmittedAnswers' }
+    & Pick<PlayerSubmittedAnswers, 'quizId' | 'name'>
+  ) }
 );
 
 export type SubmitMarksMutationVariables = Exact<{
@@ -381,7 +412,10 @@ export type SubmitMarksMutationVariables = Exact<{
 
 export type SubmitMarksMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'submitMarks'>
+  & { submitMarks: (
+    { __typename?: 'PlayerSubmittedMarks' }
+    & Pick<PlayerSubmittedMarks, 'quizId' | 'name'>
+  ) }
 );
 
 export type NextQuizStateMutationVariables = Exact<{
@@ -548,6 +582,10 @@ export const QuizSummaryDocument = gql`
     quizId
     quizName
     playerNames
+    players {
+      name
+      status
+    }
     currentRound {
       ... on QuestionWithoutAnswer {
         number
@@ -756,7 +794,10 @@ export type JoinQuizMutationResult = Apollo.MutationResult<JoinQuizMutation>;
 export type JoinQuizMutationOptions = Apollo.BaseMutationOptions<JoinQuizMutation, JoinQuizMutationVariables>;
 export const SubmitAnswersDocument = gql`
     mutation SubmitAnswers($input: SubmitAnswersInput!) {
-  submitAnswers(input: $input)
+  submitAnswers(input: $input) {
+    quizId
+    name
+  }
 }
     `;
 export type SubmitAnswersMutationFn = Apollo.MutationFunction<SubmitAnswersMutation, SubmitAnswersMutationVariables>;
@@ -786,7 +827,10 @@ export type SubmitAnswersMutationResult = Apollo.MutationResult<SubmitAnswersMut
 export type SubmitAnswersMutationOptions = Apollo.BaseMutationOptions<SubmitAnswersMutation, SubmitAnswersMutationVariables>;
 export const SubmitMarksDocument = gql`
     mutation SubmitMarks($input: SubmitMarksInput!) {
-  submitMarks(input: $input)
+  submitMarks(input: $input) {
+    quizId
+    name
+  }
 }
     `;
 export type SubmitMarksMutationFn = Apollo.MutationFunction<SubmitMarksMutation, SubmitMarksMutationVariables>;

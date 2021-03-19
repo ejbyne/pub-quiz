@@ -69,8 +69,8 @@ type QuizGenerated {
 type QuizSummary {
   quizId: ID!
   quizName: String!
-  playerNames: [String!]!
-  players: [Player!]!
+  playerNames: [String!]
+  players: [Player!]
   currentRound: [Question!]
   state: QuizState!
 }
@@ -184,10 +184,10 @@ type PlayerJoined {
 
 type PlayerSubmittedAnswers {
   quizId: ID!
-  playerName: string!
+  name: String!
 }
 
 type PlayerSubmittedMarks {
   quizId: ID!
-  playerName: string!
+  name: String!
 }

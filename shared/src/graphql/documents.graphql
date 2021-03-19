@@ -3,6 +3,10 @@ query QuizSummary($quizId: ID!) {
     quizId
     quizName
     playerNames
+    players {
+      name
+      status
+    }
 
     currentRound {
       ... on QuestionWithoutAnswer {
@@ -108,11 +112,17 @@ mutation JoinQuiz($input: JoinQuizInput!) {
 }
 
 mutation SubmitAnswers($input: SubmitAnswersInput!) {
-  submitAnswers(input: $input)
+  submitAnswers(input: $input) {
+    quizId
+    name
+  }
 }
 
 mutation SubmitMarks($input: SubmitMarksInput!) {
-  submitMarks(input: $input)
+  submitMarks(input: $input) {
+    quizId
+    name
+  }
 }
 
 mutation NextQuizState($input: NextQuizStateInput!) {

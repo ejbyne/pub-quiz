@@ -10,7 +10,10 @@ import userEvent from '@testing-library/user-event';
 
 describe('submitting marks', () => {
   it("submits the player's marks", async () => {
-    const mockSubmitMarks = jest.fn().mockReturnValue(true);
+    const mockSubmitMarks = jest.fn().mockReturnValue({
+      quizId: 'RANDOM_ID',
+      name: 'Henry',
+    });
 
     const quizState = {
       ...exampleQuizSummary,
@@ -80,7 +83,10 @@ describe('submitting marks', () => {
   });
 
   it('disables the submit button until all questions have been marked', async () => {
-    const mockSubmitMarks = jest.fn().mockReturnValue(true);
+    const mockSubmitMarks = jest.fn().mockReturnValue({
+      quizId: 'RANDOM_ID',
+      name: 'Henry',
+    });
 
     const quizState = {
       ...exampleQuizSummary,
@@ -137,7 +143,10 @@ describe('submitting marks', () => {
   });
 
   it('automatically shows unanswered questions as incorrect', async () => {
-    const mockSubmitMarks = jest.fn().mockReturnValue(true);
+    const mockSubmitMarks = jest.fn().mockReturnValue({
+      quizId: 'RANDOM_ID',
+      name: 'Henry',
+    });
 
     const quizState = {
       ...exampleQuizSummary,
