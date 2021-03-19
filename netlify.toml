@@ -12,7 +12,7 @@
   # directory located at the absolute path "root/project/build-output"
   publish = "build/"
 
-  command = "npx yarn install && npx yarn test && npx yarn build"
+  command = "npx yarn install && npx yarn build"
 
 [[redirects]]
   from = "/*"
