@@ -37,7 +37,10 @@ export type NextQuizState =
 export type QuizAction =
   | JoinedQuiz
   | QuizSummaryReceived
-  | NextQuizStateReceived;
+  | NextQuizStateReceived
+  | PlayerJoined
+  | PlayerSubmittedAnswers
+  | PlayerSubmittedMarks;
 
 type JoinedQuiz = {
   type: 'JoinedQuiz';
@@ -54,4 +57,27 @@ type QuizSummaryReceived = {
 type NextQuizStateReceived = {
   type: 'NextQuizStateReceived';
   payload: NextQuizState;
+};
+
+type PlayerJoined = {
+  type: 'PlayerJoined';
+  payload: {
+    quizId: string;
+    playerName: string;
+  };
+};
+
+type PlayerSubmittedAnswers = {
+  type: 'PlayerSubmittedAnswers';
+  payload: {
+    quizId: string;
+    playerName: string;
+  };
+};
+type PlayerSubmittedMarks = {
+  type: 'PlayerSubmittedMarks';
+  payload: {
+    quizId: string;
+    playerName: string;
+  };
 };

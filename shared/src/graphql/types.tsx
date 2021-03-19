@@ -66,11 +66,23 @@ export type MutationSubmitMarksArgs = {
 export type Subscription = {
   __typename?: 'Subscription';
   playerJoined?: Maybe<PlayerJoined>;
+  playerSubmittedAnswers?: Maybe<PlayerSubmittedAnswers>;
+  playerSubmittedMarks?: Maybe<PlayerSubmittedMarks>;
   nextQuizState?: Maybe<QuizState>;
 };
 
 
 export type SubscriptionPlayerJoinedArgs = {
+  quizId: Scalars['ID'];
+};
+
+
+export type SubscriptionPlayerSubmittedAnswersArgs = {
+  quizId: Scalars['ID'];
+};
+
+
+export type SubscriptionPlayerSubmittedMarksArgs = {
   quizId: Scalars['ID'];
 };
 
@@ -262,13 +274,13 @@ export type PlayerJoined = {
 export type PlayerSubmittedAnswers = {
   __typename?: 'PlayerSubmittedAnswers';
   quizId: Scalars['ID'];
-  name: Scalars['String'];
+  playerName: Scalars['String'];
 };
 
 export type PlayerSubmittedMarks = {
   __typename?: 'PlayerSubmittedMarks';
   quizId: Scalars['ID'];
-  name: Scalars['String'];
+  playerName: Scalars['String'];
 };
 
 export type QuizSummaryQueryVariables = Exact<{
@@ -401,7 +413,7 @@ export type SubmitAnswersMutation = (
   { __typename?: 'Mutation' }
   & { submitAnswers: (
     { __typename?: 'PlayerSubmittedAnswers' }
-    & Pick<PlayerSubmittedAnswers, 'quizId' | 'name'>
+    & Pick<PlayerSubmittedAnswers, 'quizId' | 'playerName'>
   ) }
 );
 
@@ -414,7 +426,7 @@ export type SubmitMarksMutation = (
   { __typename?: 'Mutation' }
   & { submitMarks: (
     { __typename?: 'PlayerSubmittedMarks' }
-    & Pick<PlayerSubmittedMarks, 'quizId' | 'name'>
+    & Pick<PlayerSubmittedMarks, 'quizId' | 'playerName'>
   ) }
 );
 
@@ -500,6 +512,32 @@ export type PlayerJoinedSubscription = (
   & { playerJoined?: Maybe<(
     { __typename?: 'PlayerJoined' }
     & Pick<PlayerJoined, 'quizId' | 'playerName'>
+  )> }
+);
+
+export type PlayerSubmittedAnswersSubscriptionVariables = Exact<{
+  quizId: Scalars['ID'];
+}>;
+
+
+export type PlayerSubmittedAnswersSubscription = (
+  { __typename?: 'Subscription' }
+  & { playerSubmittedAnswers?: Maybe<(
+    { __typename?: 'PlayerSubmittedAnswers' }
+    & Pick<PlayerSubmittedAnswers, 'quizId' | 'playerName'>
+  )> }
+);
+
+export type PlayerSubmittedMarksSubscriptionVariables = Exact<{
+  quizId: Scalars['ID'];
+}>;
+
+
+export type PlayerSubmittedMarksSubscription = (
+  { __typename?: 'Subscription' }
+  & { playerSubmittedMarks?: Maybe<(
+    { __typename?: 'PlayerSubmittedMarks' }
+    & Pick<PlayerSubmittedMarks, 'quizId' | 'playerName'>
   )> }
 );
 
@@ -796,7 +834,7 @@ export const SubmitAnswersDocument = gql`
     mutation SubmitAnswers($input: SubmitAnswersInput!) {
   submitAnswers(input: $input) {
     quizId
-    name
+    playerName
   }
 }
     `;
@@ -829,7 +867,7 @@ export const SubmitMarksDocument = gql`
     mutation SubmitMarks($input: SubmitMarksInput!) {
   submitMarks(input: $input) {
     quizId
-    name
+    playerName
   }
 }
     `;
@@ -985,6 +1023,66 @@ export function usePlayerJoinedSubscription(baseOptions: Apollo.SubscriptionHook
       }
 export type PlayerJoinedSubscriptionHookResult = ReturnType<typeof usePlayerJoinedSubscription>;
 export type PlayerJoinedSubscriptionResult = Apollo.SubscriptionResult<PlayerJoinedSubscription>;
+export const PlayerSubmittedAnswersDocument = gql`
+    subscription PlayerSubmittedAnswers($quizId: ID!) {
+  playerSubmittedAnswers(quizId: $quizId) {
+    quizId
+    playerName
+  }
+}
+    `;
+
+/**
+ * __usePlayerSubmittedAnswersSubscription__
+ *
+ * To run a query within a React component, call `usePlayerSubmittedAnswersSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePlayerSubmittedAnswersSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePlayerSubmittedAnswersSubscription({
+ *   variables: {
+ *      quizId: // value for 'quizId'
+ *   },
+ * });
+ */
+export function usePlayerSubmittedAnswersSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayerSubmittedAnswersSubscription, PlayerSubmittedAnswersSubscriptionVariables>) {
+        return Apollo.useSubscription<PlayerSubmittedAnswersSubscription, PlayerSubmittedAnswersSubscriptionVariables>(PlayerSubmittedAnswersDocument, baseOptions);
+      }
+export type PlayerSubmittedAnswersSubscriptionHookResult = ReturnType<typeof usePlayerSubmittedAnswersSubscription>;
+export type PlayerSubmittedAnswersSubscriptionResult = Apollo.SubscriptionResult<PlayerSubmittedAnswersSubscription>;
+export const PlayerSubmittedMarksDocument = gql`
+    subscription PlayerSubmittedMarks($quizId: ID!) {
+  playerSubmittedMarks(quizId: $quizId) {
+    quizId
+    playerName
+  }
+}
+    `;
+
+/**
+ * __usePlayerSubmittedMarksSubscription__
+ *
+ * To run a query within a React component, call `usePlayerSubmittedMarksSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePlayerSubmittedMarksSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePlayerSubmittedMarksSubscription({
+ *   variables: {
+ *      quizId: // value for 'quizId'
+ *   },
+ * });
+ */
+export function usePlayerSubmittedMarksSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayerSubmittedMarksSubscription, PlayerSubmittedMarksSubscriptionVariables>) {
+        return Apollo.useSubscription<PlayerSubmittedMarksSubscription, PlayerSubmittedMarksSubscriptionVariables>(PlayerSubmittedMarksDocument, baseOptions);
+      }
+export type PlayerSubmittedMarksSubscriptionHookResult = ReturnType<typeof usePlayerSubmittedMarksSubscription>;
+export type PlayerSubmittedMarksSubscriptionResult = Apollo.SubscriptionResult<PlayerSubmittedMarksSubscription>;
 export const QuizStateDocument = gql`
     subscription QuizState($quizId: ID!) {
   nextQuizState(quizId: $quizId) {

@@ -1,12 +1,16 @@
-import { Quiz, QuizAction, Round, Question } from './quizTypes';
+import { Question, Quiz, QuizAction, Round } from './quizTypes';
 import {
-  QuizStatus,
-  RoundStarted,
-  RoundFinished,
+  PlayerJoined,
+  PlayerStatus,
+  PlayerSubmittedAnswers,
+  PlayerSubmittedMarks,
+  QuestionAnswered,
   QuestionAsked,
+  QuizStatus,
+  RoundFinished,
+  RoundStarted,
   RoundSummary,
 } from '../graphql/types';
-import { QuestionAnswered } from '../graphql/types';
 
 export const quizReducer = (
   quiz: Quiz = { rounds: [] },
@@ -63,6 +67,10 @@ export const quizReducer = (
         return {
           ...quiz,
           state,
+          players: quiz.players?.map((player) => ({
+            ...player,
+            status: PlayerStatus.Playing,
+          })),
           rounds: addNewRound(quiz.rounds, state.roundSummary),
         };
       }
@@ -92,6 +100,59 @@ export const quizReducer = (
       default:
         return { ...quiz, state: action.payload };
     }
+  }
+
+  if (action.type === 'PlayerJoined') {
+    const playerJoined = action.payload as PlayerJoined;
+
+    if (
+      quiz.players?.some((player) => player.name === playerJoined.playerName)
+    ) {
+      return quiz;
+    }
+
+    return {
+      ...quiz,
+      players: [
+        ...(quiz.players ?? []),
+        {
+          name: playerJoined.playerName,
+          status: PlayerStatus.Playing,
+        },
+      ],
+    };
+  }
+
+  if (action.type === 'PlayerSubmittedAnswers') {
+    const playerSubmittedAnswers = action.payload as PlayerSubmittedAnswers;
+
+    return {
+      ...quiz,
+      players: quiz.players?.map((player) =>
+        player.name === playerSubmittedAnswers.playerName
+          ? {
+              ...player,
+              status: PlayerStatus.AnswersSubmitted,
+            }
+          : player,
+      ),
+    };
+  }
+
+  if (action.type === 'PlayerSubmittedMarks') {
+    const playerSubmittedMarks = action.payload as PlayerSubmittedMarks;
+
+    return {
+      ...quiz,
+      players: quiz.players?.map((player) =>
+        player.name === playerSubmittedMarks.playerName
+          ? {
+              ...player,
+              status: PlayerStatus.MarksSubmitted,
+            }
+          : player,
+      ),
+    };
   }
 
   return quiz;

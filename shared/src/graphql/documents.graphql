@@ -114,14 +114,14 @@ mutation JoinQuiz($input: JoinQuizInput!) {
 mutation SubmitAnswers($input: SubmitAnswersInput!) {
   submitAnswers(input: $input) {
     quizId
-    name
+    playerName
   }
 }
 
 mutation SubmitMarks($input: SubmitMarksInput!) {
   submitMarks(input: $input) {
     quizId
-    name
+    playerName
   }
 }
 
@@ -198,6 +198,20 @@ mutation NextQuizState($input: NextQuizStateInput!) {
 
 subscription PlayerJoined($quizId: ID!) {
   playerJoined(quizId: $quizId) {
+    quizId
+    playerName
+  }
+}
+
+subscription PlayerSubmittedAnswers($quizId: ID!) {
+  playerSubmittedAnswers(quizId: $quizId) {
+    quizId
+    playerName
+  }
+}
+
+subscription PlayerSubmittedMarks($quizId: ID!) {
+  playerSubmittedMarks(quizId: $quizId) {
     quizId
     playerName
   }

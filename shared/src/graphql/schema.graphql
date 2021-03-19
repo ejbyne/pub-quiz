@@ -14,6 +14,10 @@ type Mutation {
 type Subscription {
   playerJoined(quizId: ID!): PlayerJoined
     @aws_subscribe(mutations: ["joinQuiz"])
+  playerSubmittedAnswers(quizId: ID!): PlayerSubmittedAnswers
+    @aws_subscribe(mutations: ["submitAnswers"])
+  playerSubmittedMarks(quizId: ID!): PlayerSubmittedMarks
+    @aws_subscribe(mutations: ["submitMarks"])
   nextQuizState(quizId: ID!): QuizState
     @aws_subscribe(mutations: ["nextQuizState"])
 }
@@ -184,10 +188,10 @@ type PlayerJoined {
 
 type PlayerSubmittedAnswers {
   quizId: ID!
-  name: String!
+  playerName: String!
 }
 
 type PlayerSubmittedMarks {
   quizId: ID!
-  name: String!
+  playerName: String!
 }

@@ -1,45 +1,19 @@
-import React, { useContext } from 'react';
-import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
-import {
-  useQuizStateSubscription,
-  useQuizSummaryQuery,
-} from '@pub-quiz/shared/src/graphql/types';
-import { getComponentFromStatus } from './getComponentFromStatus';
+import React from 'react';
 import { PlayersList } from './PlayersList';
+import { useLoadQuizSummary } from '../hooks/useLoadQuizSummary';
+import { useSubscribeToQuizUpdates } from '../hooks/useSubscribeToQuizUpdates';
 
 import BeerDarkImage from '../assets/images/beer-dark.svg';
+import { useCurrentStep } from '../hooks/useCurrentStep';
 
 export const App: React.FC = () => {
-  const [quiz, updateQuiz] = useContext(QuizContext);
-  const CurrentStep = getComponentFromStatus(quiz?.state?.status);
-
-  useQuizSummaryQuery({
-    variables: {
-      quizId: quiz?.quizId as any,
-    },
-    onCompleted: (data) => {
-      const quizSummary = data?.quizSummary;
-      if (quizSummary) {
-        updateQuiz({ type: 'QuizSummaryReceived', payload: quizSummary });
-      }
-    },
-    skip: !quiz.quizId,
-  });
-
-  useQuizStateSubscription({
-    variables: { quizId: quiz?.quizId as string },
-    onSubscriptionData: (data: any) => {
-      const nextQuizState = data?.subscriptionData?.data?.nextQuizState;
-      if (nextQuizState) {
-        updateQuiz({ type: 'NextQuizStateReceived', payload: nextQuizState });
-      }
-    },
-    skip: !quiz.quizId,
-  });
+  useLoadQuizSummary();
+  useSubscribeToQuizUpdates();
+  const CurrentStep = useCurrentStep();
 
   return (
     <div className="w-screen h-screen p-2 flex flex-col bg-gray-800 pub-wallpaper text-gray-200">
-      <header className="mb-2 w-full p-2 bg-white rounded">
+      <header className="mb-2 w-full px-4 py-2 bg-white rounded flex flex-col lg:flex-row lg:justify-between">
         <div className="flex items-center">
           <img src={BeerDarkImage} alt="Two pints of beer" className="w-14" />
           <h1 className="ml-2 uppercase text-2xl text-center font-serif select-none text-indigo-900">
