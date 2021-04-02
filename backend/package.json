@@ -12,11 +12,12 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.88.0",
-    "@aws-cdk/aws-appsync": "1.88.0",
-    "@aws-cdk/aws-dynamodb": "1.88.0",
-    "@aws-cdk/aws-lambda-nodejs": "1.88.0",
-    "@aws-cdk/core": "1.88.0",
+    "@aws-cdk/assert": "1.96.0",
+    "@aws-cdk/aws-appsync": "1.96.0",
+    "@aws-cdk/aws-cognito": "1.96.0",
+    "@aws-cdk/aws-dynamodb": "1.96.0",
+    "@aws-cdk/aws-lambda-nodejs": "1.96.0",
+    "@aws-cdk/core": "1.96.0",
     "@types/aws-lambda": "^8.10.56",
     "@types/lodash": "^4.14.166",
     "@types/node": "10.17.5",
