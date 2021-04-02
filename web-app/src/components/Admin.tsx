@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import {
+  AmplifyAuthenticator,
+  AmplifySignUp,
+  AmplifySignIn,
+  AmplifySignOut,
+} from '@aws-amplify/ui-react';
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import {
   useGenerateRandomQuizMutation,
   useNextQuizStateMutation,
 } from '@pub-quiz/shared/src/graphql/types';
+import { Layout } from './Layout';
 
 export const Admin: React.FC = () => {
   const [quizName, setQuizName] = useState<string>('');
@@ -30,10 +38,44 @@ export const Admin: React.FC = () => {
     },
   });
 
+  const [authState, setAuthState] = React.useState<AuthState>();
+  const [user, setUser] = React.useState<any>();
+
+  React.useEffect(() => {
+    return onAuthUIStateChange((nextAuthState, authData) => {
+      setAuthState(nextAuthState);
+      setUser(authData);
+    });
+  }, []);
+
+  if (authState !== AuthState.SignedIn || !user) {
+    return (
+      <Layout>
+        <div className="w-full h-full flex justify-center items-center">
+          <AmplifyAuthenticator>
+            <AmplifySignUp
+              usernameAlias="email"
+              slot="sign-up"
+              formFields={[{ type: 'email' }, { type: 'password' }]}
+            />
+            <AmplifySignIn
+              usernameAlias="email"
+              slot="sign-in"
+              formFields={[{ type: 'email' }, { type: 'password' }]}
+            />
+          </AmplifyAuthenticator>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
-    <div>
-      <h1>Admin</h1>
-      <section>
+    <Layout>
+      <section className="w-full px-6 py-6 flex flex-col bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
+        <div className="flex">
+          <h1>Admin</h1>
+          <AmplifySignOut />
+        </div>
         <form>
           <h2>Generate random quiz</h2>
           <input
@@ -54,13 +96,11 @@ export const Admin: React.FC = () => {
           </button>
           {generateQuizError ? <p>{generateQuizError.message}</p> : null}
         </form>
-      </section>
-      <section>
         <h2>Current quiz</h2>
         <h3>Name: {quizName}</h3>
         <h3>ID: {quizId}</h3>
         <button onClick={() => nextState()}>Next state</button>
       </section>
-    </div>
+    </Layout>
   );
 };

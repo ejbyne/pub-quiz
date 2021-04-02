@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
+    "@aws-amplify/ui-components": "^1.1.1",
+    "@aws-amplify/ui-react": "^1.0.6",
+    "aws-amplify": "^3.3.26",
     "aws-appsync-auth-link": "^3.0.2",
     "aws-appsync-subscription-link": "^3.0.4",
     "react": "^17.0.1",
