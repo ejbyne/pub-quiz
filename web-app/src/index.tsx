@@ -6,8 +6,8 @@ import { Amplify } from 'aws-amplify';
 
 Amplify.configure({
   region: 'eu-central-1',
-  userPoolId: 'eu-central-1_52ylSW8GG',
-  userPoolWebClientId: '2a2u96csdqrfjkhvdl2jeu3isg',
+  userPoolId: '***REMOVED***',
+  userPoolWebClientId: '***REMOVED***',
 });
 
 ReactDOM.render(

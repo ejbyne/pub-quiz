@@ -1,6 +1,6 @@
 export const awsConfig = {
-  apiKey: 'da2-shhopce4bvde5hxsz4dhyyepx4',
+  apiKey: 'da2-wclis3gikvgihlv3w5jzndn7gy',
   graphQlUrl:
-    'https://marc6gl3nnfqvckankbd4zfuie.appsync-api.eu-central-1.amazonaws.com/graphql',
+    '***REMOVED***',
   region: 'eu-central-1',
 };

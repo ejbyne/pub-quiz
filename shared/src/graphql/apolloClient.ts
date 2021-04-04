@@ -22,7 +22,7 @@ const httpLink = createHttpLink({ uri: graphQlUrl, fetch });
 
 const link = ApolloLink.from([
   createAuthLink({ url: graphQlUrl, region, auth }),
-  createSubscriptionHandshakeLink(graphQlUrl, httpLink),
+  createSubscriptionHandshakeLink({ url: graphQlUrl, region, auth }),
 ]);
 
 export const client = new ApolloClient({
