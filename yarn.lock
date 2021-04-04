@@ -5986,7 +5986,7 @@ aws-appsync-auth-link@^3.0.2, aws-appsync-auth-link@^3.0.4:
     aws-sdk "^2.814.0"
     debug "2.6.9"
 
-aws-appsync-subscription-link@^3.0.4:
+aws-appsync-subscription-link@^3.0.4, aws-appsync-subscription-link@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/aws-appsync-subscription-link/-/aws-appsync-subscription-link-3.0.6.tgz#d3fcf9465bbdc9702c46a645544e1e0d29f42f80"
   integrity sha512-8iXJt+b6q7r8GCN75JVwYMN8H0+3hrUHQ/sgdikmb/pE+lBjqFOyFg2Pfu8OYqsyxwVKkxywHRKYeV1+61opXw==
