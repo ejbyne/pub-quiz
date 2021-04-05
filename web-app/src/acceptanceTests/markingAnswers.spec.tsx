@@ -12,7 +12,7 @@ describe('submitting marks', () => {
   it("submits the player's marks", async () => {
     const mockSubmitMarks = jest.fn().mockReturnValue({
       quizId: 'RANDOM_ID',
-      name: 'Henry',
+      playerName: 'Henry',
     });
 
     const quizState = {

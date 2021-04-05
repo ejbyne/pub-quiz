@@ -3,16 +3,18 @@ import userEvent from '@testing-library/user-event';
 import {
   exampleQuestionAskedState,
   exampleQuizSummary,
+  exampleRoundFinishedState,
 } from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { App } from '../components/App';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
+import { receiveNextQuizState } from '../testSupport/receiveNextQuizState';
 
 describe('submitting answers', () => {
   it("submits the player's answers", async () => {
     const mockSubmitAnswers = jest.fn().mockReturnValue({
       quizId: 'RANDOM_ID',
-      name: 'Henry',
+      playerName: 'Henry',
     });
 
     const initialQuizState = {
@@ -60,6 +62,8 @@ describe('submitting answers', () => {
         'My second answer',
       );
 
+      receiveNextQuizState(exampleRoundFinishedState);
+
       userEvent.click(await screen.findByText('Submit answers'));
     });
 
@@ -78,12 +82,7 @@ describe('submitting answers', () => {
     );
   });
 
-  it('disables the submit button until all questions in the round have been asked', async () => {
-    const mockSubmitAnswers = jest.fn().mockReturnValue({
-      quizId: 'RANDOM_ID',
-      name: 'Henry',
-    });
-
+  it('hides the submit button until the round has been completed', async () => {
     const initialQuizState = {
       ...exampleQuizSummary,
       state: exampleQuestionAskedState,
@@ -100,25 +99,14 @@ describe('submitting answers', () => {
     await act(async () => {
       await render(
         <TestAppContainer
-          client={createMockGraphQlClient({
-            mockMutationResolvers: {
-              submitAnswers: mockSubmitAnswers,
-            },
-          })}
+          client={createMockGraphQlClient()}
           initialQuizState={initialQuizState}
         >
           <App />
         </TestAppContainer>,
       );
 
-      userEvent.type(
-        await screen.findByPlaceholderText('Answer 1'),
-        'My first answer',
-      );
-
-      userEvent.click(await screen.findByText('Submit answers'));
+      expect(screen.queryByText('Submit answers')).not.toBeInTheDocument();
     });
-
-    expect(mockSubmitAnswers).not.toHaveBeenCalled();
   });
 });
