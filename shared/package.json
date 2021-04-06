@@ -26,8 +26,8 @@
   "dependencies": {
     "@apollo/client": "^3.3.11",
     "@apollo/react-hooks": "^4.0.0",
-    "aws-appsync-auth-link": "^3.0.2",
-    "aws-appsync-subscription-link": "^3.0.4",
+    "aws-appsync-auth-link": "^3.0.4",
+    "aws-appsync-subscription-link": "^3.0.6",
     "graphql": "^15.5.0",
     "react": "^17.0.1"
   },

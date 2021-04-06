@@ -6,6 +6,8 @@ jobs:
 
   backend:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: '--max_old_space_size=4096'
     defaults:
       run:
         working-directory: ./backend
