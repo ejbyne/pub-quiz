@@ -1,17 +1,17 @@
 {
   "possibleTypes": {
-    "Question": [
-      "QuestionWithoutAnswer",
-      "QuestionWithAnswer"
+    "AskedQuestion": [
+      "AskedQuestionWithoutAnswer",
+      "AskedQuestionWithAnswer"
     ],
     "QuizState": [
-      "QuizNotYetStarted",
-      "RoundStarted",
-      "QuestionAsked",
-      "RoundFinished",
       "QuestionAnswered",
+      "QuestionAsked",
+      "QuizFinished",
+      "QuizNotYetStarted",
+      "RoundFinished",
       "RoundMarked",
-      "QuizFinished"
+      "RoundStarted"
     ]
   }
 }

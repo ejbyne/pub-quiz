@@ -85,6 +85,16 @@ export const createLambdaResolvers = (
     },
   });
 
+  const quizzesLambda = new NodejsFunction(scope, 'QuizzesLambda', {
+    functionName: 'quizzes-resolver',
+    entry: Path.join(__dirname, '../lambdas/quizzesLambda.ts'),
+    handler: 'quizzesLambda',
+    runtime: Runtime.NODEJS_12_X,
+    environment: {
+      QUIZ_TABLE_NAME: quizTable.tableName,
+    },
+  });
+
   // Rights
   quizTable.grantReadWriteData(generateRandomQuizLambda);
   quizTable.grantReadWriteData(saveQuizLambda);
@@ -93,6 +103,7 @@ export const createLambdaResolvers = (
   quizTable.grantReadData(quizSummaryLambda);
   quizTable.grantReadWriteData(submitAnswersLambda);
   quizTable.grantReadWriteData(submitMarksLambda);
+  quizTable.grantReadData(quizzesLambda);
 
   // Data sources
   const generateRandomQuizLambdaDataSource = api.addLambdaDataSource(
@@ -128,6 +139,11 @@ export const createLambdaResolvers = (
   const submitMarksLambdaDataSource = api.addLambdaDataSource(
     'SubmitMarksLambda',
     submitMarksLambda
+  );
+
+  const quizzesLambdaDataSource = api.addLambdaDataSource(
+    'QuizzesLambda',
+    quizzesLambda
   );
 
   // Resolvers
@@ -176,6 +192,13 @@ export const createLambdaResolvers = (
   submitMarksLambdaDataSource.createResolver({
     typeName: 'Mutation',
     fieldName: 'submitMarks',
+    requestMappingTemplate: MappingTemplate.lambdaRequest(),
+    responseMappingTemplate: MappingTemplate.lambdaResult(),
+  });
+
+  quizzesLambdaDataSource.createResolver({
+    typeName: 'Query',
+    fieldName: 'quizzes',
     requestMappingTemplate: MappingTemplate.lambdaRequest(),
     responseMappingTemplate: MappingTemplate.lambdaResult(),
   });

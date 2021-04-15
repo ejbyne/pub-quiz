@@ -1,4 +1,6 @@
 type Query {
+  quizzes: [Quiz!]!
+    @aws_cognito_user_pools
   quizSummary(quizId: ID!): QuizSummary!
 }
 
@@ -70,12 +72,29 @@ type QuizGenerated {
   quizName: String!
 }
 
+type Quiz {
+  quizId: ID!
+  quizName: String!
+  rounds: [Round!]!
+}
+
+type Round {
+  roundName: String!
+  questions: [Question!]!
+}
+
+type Question {
+  text: String!
+  options: [String!]
+  answer: String!
+}
+
 type QuizSummary {
   quizId: ID!
   quizName: String!
   playerNames: [String!]
   players: [Player!]
-  currentRound: [Question!]
+  currentRound: [AskedQuestion!]
   state: QuizState!
 }
 
@@ -96,15 +115,15 @@ enum PlayerStatus {
   MARKS_SUBMITTED
 }
 
-union Question = QuestionWithoutAnswer | QuestionWithAnswer
+union AskedQuestion = AskedQuestionWithoutAnswer | AskedQuestionWithAnswer
 
-type QuestionWithoutAnswer {
+type AskedQuestionWithoutAnswer {
   number: Int!
   text: String!
   options: [String!]
 }
 
-type QuestionWithAnswer {
+type AskedQuestionWithAnswer {
   number: Int!
   text: String!
   options: [String!]
@@ -152,7 +171,7 @@ type QuestionAsked implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
-  question: QuestionWithoutAnswer!
+  question: AskedQuestionWithoutAnswer!
 }
 
 type RoundFinished implements QuizState {
@@ -165,7 +184,7 @@ type QuestionAnswered implements QuizState {
   quizId: ID!
   status: QuizStatus!
   roundSummary: RoundSummary!
-  question: QuestionWithAnswer!
+  question: AskedQuestionWithAnswer!
 }
 
 type RoundMarked implements QuizState {
