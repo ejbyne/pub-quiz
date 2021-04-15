@@ -1,8 +1,13 @@
 import * as cdk from '@aws-cdk/core';
-import { FieldLogLevel, GraphqlApi, Schema } from '@aws-cdk/aws-appsync';
-import { BillingMode, Table, AttributeType } from '@aws-cdk/aws-dynamodb';
+import { CfnOutput, Duration, Expiration } from '@aws-cdk/core';
+import {
+  AuthorizationType,
+  FieldLogLevel,
+  GraphqlApi,
+  Schema,
+} from '@aws-cdk/aws-appsync';
+import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
 import { createLambdaResolvers } from './createLambdaResolvers';
-import { CfnOutput } from '@aws-cdk/core';
 import {
   UserPool,
   UserPoolClient,
@@ -12,28 +17,6 @@ import {
 export class PubQuizBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    // API
-
-    const api = new GraphqlApi(this, 'Api', {
-      name: 'pub-quiz-api',
-      logConfig: {
-        fieldLogLevel: FieldLogLevel.ALL,
-      },
-      schema: Schema.fromAsset(
-        require.resolve('../../../shared/src/graphql/schema.graphql')
-      ),
-    });
-
-    const quizTable = new Table(this, 'QuizTable', {
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      partitionKey: {
-        name: 'quizId',
-        type: AttributeType.STRING,
-      },
-    });
-
-    createLambdaResolvers(this, quizTable, api);
 
     // Cognito
 
@@ -56,6 +39,46 @@ export class PubQuizBackendStack extends cdk.Stack {
         userSrp: true,
       },
     });
+
+    // API
+
+    const api = new GraphqlApi(this, 'Api', {
+      name: 'pub-quiz-api',
+      logConfig: {
+        fieldLogLevel: FieldLogLevel.ALL,
+      },
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: AuthorizationType.API_KEY,
+          apiKeyConfig: {
+            name: 'pub-quiz-public-api-key',
+            expires: Expiration.after(Duration.days(365)),
+          },
+        },
+        additionalAuthorizationModes: [
+          {
+            authorizationType: AuthorizationType.USER_POOL,
+            userPoolConfig: {
+              userPool,
+            },
+          },
+        ],
+      },
+      schema: Schema.fromAsset(
+        require.resolve('../../../shared/src/graphql/schema.graphql')
+      ),
+      xrayEnabled: true,
+    });
+
+    const quizTable = new Table(this, 'QuizTable', {
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'quizId',
+        type: AttributeType.STRING,
+      },
+    });
+
+    createLambdaResolvers(this, quizTable, api);
 
     // Outputs
 
