@@ -68,19 +68,19 @@ describe('seeing answers', () => {
       },
       currentRound: [
         {
-          __typename: 'QuestionWithAnswer',
+          __typename: 'AskedQuestionWithAnswer',
           number: 0,
           text: 'The first question',
           answer: 'The first answer',
         },
         {
-          __typename: 'QuestionWithAnswer',
+          __typename: 'AskedQuestionWithAnswer',
           number: 1,
           text: 'The second question',
           answer: 'The second answer',
         },
         {
-          __typename: 'QuestionWithoutAnswer',
+          __typename: 'AskedQuestionWithoutAnswer',
           number: 2,
           text: 'The third question',
         },

@@ -15,6 +15,7 @@ import { client } from '@pub-quiz/shared/src/graphql/apolloClient';
 import { Admin } from './Admin';
 
 import '../styles/base.css';
+import { AdminAuth } from './AdminAuth';
 
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
@@ -33,7 +34,9 @@ export const AppContainer: React.FC = () => {
           <AnswerSheetContext.Provider value={[answerSheet, updateAnswerSheet]}>
             <Switch>
               <Route path="/admin">
-                <Admin />
+                <AdminAuth>
+                  <Admin />
+                </AdminAuth>
               </Route>
               <Route path="/">
                 <App />

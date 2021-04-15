@@ -4,6 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -13,14 +14,30 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  quizSummary: QuizSummary;
+export type AskedQuestion = AskedQuestionWithoutAnswer | AskedQuestionWithAnswer;
+
+export type AskedQuestionWithAnswer = {
+  __typename?: 'AskedQuestionWithAnswer';
+  number: Scalars['Int'];
+  text: Scalars['String'];
+  options?: Maybe<Array<Scalars['String']>>;
+  answer: Scalars['String'];
 };
 
+export type AskedQuestionWithoutAnswer = {
+  __typename?: 'AskedQuestionWithoutAnswer';
+  number: Scalars['Int'];
+  text: Scalars['String'];
+  options?: Maybe<Array<Scalars['String']>>;
+};
 
-export type QueryQuizSummaryArgs = {
+export type GenerateRandomQuizInput = {
+  quizName: Scalars['String'];
+};
+
+export type JoinQuizInput = {
   quizId: Scalars['ID'];
+  playerName: Scalars['String'];
 };
 
 export type Mutation = {
@@ -63,6 +80,203 @@ export type MutationSubmitMarksArgs = {
   input: SubmitMarksInput;
 };
 
+export type NextQuizStateInput = {
+  quizId: Scalars['ID'];
+};
+
+export type Player = {
+  __typename?: 'Player';
+  name: Scalars['String'];
+  status: PlayerStatus;
+};
+
+export type PlayerJoined = {
+  __typename?: 'PlayerJoined';
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+};
+
+export type PlayerMarks = {
+  __typename?: 'PlayerMarks';
+  playerName: Scalars['String'];
+  rounds: Array<PlayerMarksForRound>;
+  quizTotal: Scalars['Int'];
+};
+
+export type PlayerMarksForRound = {
+  __typename?: 'PlayerMarksForRound';
+  marks: Array<Scalars['Int']>;
+  roundTotal: Scalars['Int'];
+};
+
+export enum PlayerStatus {
+  Playing = 'PLAYING',
+  AnswersSubmitted = 'ANSWERS_SUBMITTED',
+  MarksSubmitted = 'MARKS_SUBMITTED'
+}
+
+export type PlayerSubmittedAnswers = {
+  __typename?: 'PlayerSubmittedAnswers';
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+};
+
+export type PlayerSubmittedMarks = {
+  __typename?: 'PlayerSubmittedMarks';
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  quizzes: Array<Quiz>;
+  quizSummary: QuizSummary;
+};
+
+
+export type QueryQuizSummaryArgs = {
+  quizId: Scalars['ID'];
+};
+
+export type Question = {
+  __typename?: 'Question';
+  text: Scalars['String'];
+  options?: Maybe<Array<Scalars['String']>>;
+  answer: Scalars['String'];
+};
+
+export type QuestionAnswered = QuizState & {
+  __typename?: 'QuestionAnswered';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+  question: AskedQuestionWithAnswer;
+};
+
+export type QuestionAsked = QuizState & {
+  __typename?: 'QuestionAsked';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+  question: AskedQuestionWithoutAnswer;
+};
+
+export type QuestionInput = {
+  text: Scalars['String'];
+  answer: Scalars['String'];
+  options?: Maybe<Array<Scalars['String']>>;
+};
+
+export type Quiz = {
+  __typename?: 'Quiz';
+  quizId: Scalars['ID'];
+  quizName: Scalars['String'];
+  rounds: Array<Round>;
+};
+
+export type QuizFinished = QuizState & {
+  __typename?: 'QuizFinished';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  marks: Array<PlayerMarks>;
+};
+
+export type QuizGenerated = {
+  __typename?: 'QuizGenerated';
+  quizId: Scalars['ID'];
+  quizName: Scalars['String'];
+};
+
+export type QuizNotYetStarted = QuizState & {
+  __typename?: 'QuizNotYetStarted';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+};
+
+export type QuizState = {
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+};
+
+export enum QuizStatus {
+  QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
+  RoundStarted = 'ROUND_STARTED',
+  QuestionAsked = 'QUESTION_ASKED',
+  RoundFinished = 'ROUND_FINISHED',
+  QuestionAnswered = 'QUESTION_ANSWERED',
+  RoundMarked = 'ROUND_MARKED',
+  QuizFinished = 'QUIZ_FINISHED'
+}
+
+export type QuizSummary = {
+  __typename?: 'QuizSummary';
+  quizId: Scalars['ID'];
+  quizName: Scalars['String'];
+  playerNames?: Maybe<Array<Scalars['String']>>;
+  players?: Maybe<Array<Player>>;
+  currentRound?: Maybe<Array<AskedQuestion>>;
+  state: QuizState;
+};
+
+export type Round = {
+  __typename?: 'Round';
+  roundName: Scalars['String'];
+  questions: Array<Question>;
+};
+
+export type RoundFinished = QuizState & {
+  __typename?: 'RoundFinished';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+};
+
+export type RoundInput = {
+  roundName: Scalars['String'];
+  questions: Array<QuestionInput>;
+};
+
+export type RoundMarked = QuizState & {
+  __typename?: 'RoundMarked';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+  marks: Array<PlayerMarks>;
+};
+
+export type RoundStarted = QuizState & {
+  __typename?: 'RoundStarted';
+  quizId: Scalars['ID'];
+  status: QuizStatus;
+  roundSummary: RoundSummary;
+};
+
+export type RoundSummary = {
+  __typename?: 'RoundSummary';
+  roundNumber: Scalars['Int'];
+  roundName: Scalars['String'];
+  numberOfQuestions: Scalars['Int'];
+};
+
+export type SaveQuizInput = {
+  quizName: Scalars['String'];
+  rounds: Array<RoundInput>;
+};
+
+export type SubmitAnswersInput = {
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+  roundNumber: Scalars['Int'];
+  answers: Array<Maybe<Scalars['String']>>;
+};
+
+export type SubmitMarksInput = {
+  quizId: Scalars['ID'];
+  playerName: Scalars['String'];
+  roundNumber: Scalars['Int'];
+  marks: Array<Maybe<Scalars['Int']>>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   playerJoined?: Maybe<PlayerJoined>;
@@ -91,197 +305,24 @@ export type SubscriptionNextQuizStateArgs = {
   quizId: Scalars['ID'];
 };
 
-export type GenerateRandomQuizInput = {
-  quizName: Scalars['String'];
-};
+export type QuizzesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type SaveQuizInput = {
-  quizName: Scalars['String'];
-  rounds: Array<RoundInput>;
-};
 
-export type RoundInput = {
-  roundName: Scalars['String'];
-  questions: Array<QuestionInput>;
-};
-
-export type QuestionInput = {
-  text: Scalars['String'];
-  answer: Scalars['String'];
-  options?: Maybe<Array<Scalars['String']>>;
-};
-
-export type JoinQuizInput = {
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-};
-
-export type NextQuizStateInput = {
-  quizId: Scalars['ID'];
-};
-
-export type SubmitAnswersInput = {
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-  roundNumber: Scalars['Int'];
-  answers: Array<Maybe<Scalars['String']>>;
-};
-
-export type SubmitMarksInput = {
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-  roundNumber: Scalars['Int'];
-  marks: Array<Maybe<Scalars['Int']>>;
-};
-
-export type QuizGenerated = {
-  __typename?: 'QuizGenerated';
-  quizId: Scalars['ID'];
-  quizName: Scalars['String'];
-};
-
-export type QuizSummary = {
-  __typename?: 'QuizSummary';
-  quizId: Scalars['ID'];
-  quizName: Scalars['String'];
-  playerNames?: Maybe<Array<Scalars['String']>>;
-  players?: Maybe<Array<Player>>;
-  currentRound?: Maybe<Array<Question>>;
-  state: QuizState;
-};
-
-export type RoundSummary = {
-  __typename?: 'RoundSummary';
-  roundNumber: Scalars['Int'];
-  roundName: Scalars['String'];
-  numberOfQuestions: Scalars['Int'];
-};
-
-export type Player = {
-  __typename?: 'Player';
-  name: Scalars['String'];
-  status: PlayerStatus;
-};
-
-export enum PlayerStatus {
-  Playing = 'PLAYING',
-  AnswersSubmitted = 'ANSWERS_SUBMITTED',
-  MarksSubmitted = 'MARKS_SUBMITTED'
-}
-
-export type Question = QuestionWithoutAnswer | QuestionWithAnswer;
-
-export type QuestionWithoutAnswer = {
-  __typename?: 'QuestionWithoutAnswer';
-  number: Scalars['Int'];
-  text: Scalars['String'];
-  options?: Maybe<Array<Scalars['String']>>;
-};
-
-export type QuestionWithAnswer = {
-  __typename?: 'QuestionWithAnswer';
-  number: Scalars['Int'];
-  text: Scalars['String'];
-  options?: Maybe<Array<Scalars['String']>>;
-  answer: Scalars['String'];
-};
-
-export type PlayerMarks = {
-  __typename?: 'PlayerMarks';
-  playerName: Scalars['String'];
-  rounds: Array<PlayerMarksForRound>;
-  quizTotal: Scalars['Int'];
-};
-
-export type PlayerMarksForRound = {
-  __typename?: 'PlayerMarksForRound';
-  marks: Array<Scalars['Int']>;
-  roundTotal: Scalars['Int'];
-};
-
-export enum QuizStatus {
-  QuizNotYetStarted = 'QUIZ_NOT_YET_STARTED',
-  RoundStarted = 'ROUND_STARTED',
-  QuestionAsked = 'QUESTION_ASKED',
-  RoundFinished = 'ROUND_FINISHED',
-  QuestionAnswered = 'QUESTION_ANSWERED',
-  RoundMarked = 'ROUND_MARKED',
-  QuizFinished = 'QUIZ_FINISHED'
-}
-
-export type QuizState = {
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-};
-
-export type QuizNotYetStarted = QuizState & {
-  __typename?: 'QuizNotYetStarted';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-};
-
-export type RoundStarted = QuizState & {
-  __typename?: 'RoundStarted';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-};
-
-export type QuestionAsked = QuizState & {
-  __typename?: 'QuestionAsked';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-  question: QuestionWithoutAnswer;
-};
-
-export type RoundFinished = QuizState & {
-  __typename?: 'RoundFinished';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-};
-
-export type QuestionAnswered = QuizState & {
-  __typename?: 'QuestionAnswered';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-  question: QuestionWithAnswer;
-};
-
-export type RoundMarked = QuizState & {
-  __typename?: 'RoundMarked';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  roundSummary: RoundSummary;
-  marks: Array<PlayerMarks>;
-};
-
-export type QuizFinished = QuizState & {
-  __typename?: 'QuizFinished';
-  quizId: Scalars['ID'];
-  status: QuizStatus;
-  marks: Array<PlayerMarks>;
-};
-
-export type PlayerJoined = {
-  __typename?: 'PlayerJoined';
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-};
-
-export type PlayerSubmittedAnswers = {
-  __typename?: 'PlayerSubmittedAnswers';
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-};
-
-export type PlayerSubmittedMarks = {
-  __typename?: 'PlayerSubmittedMarks';
-  quizId: Scalars['ID'];
-  playerName: Scalars['String'];
-};
+export type QuizzesQuery = (
+  { __typename?: 'Query' }
+  & { quizzes: Array<(
+    { __typename?: 'Quiz' }
+    & Pick<Quiz, 'quizId' | 'quizName'>
+    & { rounds: Array<(
+      { __typename?: 'Round' }
+      & Pick<Round, 'roundName'>
+      & { questions: Array<(
+        { __typename?: 'Question' }
+        & Pick<Question, 'text' | 'options' | 'answer'>
+      )> }
+    )> }
+  )> }
+);
 
 export type QuizSummaryQueryVariables = Exact<{
   quizId: Scalars['ID'];
@@ -297,20 +338,20 @@ export type QuizSummaryQuery = (
       { __typename?: 'Player' }
       & Pick<Player, 'name' | 'status'>
     )>>, currentRound?: Maybe<Array<(
-      { __typename?: 'QuestionWithoutAnswer' }
-      & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
+      { __typename?: 'AskedQuestionWithoutAnswer' }
+      & Pick<AskedQuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) | (
-      { __typename?: 'QuestionWithAnswer' }
-      & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
+      { __typename?: 'AskedQuestionWithAnswer' }
+      & Pick<AskedQuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     )>>, state: (
-      { __typename?: 'QuizNotYetStarted' }
-      & Pick<QuizNotYetStarted, 'quizId' | 'status'>
-    ) | (
-      { __typename?: 'RoundStarted' }
-      & Pick<RoundStarted, 'quizId' | 'status'>
+      { __typename?: 'QuestionAnswered' }
+      & Pick<QuestionAnswered, 'quizId' | 'status'>
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ), question: (
+        { __typename?: 'AskedQuestionWithAnswer' }
+        & Pick<AskedQuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
       ) }
     ) | (
       { __typename?: 'QuestionAsked' }
@@ -319,25 +360,29 @@ export type QuizSummaryQuery = (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
       ), question: (
-        { __typename?: 'QuestionWithoutAnswer' }
-        & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
+        { __typename?: 'AskedQuestionWithoutAnswer' }
+        & Pick<AskedQuestionWithoutAnswer, 'number' | 'text' | 'options'>
       ) }
+    ) | (
+      { __typename?: 'QuizFinished' }
+      & Pick<QuizFinished, 'quizId' | 'status'>
+      & { marks: Array<(
+        { __typename?: 'PlayerMarks' }
+        & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+        & { rounds: Array<(
+          { __typename?: 'PlayerMarksForRound' }
+          & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+        )> }
+      )> }
+    ) | (
+      { __typename?: 'QuizNotYetStarted' }
+      & Pick<QuizNotYetStarted, 'quizId' | 'status'>
     ) | (
       { __typename?: 'RoundFinished' }
       & Pick<RoundFinished, 'quizId' | 'status'>
       & { roundSummary: (
         { __typename?: 'RoundSummary' }
         & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-      ) }
-    ) | (
-      { __typename?: 'QuestionAnswered' }
-      & Pick<QuestionAnswered, 'quizId' | 'status'>
-      & { roundSummary: (
-        { __typename?: 'RoundSummary' }
-        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-      ), question: (
-        { __typename?: 'QuestionWithAnswer' }
-        & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
       ) }
     ) | (
       { __typename?: 'RoundMarked' }
@@ -354,16 +399,12 @@ export type QuizSummaryQuery = (
         )> }
       )> }
     ) | (
-      { __typename?: 'QuizFinished' }
-      & Pick<QuizFinished, 'quizId' | 'status'>
-      & { marks: Array<(
-        { __typename?: 'PlayerMarks' }
-        & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
-        & { rounds: Array<(
-          { __typename?: 'PlayerMarksForRound' }
-          & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
-        )> }
-      )> }
+      { __typename?: 'RoundStarted' }
+      & Pick<RoundStarted, 'quizId' | 'status'>
+      & { roundSummary: (
+        { __typename?: 'RoundSummary' }
+        & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+      ) }
     ) }
   ) }
 );
@@ -438,14 +479,14 @@ export type NextQuizStateMutationVariables = Exact<{
 export type NextQuizStateMutation = (
   { __typename?: 'Mutation' }
   & { nextQuizState: (
-    { __typename?: 'QuizNotYetStarted' }
-    & Pick<QuizNotYetStarted, 'quizId' | 'status'>
-  ) | (
-    { __typename?: 'RoundStarted' }
-    & Pick<RoundStarted, 'quizId' | 'status'>
+    { __typename?: 'QuestionAnswered' }
+    & Pick<QuestionAnswered, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ), question: (
+      { __typename?: 'AskedQuestionWithAnswer' }
+      & Pick<AskedQuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
     { __typename?: 'QuestionAsked' }
@@ -454,25 +495,29 @@ export type NextQuizStateMutation = (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ), question: (
-      { __typename?: 'QuestionWithoutAnswer' }
-      & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
+      { __typename?: 'AskedQuestionWithoutAnswer' }
+      & Pick<AskedQuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) }
+  ) | (
+    { __typename?: 'QuizFinished' }
+    & Pick<QuizFinished, 'quizId' | 'status'>
+    & { marks: Array<(
+      { __typename?: 'PlayerMarks' }
+      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+      & { rounds: Array<(
+        { __typename?: 'PlayerMarksForRound' }
+        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+      )> }
+    )> }
+  ) | (
+    { __typename?: 'QuizNotYetStarted' }
+    & Pick<QuizNotYetStarted, 'quizId' | 'status'>
   ) | (
     { __typename?: 'RoundFinished' }
     & Pick<RoundFinished, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ) }
-  ) | (
-    { __typename?: 'QuestionAnswered' }
-    & Pick<QuestionAnswered, 'quizId' | 'status'>
-    & { roundSummary: (
-      { __typename?: 'RoundSummary' }
-      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ), question: (
-      { __typename?: 'QuestionWithAnswer' }
-      & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
     { __typename?: 'RoundMarked' }
@@ -489,16 +534,12 @@ export type NextQuizStateMutation = (
       )> }
     )> }
   ) | (
-    { __typename?: 'QuizFinished' }
-    & Pick<QuizFinished, 'quizId' | 'status'>
-    & { marks: Array<(
-      { __typename?: 'PlayerMarks' }
-      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
-      & { rounds: Array<(
-        { __typename?: 'PlayerMarksForRound' }
-        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
-      )> }
-    )> }
+    { __typename?: 'RoundStarted' }
+    & Pick<RoundStarted, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   ) }
 );
 
@@ -549,14 +590,14 @@ export type QuizStateSubscriptionVariables = Exact<{
 export type QuizStateSubscription = (
   { __typename?: 'Subscription' }
   & { nextQuizState?: Maybe<(
-    { __typename?: 'QuizNotYetStarted' }
-    & Pick<QuizNotYetStarted, 'quizId' | 'status'>
-  ) | (
-    { __typename?: 'RoundStarted' }
-    & Pick<RoundStarted, 'quizId' | 'status'>
+    { __typename?: 'QuestionAnswered' }
+    & Pick<QuestionAnswered, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ), question: (
+      { __typename?: 'AskedQuestionWithAnswer' }
+      & Pick<AskedQuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
     { __typename?: 'QuestionAsked' }
@@ -565,25 +606,29 @@ export type QuizStateSubscription = (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
     ), question: (
-      { __typename?: 'QuestionWithoutAnswer' }
-      & Pick<QuestionWithoutAnswer, 'number' | 'text' | 'options'>
+      { __typename?: 'AskedQuestionWithoutAnswer' }
+      & Pick<AskedQuestionWithoutAnswer, 'number' | 'text' | 'options'>
     ) }
+  ) | (
+    { __typename?: 'QuizFinished' }
+    & Pick<QuizFinished, 'quizId' | 'status'>
+    & { marks: Array<(
+      { __typename?: 'PlayerMarks' }
+      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
+      & { rounds: Array<(
+        { __typename?: 'PlayerMarksForRound' }
+        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
+      )> }
+    )> }
+  ) | (
+    { __typename?: 'QuizNotYetStarted' }
+    & Pick<QuizNotYetStarted, 'quizId' | 'status'>
   ) | (
     { __typename?: 'RoundFinished' }
     & Pick<RoundFinished, 'quizId' | 'status'>
     & { roundSummary: (
       { __typename?: 'RoundSummary' }
       & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ) }
-  ) | (
-    { __typename?: 'QuestionAnswered' }
-    & Pick<QuestionAnswered, 'quizId' | 'status'>
-    & { roundSummary: (
-      { __typename?: 'RoundSummary' }
-      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
-    ), question: (
-      { __typename?: 'QuestionWithAnswer' }
-      & Pick<QuestionWithAnswer, 'number' | 'text' | 'options' | 'answer'>
     ) }
   ) | (
     { __typename?: 'RoundMarked' }
@@ -600,20 +645,59 @@ export type QuizStateSubscription = (
       )> }
     )> }
   ) | (
-    { __typename?: 'QuizFinished' }
-    & Pick<QuizFinished, 'quizId' | 'status'>
-    & { marks: Array<(
-      { __typename?: 'PlayerMarks' }
-      & Pick<PlayerMarks, 'playerName' | 'quizTotal'>
-      & { rounds: Array<(
-        { __typename?: 'PlayerMarksForRound' }
-        & Pick<PlayerMarksForRound, 'marks' | 'roundTotal'>
-      )> }
-    )> }
+    { __typename?: 'RoundStarted' }
+    & Pick<RoundStarted, 'quizId' | 'status'>
+    & { roundSummary: (
+      { __typename?: 'RoundSummary' }
+      & Pick<RoundSummary, 'roundNumber' | 'roundName' | 'numberOfQuestions'>
+    ) }
   )> }
 );
 
 
+export const QuizzesDocument = gql`
+    query Quizzes {
+  quizzes {
+    quizId
+    quizName
+    rounds {
+      roundName
+      questions {
+        text
+        options
+        answer
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useQuizzesQuery__
+ *
+ * To run a query within a React component, call `useQuizzesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuizzesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuizzesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQuizzesQuery(baseOptions?: Apollo.QueryHookOptions<QuizzesQuery, QuizzesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuizzesQuery, QuizzesQueryVariables>(QuizzesDocument, options);
+      }
+export function useQuizzesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuizzesQuery, QuizzesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuizzesQuery, QuizzesQueryVariables>(QuizzesDocument, options);
+        }
+export type QuizzesQueryHookResult = ReturnType<typeof useQuizzesQuery>;
+export type QuizzesLazyQueryHookResult = ReturnType<typeof useQuizzesLazyQuery>;
+export type QuizzesQueryResult = Apollo.QueryResult<QuizzesQuery, QuizzesQueryVariables>;
 export const QuizSummaryDocument = gql`
     query QuizSummary($quizId: ID!) {
   quizSummary(quizId: $quizId) {
@@ -625,12 +709,12 @@ export const QuizSummaryDocument = gql`
       status
     }
     currentRound {
-      ... on QuestionWithoutAnswer {
+      ... on AskedQuestionWithoutAnswer {
         number
         text
         options
       }
-      ... on QuestionWithAnswer {
+      ... on AskedQuestionWithAnswer {
         number
         text
         options
@@ -726,10 +810,12 @@ export const QuizSummaryDocument = gql`
  * });
  */
 export function useQuizSummaryQuery(baseOptions: Apollo.QueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
-        return Apollo.useQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, options);
       }
 export function useQuizSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuizSummaryQuery, QuizSummaryQueryVariables>) {
-          return Apollo.useLazyQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuizSummaryQuery, QuizSummaryQueryVariables>(QuizSummaryDocument, options);
         }
 export type QuizSummaryQueryHookResult = ReturnType<typeof useQuizSummaryQuery>;
 export type QuizSummaryLazyQueryHookResult = ReturnType<typeof useQuizSummaryLazyQuery>;
@@ -762,7 +848,8 @@ export type GenerateRandomQuizMutationFn = Apollo.MutationFunction<GenerateRando
  * });
  */
 export function useGenerateRandomQuizMutation(baseOptions?: Apollo.MutationHookOptions<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>) {
-        return Apollo.useMutation<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>(GenerateRandomQuizDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateRandomQuizMutation, GenerateRandomQuizMutationVariables>(GenerateRandomQuizDocument, options);
       }
 export type GenerateRandomQuizMutationHookResult = ReturnType<typeof useGenerateRandomQuizMutation>;
 export type GenerateRandomQuizMutationResult = Apollo.MutationResult<GenerateRandomQuizMutation>;
@@ -792,7 +879,8 @@ export type SaveQuizMutationFn = Apollo.MutationFunction<SaveQuizMutation, SaveQ
  * });
  */
 export function useSaveQuizMutation(baseOptions?: Apollo.MutationHookOptions<SaveQuizMutation, SaveQuizMutationVariables>) {
-        return Apollo.useMutation<SaveQuizMutation, SaveQuizMutationVariables>(SaveQuizDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveQuizMutation, SaveQuizMutationVariables>(SaveQuizDocument, options);
       }
 export type SaveQuizMutationHookResult = ReturnType<typeof useSaveQuizMutation>;
 export type SaveQuizMutationResult = Apollo.MutationResult<SaveQuizMutation>;
@@ -825,7 +913,8 @@ export type JoinQuizMutationFn = Apollo.MutationFunction<JoinQuizMutation, JoinQ
  * });
  */
 export function useJoinQuizMutation(baseOptions?: Apollo.MutationHookOptions<JoinQuizMutation, JoinQuizMutationVariables>) {
-        return Apollo.useMutation<JoinQuizMutation, JoinQuizMutationVariables>(JoinQuizDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinQuizMutation, JoinQuizMutationVariables>(JoinQuizDocument, options);
       }
 export type JoinQuizMutationHookResult = ReturnType<typeof useJoinQuizMutation>;
 export type JoinQuizMutationResult = Apollo.MutationResult<JoinQuizMutation>;
@@ -858,7 +947,8 @@ export type SubmitAnswersMutationFn = Apollo.MutationFunction<SubmitAnswersMutat
  * });
  */
 export function useSubmitAnswersMutation(baseOptions?: Apollo.MutationHookOptions<SubmitAnswersMutation, SubmitAnswersMutationVariables>) {
-        return Apollo.useMutation<SubmitAnswersMutation, SubmitAnswersMutationVariables>(SubmitAnswersDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitAnswersMutation, SubmitAnswersMutationVariables>(SubmitAnswersDocument, options);
       }
 export type SubmitAnswersMutationHookResult = ReturnType<typeof useSubmitAnswersMutation>;
 export type SubmitAnswersMutationResult = Apollo.MutationResult<SubmitAnswersMutation>;
@@ -891,7 +981,8 @@ export type SubmitMarksMutationFn = Apollo.MutationFunction<SubmitMarksMutation,
  * });
  */
 export function useSubmitMarksMutation(baseOptions?: Apollo.MutationHookOptions<SubmitMarksMutation, SubmitMarksMutationVariables>) {
-        return Apollo.useMutation<SubmitMarksMutation, SubmitMarksMutationVariables>(SubmitMarksDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitMarksMutation, SubmitMarksMutationVariables>(SubmitMarksDocument, options);
       }
 export type SubmitMarksMutationHookResult = ReturnType<typeof useSubmitMarksMutation>;
 export type SubmitMarksMutationResult = Apollo.MutationResult<SubmitMarksMutation>;
@@ -988,7 +1079,8 @@ export type NextQuizStateMutationFn = Apollo.MutationFunction<NextQuizStateMutat
  * });
  */
 export function useNextQuizStateMutation(baseOptions?: Apollo.MutationHookOptions<NextQuizStateMutation, NextQuizStateMutationVariables>) {
-        return Apollo.useMutation<NextQuizStateMutation, NextQuizStateMutationVariables>(NextQuizStateDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NextQuizStateMutation, NextQuizStateMutationVariables>(NextQuizStateDocument, options);
       }
 export type NextQuizStateMutationHookResult = ReturnType<typeof useNextQuizStateMutation>;
 export type NextQuizStateMutationResult = Apollo.MutationResult<NextQuizStateMutation>;
@@ -1019,7 +1111,8 @@ export const PlayerJoinedDocument = gql`
  * });
  */
 export function usePlayerJoinedSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>) {
-        return Apollo.useSubscription<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>(PlayerJoinedDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PlayerJoinedSubscription, PlayerJoinedSubscriptionVariables>(PlayerJoinedDocument, options);
       }
 export type PlayerJoinedSubscriptionHookResult = ReturnType<typeof usePlayerJoinedSubscription>;
 export type PlayerJoinedSubscriptionResult = Apollo.SubscriptionResult<PlayerJoinedSubscription>;
@@ -1049,7 +1142,8 @@ export const PlayerSubmittedAnswersDocument = gql`
  * });
  */
 export function usePlayerSubmittedAnswersSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayerSubmittedAnswersSubscription, PlayerSubmittedAnswersSubscriptionVariables>) {
-        return Apollo.useSubscription<PlayerSubmittedAnswersSubscription, PlayerSubmittedAnswersSubscriptionVariables>(PlayerSubmittedAnswersDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PlayerSubmittedAnswersSubscription, PlayerSubmittedAnswersSubscriptionVariables>(PlayerSubmittedAnswersDocument, options);
       }
 export type PlayerSubmittedAnswersSubscriptionHookResult = ReturnType<typeof usePlayerSubmittedAnswersSubscription>;
 export type PlayerSubmittedAnswersSubscriptionResult = Apollo.SubscriptionResult<PlayerSubmittedAnswersSubscription>;
@@ -1079,7 +1173,8 @@ export const PlayerSubmittedMarksDocument = gql`
  * });
  */
 export function usePlayerSubmittedMarksSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayerSubmittedMarksSubscription, PlayerSubmittedMarksSubscriptionVariables>) {
-        return Apollo.useSubscription<PlayerSubmittedMarksSubscription, PlayerSubmittedMarksSubscriptionVariables>(PlayerSubmittedMarksDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PlayerSubmittedMarksSubscription, PlayerSubmittedMarksSubscriptionVariables>(PlayerSubmittedMarksDocument, options);
       }
 export type PlayerSubmittedMarksSubscriptionHookResult = ReturnType<typeof usePlayerSubmittedMarksSubscription>;
 export type PlayerSubmittedMarksSubscriptionResult = Apollo.SubscriptionResult<PlayerSubmittedMarksSubscription>;
@@ -1180,7 +1275,8 @@ export const QuizStateDocument = gql`
  * });
  */
 export function useQuizStateSubscription(baseOptions: Apollo.SubscriptionHookOptions<QuizStateSubscription, QuizStateSubscriptionVariables>) {
-        return Apollo.useSubscription<QuizStateSubscription, QuizStateSubscriptionVariables>(QuizStateDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<QuizStateSubscription, QuizStateSubscriptionVariables>(QuizStateDocument, options);
       }
 export type QuizStateSubscriptionHookResult = ReturnType<typeof useQuizStateSubscription>;
 export type QuizStateSubscriptionResult = Apollo.SubscriptionResult<QuizStateSubscription>;

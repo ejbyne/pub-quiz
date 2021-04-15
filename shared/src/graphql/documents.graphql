@@ -1,3 +1,18 @@
+query Quizzes {
+  quizzes {
+    quizId
+    quizName
+    rounds {
+      roundName
+      questions {
+        text
+        options
+        answer
+      }
+    }
+  }
+}
+
 query QuizSummary($quizId: ID!) {
   quizSummary(quizId: $quizId) {
     quizId
@@ -9,12 +24,12 @@ query QuizSummary($quizId: ID!) {
     }
 
     currentRound {
-      ... on QuestionWithoutAnswer {
+      ... on AskedQuestionWithoutAnswer {
         number
         text
         options
       }
-      ... on QuestionWithAnswer {
+      ... on AskedQuestionWithAnswer {
         number
         text
         options

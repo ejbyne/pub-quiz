@@ -144,12 +144,12 @@ describe('seeing questions', () => {
       },
       currentRound: [
         {
-          __typename: 'QuestionWithoutAnswer',
+          __typename: 'AskedQuestionWithoutAnswer',
           number: 0,
           text: 'The first question',
         },
         {
-          __typename: 'QuestionWithoutAnswer',
+          __typename: 'AskedQuestionWithoutAnswer',
           number: 1,
           text: 'The second question',
         },
