@@ -7,7 +7,7 @@ import fragmentTypes from '../graphql/fragmentTypes.json';
 
 const schemaString =
   'directive @aws_subscribe(mutations : [String]!) on FIELD_DEFINITION \n' +
-  'directive @aws_cognito_user_pools on FIELD_DEFINITION \n' +
+  'directive @aws_cognito_user_pools on FIELD_DEFINITION | OBJECT \n' +
   readFileSync(require.resolve('../graphql/schema.graphql'), 'utf-8');
 
 export const createMockGraphQlClient = (mockResolvers?: {

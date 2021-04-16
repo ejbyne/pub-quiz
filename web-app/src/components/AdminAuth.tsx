@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
 import { Layout } from './Layout';
 import {
   AmplifyAuthenticator,
@@ -7,14 +8,16 @@ import {
   AmplifySignUp,
 } from '@aws-amplify/ui-react';
 
+let session: CognitoUserSession;
+export const getSession = () => session;
+
 export const AdminAuth: React.FC<PropsWithChildren<any>> = ({ children }) => {
   const [authState, setAuthState] = React.useState<AuthState>();
   const [user, setUser] = React.useState<any>();
 
-  console.log(authState, user);
-
   React.useEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
+      session = (authData as any).signInUserSession;
       setAuthState(nextAuthState);
       setUser(authData);
     });

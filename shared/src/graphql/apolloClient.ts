@@ -2,10 +2,10 @@ import { createAuthLink, AUTH_TYPE } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/react-hooks';
-import { Auth } from 'aws-amplify';
 import fragmentTypes from './fragmentTypes.json';
 
 import { awsConfig } from '../awsConfig';
+import { getSession } from '@pub-quiz/web-app/src/components/AdminAuth';
 
 const { apiKey, graphQlUrl, region } = awsConfig;
 
@@ -23,8 +23,9 @@ const userPoolAuthLink = createAuthLink({
   region,
   auth: {
     type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
-    jwtToken: async () =>
-      (await Auth.currentSession())?.getAccessToken().getJwtToken(),
+    jwtToken: () => {
+      return getSession().getIdToken().getJwtToken();
+    },
   },
 });
 
@@ -52,4 +53,6 @@ export const client = new ApolloClient({
   }),
 });
 
-const isAdminResource = (operationName: string) => false;
+const isAdminResource = (operationName: string) => {
+  return operationName === 'Quizzes';
+};
