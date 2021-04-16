@@ -72,18 +72,18 @@ type QuizGenerated {
   quizName: String!
 }
 
-type Quiz {
+type Quiz @aws_cognito_user_pools {
   quizId: ID!
   quizName: String!
   rounds: [Round!]!
 }
 
-type Round {
+type Round @aws_cognito_user_pools {
   roundName: String!
   questions: [Question!]!
 }
 
-type Question {
+type Question @aws_cognito_user_pools {
   text: String!
   options: [String!]
   answer: String!

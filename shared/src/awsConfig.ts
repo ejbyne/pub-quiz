@@ -1,5 +1,5 @@
 export const awsConfig = {
-  apiKey: 'da2-wclis3gikvgihlv3w5jzndn7gy',
+  apiKey: '***REMOVED***',
   graphQlUrl:
     '***REMOVED***',
   region: 'eu-central-1',
