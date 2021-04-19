@@ -1,0 +1,16 @@
+version: 1.0
+frontend:
+  phases:
+    build:
+      commands:
+        - cd web-app
+        - yarn install --frozen-lockfile
+        - yarn build
+    test:
+      commands:
+        - cd web-app
+        - yarn test
+  artifacts:
+    baseDirectory: web-app/build
+    files:
+      - '**/*'
