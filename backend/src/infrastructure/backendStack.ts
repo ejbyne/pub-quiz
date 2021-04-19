@@ -116,6 +116,8 @@ export class PubQuizBackendStack extends cdk.Stack {
       ],
     });
 
+    amplifyApp.addBranch('master');
+
     // Outputs
 
     new CfnOutput(this, 'GraphQlUrl', {
