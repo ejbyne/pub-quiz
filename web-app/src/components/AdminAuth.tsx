@@ -17,7 +17,7 @@ export const AdminAuth: React.FC<PropsWithChildren<any>> = ({ children }) => {
 
   React.useEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
-      session = (authData as any).signInUserSession;
+      session = (authData as any)?.signInUserSession;
       setAuthState(nextAuthState);
       setUser(authData);
     });
