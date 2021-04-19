@@ -18,6 +18,7 @@ import {
   UserPoolClient,
   VerificationEmailStyle,
 } from '@aws-cdk/aws-cognito';
+import { PublicHostedZone } from '@aws-cdk/aws-route53';
 
 export class PubQuizBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -117,6 +118,12 @@ export class PubQuizBackendStack extends cdk.Stack {
     });
 
     amplifyApp.addBranch('master');
+
+    // Route 53
+
+    new PublicHostedZone(this, 'HostedZone', {
+      zoneName: 'theonlinepubquiz.app',
+    });
 
     // Outputs
 
