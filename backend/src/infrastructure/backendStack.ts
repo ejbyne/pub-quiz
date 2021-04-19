@@ -7,6 +7,11 @@ import {
   Schema,
 } from '@aws-cdk/aws-appsync';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
+import {
+  App,
+  GitHubSourceCodeProvider,
+  RedirectStatus,
+} from '@aws-cdk/aws-amplify';
 import { createLambdaResolvers } from './createLambdaResolvers';
 import {
   UserPool,
@@ -80,6 +85,37 @@ export class PubQuizBackendStack extends cdk.Stack {
 
     createLambdaResolvers(this, quizTable, api);
 
+    // Web app
+
+    const githubOauthToken = cdk.SecretValue.secretsManager(
+      'pub-quiz-secrets',
+      {
+        jsonField: 'github-oauth-token',
+      }
+    );
+
+    const amplifyApp = new App(this, 'PubQuizWebApp', {
+      sourceCodeProvider: new GitHubSourceCodeProvider({
+        repository: 'pub-quiz',
+        owner: 'ejbyne',
+        oauthToken: githubOauthToken,
+      }),
+      customRules: [
+        {
+          source: '/api/<*>',
+          target: `${api.graphqlUrl}/<*>`,
+          status: RedirectStatus.REWRITE,
+        },
+        // careful, the redirect rule documented at https://docs.aws.amazon.com/amplify/latest/userguide/redirects.html does not work with filenames with more than 1 dot (foo.hash.ext)
+        {
+          source:
+            '</^((?!.(css|gif|ico|jpg|js|json|png|txt|svg|woff|ttf|map)$).)*$/>',
+          target: '/',
+          status: RedirectStatus.REWRITE,
+        },
+      ],
+    });
+
     // Outputs
 
     new CfnOutput(this, 'GraphQlUrl', {
@@ -92,6 +128,10 @@ export class PubQuizBackendStack extends cdk.Stack {
 
     new CfnOutput(this, 'UserPoolClientId', {
       value: userPoolClient.userPoolClientId,
+    });
+
+    new CfnOutput(this, 'AmplifyUrl', {
+      value: amplifyApp.defaultDomain,
     });
   }
 }
