@@ -18,6 +18,7 @@
     "@aws-cdk/aws-cognito": "1.96.0",
     "@aws-cdk/aws-dynamodb": "1.96.0",
     "@aws-cdk/aws-lambda-nodejs": "1.96.0",
+    "@aws-cdk/aws-route53": "1.96.0",
     "@aws-cdk/core": "1.96.0",
     "@types/aws-lambda": "^8.10.56",
     "@types/jest": "^26.0.22",
@@ -43,7 +44,6 @@
     "typescript": "^4.1.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-route53": "1.96.0",
     "aws-sdk": "^2.700.0",
     "html-entities": "^1.4.0",
     "lodash": "^4.17.15",
