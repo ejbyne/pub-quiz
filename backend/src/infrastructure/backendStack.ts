@@ -86,6 +86,12 @@ export class PubQuizBackendStack extends cdk.Stack {
 
     createLambdaResolvers(this, quizTable, api);
 
+    // Route 53
+
+    new PublicHostedZone(this, 'HostedZone', {
+      zoneName: 'theonlinepubquiz.app',
+    });
+
     // Web app
 
     const githubOauthToken = cdk.SecretValue.secretsManager(
@@ -117,12 +123,16 @@ export class PubQuizBackendStack extends cdk.Stack {
       ],
     });
 
-    amplifyApp.addBranch('master');
+    const amplifyBranch = amplifyApp.addBranch('master');
 
-    // Route 53
-
-    new PublicHostedZone(this, 'HostedZone', {
-      zoneName: 'theonlinepubquiz.app',
+    amplifyApp.addDomain('Domain', {
+      domainName: 'theonlinepubquiz.app',
+      subDomains: [
+        {
+          branch: amplifyBranch,
+          prefix: '',
+        },
+      ],
     });
 
     // Outputs
