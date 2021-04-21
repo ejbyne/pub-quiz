@@ -107,6 +107,9 @@ export class PubQuizBackendStack extends cdk.Stack {
         owner: 'ejbyne',
         oauthToken: githubOauthToken,
       }),
+      environmentVariables: {
+        NODE_OPTIONS: '-max-old-space-size=8192',
+      },
       customRules: [
         {
           source: '/api/<*>',
