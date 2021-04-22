@@ -1,15 +1,17 @@
 version: 1.0
 frontend:
   phases:
-    build:
+    preBuild:
       commands:
+        - nvm use $VERSION_NODE_12
         - cd web-app
         - yarn install --frozen-lockfile
-        - yarn build
-    test:
+    build:
       commands:
-        - cd web-app
-        - yarn test
+        - yarn build
+#    test:
+#      commands:
+#        - yarn test
   artifacts:
     baseDirectory: web-app/build
     files:
