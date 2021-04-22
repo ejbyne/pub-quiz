@@ -107,15 +107,12 @@ export class PubQuizBackendStack extends cdk.Stack {
         owner: 'ejbyne',
         oauthToken: githubOauthToken,
       }),
-      environmentVariables: {
-        NODE_OPTIONS: '-max-old-space-size=4096',
-      },
       customRules: [
-        // {
-        //   source: '/api/<*>',
-        //   target: `${api.graphqlUrl}/<*>`,
-        //   status: RedirectStatus.REWRITE,
-        // },
+        {
+          source: '/api/<*>',
+          target: `${api.graphqlUrl}/<*>`,
+          status: RedirectStatus.REWRITE,
+        },
         // careful, the redirect rule documented at https://docs.aws.amazon.com/amplify/latest/userguide/redirects.html does not work with filenames with more than 1 dot (foo.hash.ext)
         {
           source:
