@@ -12,10 +12,9 @@ import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
 import { answerSheetReducer } from '@pub-quiz/shared/src/domain/answerSheetReducer';
 import { client } from '@pub-quiz/shared/src/graphql/apolloClient';
-import { Admin } from './Admin';
 
 import '../styles/base.css';
-import { AdminAuth } from './AdminAuth';
+import { Routes } from './Routes';
 
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
@@ -32,16 +31,7 @@ export const AppContainer: React.FC = () => {
       <ApolloProvider client={client}>
         <QuizContext.Provider value={[quiz, updateQuiz]}>
           <AnswerSheetContext.Provider value={[answerSheet, updateAnswerSheet]}>
-            <Switch>
-              <Route path="/admin">
-                <AdminAuth>
-                  <Admin />
-                </AdminAuth>
-              </Route>
-              <Route path="/">
-                <App />
-              </Route>
-            </Switch>
+            <Routes />
           </AnswerSheetContext.Provider>
         </QuizContext.Provider>
       </ApolloProvider>

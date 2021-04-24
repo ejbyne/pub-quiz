@@ -5,7 +5,7 @@ import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/react-hooks';
 import fragmentTypes from './fragmentTypes.json';
 
 import { awsConfig } from '../awsConfig';
-import { getSession } from '@pub-quiz/web-app/src/components/AdminAuth';
+import { getSession } from '@pub-quiz/web-app/src/components/withAuth';
 
 const { apiKey, graphQlUrl, region } = awsConfig;
 

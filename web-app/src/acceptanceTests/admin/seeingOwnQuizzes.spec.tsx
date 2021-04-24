@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { Admin } from '../../components/Admin';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
+import { Routes } from '../../components/Routes';
+import { MemoryRouter } from 'react-router';
 
 describe('seeing own quizzes', () => {
   it("displays the host's quizzes", async () => {
@@ -25,7 +27,9 @@ describe('seeing own quizzes', () => {
           },
         })}
       >
-        <Admin />
+        <MemoryRouter initialEntries={['/my-quizzes']}>
+          <Routes />
+        </MemoryRouter>
       </TestAppContainer>,
     );
 

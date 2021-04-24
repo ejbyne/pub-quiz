@@ -1,4 +1,7 @@
-import { exampleQuestionAnsweredState, exampleQuizSummary } from '@pub-quiz/shared/src/testSupport/testFixtures';
+import {
+  exampleQuestionAnsweredState,
+  exampleQuizSummary,
+} from '@pub-quiz/shared/src/testSupport/testFixtures';
 import { render } from '@testing-library/react';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
@@ -34,7 +37,8 @@ it('finishes the quiz', async () => {
   const { findByText } = render(
     <TestAppContainer
       client={createMockGraphQlClient()}
-      initialQuizState={initialQuizState}>
+      initialQuizState={initialQuizState}
+    >
       <App />
     </TestAppContainer>,
   );
@@ -43,6 +47,7 @@ it('finishes the quiz', async () => {
     __typename: 'QuizFinished',
     quizId: 'RANDOM_ID',
     status: QuizStatus.QuizFinished,
+    marks: [],
   });
 
   expect(await findByText('Quiz complete')).toBeTruthy();
