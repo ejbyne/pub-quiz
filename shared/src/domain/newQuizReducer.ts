@@ -1,7 +1,7 @@
 import { NewQuizAction } from './newQuizTypes';
 import { SaveQuizInput } from '../graphql/types';
 
-const emptyQuiz = {
+export const emptyQuiz = {
   quizName: '',
   rounds: [
     {
