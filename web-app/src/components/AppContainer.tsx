@@ -1,7 +1,6 @@
 import React, { useReducer, Reducer } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { App } from './App';
+import { BrowserRouter } from 'react-router-dom';
 import { Quiz, QuizAction } from '@pub-quiz/shared/src/domain/quizTypes';
 import {
   AnswerSheet,
