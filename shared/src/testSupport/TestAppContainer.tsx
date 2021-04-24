@@ -7,6 +7,10 @@ import { QuizContext } from '../context/quizContext';
 import { AnswerSheetContext } from '../context/answerSheetContext';
 import { answerSheetReducer } from '../domain/answerSheetReducer';
 
+jest.mock('@pub-quiz/web-app/src/components/withAuth', () => ({
+  withAuth: (Component: React.FC<any>) => Component,
+}));
+
 let mockUpdateQuiz: Dispatch<QuizAction>;
 
 export const receiveNextQuizState = (payload: NextQuizState) =>
