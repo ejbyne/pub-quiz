@@ -25,6 +25,10 @@ module.exports = {
           '@apollo/react-hooks': './node_modules/@apollo/react-hooks',
           '@apollo/client': './node_modules/@apollo/client',
           graphql: './node_modules/graphql',
+          '@aws-amplify/ui-components':
+            './node_modules/@aws-amplify/ui-components',
+          '@aws-amplify/ui-react': './node_modules/@aws-amplify/ui-react',
+          'aws-amplify': './node_modules/aws-amplify',
         },
       },
     },

@@ -2,19 +2,20 @@ import { Route, Switch } from 'react-router-dom';
 import { Admin } from './Admin';
 import { App } from './App';
 import React from 'react';
-import { withAuth } from './withAuth';
 import { NewQuiz } from './NewQuiz';
-
-const AdminWithAuth = withAuth(Admin);
-const NewQuizWithAuth = withAuth(NewQuiz);
+import { AuthenticatedRoute } from './AuthenticatedRoute';
+import { Login } from './Login';
 
 export const Routes = () => (
   <Switch>
-    <Route path="/my-quizzes">
-      <AdminWithAuth />
-    </Route>
-    <Route path="/new-quiz">
-      <NewQuizWithAuth />
+    <AuthenticatedRoute path="/my-quizzes">
+      <Admin />
+    </AuthenticatedRoute>
+    <AuthenticatedRoute path="/new-quiz">
+      <NewQuiz />
+    </AuthenticatedRoute>
+    <Route path="/login">
+      <Login />
     </Route>
     <Route path="/">
       <App />
