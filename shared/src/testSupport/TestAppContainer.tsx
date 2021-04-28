@@ -7,8 +7,8 @@ import { QuizContext } from '../context/quizContext';
 import { AnswerSheetContext } from '../context/answerSheetContext';
 import { answerSheetReducer } from '../domain/answerSheetReducer';
 
-jest.mock('@pub-quiz/web-app/src/components/withAuth', () => ({
-  withAuth: (Component: React.FC<any>) => Component,
+jest.mock('../hooks/useIsAuthenticated', () => ({
+  useIsAuthenticated: () => true,
 }));
 
 let mockUpdateQuiz: Dispatch<QuizAction>;

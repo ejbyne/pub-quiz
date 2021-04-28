@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestAppContainer } from '@pub-quiz/shared/src/testSupport/TestAppContainer';
-import { Admin } from '../../components/Admin';
 import { createMockGraphQlClient } from '@pub-quiz/shared/src/testSupport/mockGraphQlClient';
 import { Routes } from '../../components/Routes';
 import { MemoryRouter } from 'react-router';

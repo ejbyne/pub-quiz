@@ -1,4 +1,7 @@
-import { getQuizHistory, saveQuizRecord } from '../localStorage/quizHistory';
+import {
+  getQuizHistory,
+  saveQuizRecord,
+} from '@pub-quiz/web-app/src/localStorage/quizHistory';
 import { useJoinQuizMutation } from '@pub-quiz/shared/src/graphql/types';
 
 export const useJoinQuiz = (

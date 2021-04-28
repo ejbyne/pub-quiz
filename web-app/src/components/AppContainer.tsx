@@ -14,6 +14,7 @@ import { client } from '@pub-quiz/shared/src/graphql/apolloClient';
 
 import '../styles/base.css';
 import { Routes } from './Routes';
+import { IsAuthenticatedProvider } from './IsAuthenticatedProvider';
 
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(
@@ -28,11 +29,15 @@ export const AppContainer: React.FC = () => {
   return (
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <QuizContext.Provider value={[quiz, updateQuiz]}>
-          <AnswerSheetContext.Provider value={[answerSheet, updateAnswerSheet]}>
-            <Routes />
-          </AnswerSheetContext.Provider>
-        </QuizContext.Provider>
+        <IsAuthenticatedProvider>
+          <QuizContext.Provider value={[quiz, updateQuiz]}>
+            <AnswerSheetContext.Provider
+              value={[answerSheet, updateAnswerSheet]}
+            >
+              <Routes />
+            </AnswerSheetContext.Provider>
+          </QuizContext.Provider>
+        </IsAuthenticatedProvider>
       </ApolloProvider>
     </BrowserRouter>
   );
