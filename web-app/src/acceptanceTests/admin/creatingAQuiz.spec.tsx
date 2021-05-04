@@ -29,7 +29,7 @@ describe('creating a quiz', () => {
     );
     userEvent.type(question1.getByLabelText('Answer'), 'The first answer');
 
-    userEvent.click(screen.getByText('Add question'));
+    userEvent.click(screen.getByTitle('Add question'));
 
     const question2 = within(
       screen.getByText('Question 2').parentElement!.parentElement!,
@@ -52,7 +52,7 @@ describe('creating a quiz', () => {
 
     userEvent.click(screen.getByText('Create a quiz'));
 
-    userEvent.click(screen.getByText('Add round'));
+    userEvent.click(screen.getByTitle('Add round'));
 
     const round2 = within(
       screen.getByText('Round 2 of 2').parentElement!.parentElement!,
@@ -90,7 +90,7 @@ describe('creating a quiz', () => {
     );
     userEvent.type(question1.getByLabelText('Answer'), 'The first answer');
 
-    userEvent.click(screen.getByText('Add question'));
+    userEvent.click(screen.getByTitle('Add question'));
 
     const question2 = within(
       screen.getByText('Question 2').parentElement!.parentElement!,
@@ -101,7 +101,7 @@ describe('creating a quiz', () => {
     );
     userEvent.type(question2.getByLabelText('Answer'), 'The second answer');
 
-    userEvent.click(question1.getByText('Remove question'));
+    userEvent.click(question1.getByTitle('Remove question'));
 
     expect(
       screen.queryByDisplayValue('The first question'),
@@ -120,14 +120,14 @@ describe('creating a quiz', () => {
 
     userEvent.click(screen.getByText('Create a quiz'));
     userEvent.type(screen.getByLabelText('Round name'), 'The first round');
-    userEvent.click(screen.getByText('Add round'));
+    userEvent.click(screen.getByTitle('Add round'));
     userEvent.type(screen.getByLabelText('Round name'), 'The second round');
-    userEvent.click(screen.getByText('Previous round'));
+    userEvent.click(screen.getByTitle('Previous round'));
 
     const round1 = within(
       screen.getByText('Round 1 of 2').parentElement!.parentElement!,
     );
-    userEvent.click(round1.getByText('Remove round'));
+    userEvent.click(round1.getByTitle('Remove round'));
 
     expect(
       screen.queryByDisplayValue('The first round'),

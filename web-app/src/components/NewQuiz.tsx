@@ -6,6 +6,10 @@ import {
   emptyQuiz,
   newQuizReducer,
 } from '@pub-quiz/shared/src/domain/newQuizReducer';
+import { ReactComponent as FastForward } from '../assets/icons/fast-forward.svg';
+import { ReactComponent as Rewind } from '../assets/icons/rewind.svg';
+import { ReactComponent as Delete } from '../assets/icons/delete.svg';
+import { ReactComponent as PlusCircle } from '../assets/icons/plus-circle.svg';
 
 export const NewQuiz = () => {
   const [newQuiz, updateNewQuiz] = useReducer<
@@ -14,6 +18,7 @@ export const NewQuiz = () => {
 
   const [selectedRound, setSelectedRound] = useState<number>(0);
   const round = newQuiz.rounds[selectedRound];
+  const isFirstRound = selectedRound === 0;
   const isLastRound = newQuiz.rounds.length === selectedRound + 1;
 
   return (
@@ -21,10 +26,10 @@ export const NewQuiz = () => {
       <section className="w-full px-6 py-6 flex flex-col bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
         <h1 className="text-2xl font-semibold mb-4">Create your quiz</h1>
         <form className="w-full flex flex-col">
-          <label className="w-full flex items-baseline mb-4">
+          <label className="w-full flex items-baseline mb-8">
             <span className="w-1/4 text-right pr-4">Quiz name</span>
             <input
-              className="w-1/2 text-input mb-4"
+              className="w-1/2 text-input"
               placeholder="Choose a quiz name"
               value={newQuiz.quizName}
               onChange={(e) =>
@@ -38,40 +43,42 @@ export const NewQuiz = () => {
             />
           </label>
           <div className="flex flex-col w-full items-center">
-            <div className="flex justify-center mb-2 items-baseline">
+            <div className="flex justify-center mb-4 items-center">
               <button
-                className="button"
                 type="button"
-                disabled={selectedRound === 0}
+                disabled={isFirstRound}
                 onClick={() =>
                   setSelectedRound((selectedRound) => selectedRound - 1)
                 }
               >
-                Previous round
+                <Rewind className="w-6" title="Previous round" />
               </button>
-              <h2 className="text-xl font-medium mb-4 mx-4">
+              <h2 className="text-xl font-medium mx-4">
                 Round {selectedRound + 1} of {newQuiz.rounds.length}
               </h2>
               <button
-                className="button"
                 type="button"
                 onClick={() => {
+                  setSelectedRound((selectedRound) => selectedRound + 1);
                   if (isLastRound) {
                     updateNewQuiz({
                       type: 'RoundAdded',
                     });
                   }
-                  setSelectedRound((selectedRound) => selectedRound + 1);
                 }}
               >
-                {isLastRound ? 'Add round' : 'Next round'}
+                {isLastRound ? (
+                  <PlusCircle className="w-6" title="Add round" />
+                ) : (
+                  <FastForward className="w-6" title="Next round" />
+                )}
               </button>
             </div>
-            <div className="w-full flex items-baseline">
-              <label className="flex w-3/4 items-baseline mb-4">
+            <div className="w-full flex items-center mb-10">
+              <label className="flex w-3/4 items-baseline mr-4">
                 <span className="w-1/3 text-right pr-4">Round name</span>
                 <input
-                  className="w-2/3 text-input mb-4"
+                  className="w-2/3 text-input"
                   placeholder="Choose a round name"
                   value={round.roundName}
                   onChange={(e) =>
@@ -86,18 +93,21 @@ export const NewQuiz = () => {
                 />
               </label>
               <button
-                className="button ml-4"
                 type="button"
-                onClick={() =>
+                disabled={newQuiz.rounds.length === 1}
+                onClick={() => {
+                  if (isLastRound) {
+                    setSelectedRound((selectedRound) => selectedRound - 1);
+                  }
                   updateNewQuiz({
                     type: 'RoundRemoved',
                     payload: {
                       roundNumber: selectedRound,
                     },
-                  })
-                }
+                  });
+                }}
               >
-                Remove round
+                <Delete className="w-6" title="Remove round" />
               </button>
             </div>
 
@@ -106,7 +116,7 @@ export const NewQuiz = () => {
                 key={`question-${questionIndex}`}
                 className="flex flex-col w-full items-center mb-4"
               >
-                <div className="w-full flex justify-center items-baseline">
+                <div className="w-full flex justify-center items-center">
                   <label className="flex-grow flex items-baseline pr-4">
                     Question {questionIndex + 1}
                     <input
@@ -125,7 +135,7 @@ export const NewQuiz = () => {
                       }
                     />
                   </label>
-                  <label className="flex-grow flex items-baseline">
+                  <label className="flex-grow flex items-baseline mr-4">
                     Answer
                     <input
                       className="text-input ml-4 flex-grow"
@@ -144,8 +154,8 @@ export const NewQuiz = () => {
                     />
                   </label>
                   <button
-                    className="button ml-4"
                     type="button"
+                    disabled={round.questions.length === 1}
                     onClick={() =>
                       updateNewQuiz({
                         type: 'QuestionRemoved',
@@ -156,25 +166,26 @@ export const NewQuiz = () => {
                       })
                     }
                   >
-                    Remove question
+                    <Delete className="w-6" title="Remove question" />
                   </button>
                 </div>
               </div>
             ))}
-            <button
-              className="button self-end"
-              type="button"
-              onClick={() =>
-                updateNewQuiz({
-                  type: 'QuestionAdded',
-                  payload: {
-                    roundNumber: selectedRound,
-                  },
-                })
-              }
-            >
-              Add question
-            </button>
+            <div className="w-full flex justify-end">
+              <button
+                type="button"
+                onClick={() =>
+                  updateNewQuiz({
+                    type: 'QuestionAdded',
+                    payload: {
+                      roundNumber: selectedRound,
+                    },
+                  })
+                }
+              >
+                <PlusCircle className="h-6" title="Add question" />
+              </button>
+            </div>
           </div>
         </form>
       </section>
