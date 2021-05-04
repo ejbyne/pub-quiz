@@ -1,4 +1,4 @@
-import React, { useReducer, Reducer } from 'react';
+import React, { useReducer, Reducer, useState } from 'react';
 import { Layout } from './Layout';
 import { NewQuizAction } from '@pub-quiz/shared/src/domain/newQuizTypes';
 import { SaveQuizInput } from '@pub-quiz/shared/src/graphql/types';
@@ -11,6 +11,10 @@ export const NewQuiz = () => {
   const [newQuiz, updateNewQuiz] = useReducer<
     Reducer<SaveQuizInput, NewQuizAction>
   >(newQuizReducer, emptyQuiz);
+
+  const [selectedRound, setSelectedRound] = useState<number>(0);
+  const round = newQuiz.rounds[selectedRound];
+  const isLastRound = newQuiz.rounds.length === selectedRound + 1;
 
   return (
     <Layout>
@@ -33,134 +37,145 @@ export const NewQuiz = () => {
               }
             />
           </label>
-          {newQuiz.rounds.map((round, roundIndex) => (
-            <div key={roundIndex} className="flex flex-col w-full items-center">
-              <div className="flex justify-center mb-2 items-baseline">
-                <h2 className="text-xl font-medium mb-4 mx-4">
-                  Round {roundIndex + 1} of {newQuiz.rounds.length}
-                </h2>
-                <button
-                  className="button"
-                  type="button"
-                  onClick={() =>
+          <div className="flex flex-col w-full items-center">
+            <div className="flex justify-center mb-2 items-baseline">
+              <button
+                className="button"
+                type="button"
+                disabled={selectedRound === 0}
+                onClick={() =>
+                  setSelectedRound((selectedRound) => selectedRound - 1)
+                }
+              >
+                Previous round
+              </button>
+              <h2 className="text-xl font-medium mb-4 mx-4">
+                Round {selectedRound + 1} of {newQuiz.rounds.length}
+              </h2>
+              <button
+                className="button"
+                type="button"
+                onClick={() => {
+                  if (isLastRound) {
                     updateNewQuiz({
                       type: 'RoundAdded',
-                    })
+                    });
                   }
-                >
-                  Add round
-                </button>
-              </div>
-              <div className="w-full flex items-baseline">
-                <label className="flex w-3/4 items-baseline mb-4">
-                  <span className="w-1/3 text-right pr-4">Round name</span>
-                  <input
-                    className="w-2/3 text-input mb-4"
-                    placeholder="Choose a round name"
-                    value={round.roundName}
-                    onChange={(e) =>
-                      updateNewQuiz({
-                        type: 'RoundNameAmended',
-                        payload: {
-                          roundNumber: roundIndex,
-                          roundName: e.currentTarget.value,
-                        },
-                      })
-                    }
-                  />
-                </label>
-                <button
-                  className="button ml-4"
-                  type="button"
-                  onClick={() =>
+                  setSelectedRound((selectedRound) => selectedRound + 1);
+                }}
+              >
+                {isLastRound ? 'Add round' : 'Next round'}
+              </button>
+            </div>
+            <div className="w-full flex items-baseline">
+              <label className="flex w-3/4 items-baseline mb-4">
+                <span className="w-1/3 text-right pr-4">Round name</span>
+                <input
+                  className="w-2/3 text-input mb-4"
+                  placeholder="Choose a round name"
+                  value={round.roundName}
+                  onChange={(e) =>
                     updateNewQuiz({
-                      type: 'RoundRemoved',
+                      type: 'RoundNameAmended',
                       payload: {
-                        roundNumber: roundIndex,
+                        roundNumber: selectedRound,
+                        roundName: e.currentTarget.value,
                       },
                     })
                   }
-                >
-                  Remove round
-                </button>
-              </div>
-
-              {round.questions.map((question, questionIndex) => (
-                <div
-                  key={`${roundIndex}-${questionIndex}`}
-                  className="flex flex-col w-full items-center mb-4"
-                >
-                  <div className="w-full flex justify-center items-baseline">
-                    <label className="flex-grow flex items-baseline pr-4">
-                      Question {questionIndex + 1}
-                      <input
-                        className="text-input ml-4 flex-grow pr-4"
-                        value={question.text}
-                        onChange={(e) =>
-                          updateNewQuiz({
-                            type: 'QuestionAmended',
-                            payload: {
-                              roundNumber: roundIndex,
-                              questionNumber: questionIndex,
-                              text: e.currentTarget.value,
-                              answer: question.answer,
-                            },
-                          })
-                        }
-                      />
-                    </label>
-                    <label className="flex-grow flex items-baseline">
-                      Answer
-                      <input
-                        className="text-input ml-4 flex-grow"
-                        value={question.answer}
-                        onChange={(e) =>
-                          updateNewQuiz({
-                            type: 'QuestionAmended',
-                            payload: {
-                              roundNumber: roundIndex,
-                              questionNumber: questionIndex,
-                              text: question.text,
-                              answer: e.currentTarget.value,
-                            },
-                          })
-                        }
-                      />
-                    </label>
-                    <button
-                      className="button ml-4"
-                      type="button"
-                      onClick={() =>
-                        updateNewQuiz({
-                          type: 'QuestionRemoved',
-                          payload: {
-                            roundNumber: roundIndex,
-                            questionNumber: questionIndex,
-                          },
-                        })
-                      }
-                    >
-                      Remove question
-                    </button>
-                  </div>
-                </div>
-              ))}
+                />
+              </label>
               <button
-                className="button self-end"
+                className="button ml-4"
                 type="button"
                 onClick={() =>
                   updateNewQuiz({
-                    type: 'QuestionAdded',
+                    type: 'RoundRemoved',
                     payload: {
-                      roundNumber: roundIndex,
+                      roundNumber: selectedRound,
                     },
                   })
                 }
               >
-                Add question
+                Remove round
               </button>
             </div>
-          ))}
+
+            {round.questions.map((question, questionIndex) => (
+              <div
+                key={`question-${questionIndex}`}
+                className="flex flex-col w-full items-center mb-4"
+              >
+                <div className="w-full flex justify-center items-baseline">
+                  <label className="flex-grow flex items-baseline pr-4">
+                    Question {questionIndex + 1}
+                    <input
+                      className="text-input ml-4 flex-grow pr-4"
+                      value={question.text}
+                      onChange={(e) =>
+                        updateNewQuiz({
+                          type: 'QuestionAmended',
+                          payload: {
+                            roundNumber: selectedRound,
+                            questionNumber: questionIndex,
+                            text: e.currentTarget.value,
+                            answer: question.answer,
+                          },
+                        })
+                      }
+                    />
+                  </label>
+                  <label className="flex-grow flex items-baseline">
+                    Answer
+                    <input
+                      className="text-input ml-4 flex-grow"
+                      value={question.answer}
+                      onChange={(e) =>
+                        updateNewQuiz({
+                          type: 'QuestionAmended',
+                          payload: {
+                            roundNumber: selectedRound,
+                            questionNumber: questionIndex,
+                            text: question.text,
+                            answer: e.currentTarget.value,
+                          },
+                        })
+                      }
+                    />
+                  </label>
+                  <button
+                    className="button ml-4"
+                    type="button"
+                    onClick={() =>
+                      updateNewQuiz({
+                        type: 'QuestionRemoved',
+                        payload: {
+                          roundNumber: selectedRound,
+                          questionNumber: questionIndex,
+                        },
+                      })
+                    }
+                  >
+                    Remove question
+                  </button>
+                </div>
+              </div>
+            ))}
+            <button
+              className="button self-end"
+              type="button"
+              onClick={() =>
+                updateNewQuiz({
+                  type: 'QuestionAdded',
+                  payload: {
+                    roundNumber: selectedRound,
+                  },
+                })
+              }
+            >
+              Add question
+            </button>
+          </div>
         </form>
       </section>
     </Layout>
