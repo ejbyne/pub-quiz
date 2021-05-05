@@ -24,12 +24,12 @@ export const NewQuiz = () => {
   return (
     <Layout>
       <section className="w-full px-6 py-6 flex flex-col bg-indigo-900 lg:shadow-2xl lg:rounded-lg flex-grow text-gray-200 overflow-y-auto">
-        <h1 className="text-2xl font-semibold mb-4">Create your quiz</h1>
+        <h1 className="text-2xl font-semibold mb-4">Create your own quiz</h1>
         <form className="w-full flex flex-col">
-          <label className="w-full flex items-baseline mb-8">
-            <span className="w-1/4 text-right pr-4">Quiz name</span>
+          <label className="w-full flex items-baseline mb-10">
+            <span className="w-1/3 text-right pr-4">Quiz name</span>
             <input
-              className="w-1/2 text-input"
+              className="w-1/3 text-input"
               placeholder="Choose a quiz name"
               value={newQuiz.quizName}
               onChange={(e) =>
@@ -43,8 +43,9 @@ export const NewQuiz = () => {
             />
           </label>
           <div className="flex flex-col w-full items-center">
-            <div className="flex justify-center mb-4 items-center">
+            <div className="flex justify-center mb-10 items-center">
               <button
+                className="icon-button"
                 type="button"
                 disabled={isFirstRound}
                 onClick={() =>
@@ -57,6 +58,7 @@ export const NewQuiz = () => {
                 Round {selectedRound + 1} of {newQuiz.rounds.length}
               </h2>
               <button
+                className="icon-button"
                 type="button"
                 onClick={() => {
                   setSelectedRound((selectedRound) => selectedRound + 1);
@@ -74,11 +76,11 @@ export const NewQuiz = () => {
                 )}
               </button>
             </div>
-            <div className="w-full flex items-center mb-10">
-              <label className="flex w-3/4 items-baseline mr-4">
-                <span className="w-1/3 text-right pr-4">Round name</span>
+            <div className="w-full flex items-center mb-14">
+              <label className="flex w-2/3 items-baseline mr-4">
+                <span className="w-1/2 text-right pr-4">Round name</span>
                 <input
-                  className="w-2/3 text-input"
+                  className="w-1/2 text-input"
                   placeholder="Choose a round name"
                   value={round.roundName}
                   onChange={(e) =>
@@ -93,6 +95,7 @@ export const NewQuiz = () => {
                 />
               </label>
               <button
+                className="icon-button"
                 type="button"
                 disabled={newQuiz.rounds.length === 1}
                 onClick={() => {
@@ -154,6 +157,7 @@ export const NewQuiz = () => {
                     />
                   </label>
                   <button
+                    className="icon-button"
                     type="button"
                     disabled={round.questions.length === 1}
                     onClick={() =>
@@ -173,6 +177,7 @@ export const NewQuiz = () => {
             ))}
             <div className="w-full flex justify-end">
               <button
+                className="icon-button"
                 type="button"
                 onClick={() =>
                   updateNewQuiz({
