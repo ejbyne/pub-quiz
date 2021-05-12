@@ -35,7 +35,7 @@
     "autoprefixer": "^9",
     "craco-alias": "^2.1.1",
     "craco-babel-loader": "^0.1.4",
-    "postcss": "^7",
+    "postcss": "^8",
     "react-scripts": "4.0.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.0.3"
