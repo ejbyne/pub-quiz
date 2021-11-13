@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
 import { WaitingToStart } from '../components/WaitingToStart';
-import { AnswerSheet } from '../components/AnswerSheet';
+import { AnswerSheet } from '../components/answerSheet/AnswerSheet';
 import { MarkSheet } from '../components/MarkSheet';
 import { Registration } from '../components/Registration';
 

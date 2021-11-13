@@ -12,7 +12,7 @@ import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetCont
 import { SubmitAnswers } from './SubmitAnswers';
 import { SubmitMarks } from './SubmitMarks';
 import { QuestionField } from './QuestionField';
-import { useAnswerSheetRefs } from '../hooks/useAnswerSheetRefs';
+import { useAnswerSheetRefs } from '../../hooks/useAnswerSheetRefs';
 
 export const AnswerSheet: React.FC = () => {
   const [quiz] = useContext(QuizContext);

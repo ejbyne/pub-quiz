@@ -1,5 +1,5 @@
-import { ReactComponent as Cross } from '../assets/icons/cross.svg';
-import { ReactComponent as Tick } from '../assets/icons/tick.svg';
+import { ReactComponent as Cross } from '../../assets/icons/cross.svg';
+import { ReactComponent as Tick } from '../../assets/icons/tick.svg';
 import React from 'react';
 import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
 

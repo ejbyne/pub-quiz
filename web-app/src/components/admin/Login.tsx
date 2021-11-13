@@ -3,7 +3,7 @@ import {
   AmplifySignIn,
   AmplifySignUp,
 } from '@aws-amplify/ui-react';
-import { Layout } from './Layout';
+import { Layout } from '../Layout';
 import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Location } from 'history';
