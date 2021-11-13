@@ -14,7 +14,7 @@ import { client } from '@pub-quiz/shared/src/graphql/apolloClient';
 
 import '../styles/base.css';
 import { Routes } from './Routes';
-import { IsAuthenticatedProvider } from './IsAuthenticatedProvider';
+import { IsAuthenticatedProvider } from './admin/IsAuthenticatedProvider';
 
 export const AppContainer: React.FC = () => {
   const [quiz, updateQuiz] = useReducer<Reducer<Quiz, QuizAction>>(

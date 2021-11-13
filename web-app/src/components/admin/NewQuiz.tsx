@@ -1,15 +1,15 @@
 import React, { useReducer, Reducer, useState } from 'react';
-import { Layout } from './Layout';
+import { Layout } from '../Layout';
 import { NewQuizAction } from '@pub-quiz/shared/src/domain/newQuizTypes';
 import { SaveQuizInput } from '@pub-quiz/shared/src/graphql/types';
 import {
   emptyQuiz,
   newQuizReducer,
 } from '@pub-quiz/shared/src/domain/newQuizReducer';
-import { ReactComponent as FastForward } from '../assets/icons/fast-forward.svg';
-import { ReactComponent as Rewind } from '../assets/icons/rewind.svg';
-import { ReactComponent as Delete } from '../assets/icons/delete.svg';
-import { ReactComponent as PlusCircle } from '../assets/icons/plus-circle.svg';
+import { ReactComponent as FastForward } from '../../assets/icons/fast-forward.svg';
+import { ReactComponent as Rewind } from '../../assets/icons/rewind.svg';
+import { ReactComponent as Delete } from '../../assets/icons/delete.svg';
+import { ReactComponent as PlusCircle } from '../../assets/icons/plus-circle.svg';
 
 export const NewQuiz = () => {
   const [newQuiz, updateNewQuiz] = useReducer<

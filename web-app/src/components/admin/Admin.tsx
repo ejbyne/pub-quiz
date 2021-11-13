@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AmplifySignOut } from '@aws-amplify/ui-react';
 import { Link } from 'react-router-dom';
 import { useNextQuizStateMutation } from '@pub-quiz/shared/src/graphql/types';
-import { Layout } from './Layout';
+import { Layout } from '../Layout';
 import { Quizzes } from './Quizzes';
 
 export const Admin: React.FC = () => {
