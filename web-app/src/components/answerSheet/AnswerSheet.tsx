@@ -3,8 +3,6 @@ import {
   QuestionAnswered,
   QuestionAsked,
   QuizStatus,
-  useSubmitAnswersMutation,
-  useSubmitMarksMutation,
 } from '@pub-quiz/shared/src/graphql/types';
 import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
 import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
@@ -13,6 +11,8 @@ import { SubmitAnswers } from './SubmitAnswers';
 import { SubmitMarks } from './SubmitMarks';
 import { QuestionField } from './QuestionField';
 import { useAnswerSheetRefs } from '../../hooks/useAnswerSheetRefs';
+import { useSubmitAnswers } from '../../hooks/useSubmitAnswers';
+import { useSubmitMarks } from '../../hooks/useSubmitMarks';
 
 export const AnswerSheet: React.FC = () => {
   const [quiz] = useContext(QuizContext);
@@ -20,32 +20,10 @@ export const AnswerSheet: React.FC = () => {
   const state = quiz.state as QuestionAsked | QuestionAnswered;
   const round = quiz.rounds[state.roundSummary.roundNumber];
   const answers = answerSheet.rounds[round.roundNumber];
+
   const { containerRef, questionRefs } = useAnswerSheetRefs(round, state);
-
-  const [
-    submitAnswers,
-    { called: submitAnswersCalled },
-  ] = useSubmitAnswersMutation({
-    variables: {
-      input: {
-        quizId: state.quizId,
-        playerName: answerSheet.playerName!,
-        roundNumber: round.roundNumber,
-        answers: answers?.map((answer) => answer?.answer ?? null) ?? [],
-      },
-    },
-  });
-
-  const [submitMarks, { called: submitMarksCalled }] = useSubmitMarksMutation({
-    variables: {
-      input: {
-        quizId: state.quizId,
-        playerName: answerSheet.playerName!,
-        roundNumber: round.roundNumber,
-        marks: answers?.map((answer) => answer?.mark ?? null) ?? [],
-      },
-    },
-  });
+  const { submitAnswers, submitAnswersCalled } = useSubmitAnswers(state, round);
+  const { submitMarks, submitMarksCalled } = useSubmitMarks(state, round);
 
   const changeAnswer = (questionNumber: number, answer: string) =>
     updateAnswerSheet({
