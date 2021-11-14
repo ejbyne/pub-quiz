@@ -5,6 +5,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Before running the below commands you will need to create a `.env` file containing the following environment variables:
 - `REACT_APP_GRAPHQL_API_KEY`
 - `REACT_APP_GRAPHQL_API_URL`
+- `REACT_APP_USER_POOL_ID`
+- `REACT_APP_USER_POOL_WEB_CLIENT_ID`
 
 ## Available Scripts
 

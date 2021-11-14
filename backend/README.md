@@ -2,7 +2,8 @@
 
 The serverless backend was built using AWS AppSync, Lambda, DynamoDB and Cognito.
 
-The infrastructure was created using AWS CDK.
+This package contains the CDK code to provision the infrastructure and also the source
+code for the lambdas used by the GraphQL API.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
