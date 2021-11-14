@@ -30,7 +30,7 @@ export const CorrectAnswer: React.FC<AnswerProps> = ({
           className="hidden"
           onClick={(e) => markAnswer(question.number, 0)}
           onChange={() => {}}
-          disabled={Boolean(answer.answer)}
+          disabled={answer?.answer === undefined}
         />
         <label htmlFor={`${question.number}-score-incorrect`}>
           <div
@@ -52,7 +52,7 @@ export const CorrectAnswer: React.FC<AnswerProps> = ({
           className="hidden"
           onClick={(e) => markAnswer(question.number, 1)}
           onChange={() => {}}
-          disabled={Boolean(answer?.answer)}
+          disabled={answer?.answer === undefined}
         />
         <label htmlFor={`${question.number}-score-correct`}>
           <div

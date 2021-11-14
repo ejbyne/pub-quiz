@@ -1,24 +1,18 @@
-import {
-  QuestionAnswered,
-  QuestionAsked,
-  useSubmitMarksMutation,
-} from '@pub-quiz/shared/src/graphql/types';
-import { Round } from '@pub-quiz/shared/src/domain/quizTypes';
-import { useContext } from 'react';
-import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
+import { useSubmitMarksMutation } from '@pub-quiz/shared/src/graphql/types';
+import { useQuizState } from './useQuizState';
+import { useCurrentRound } from './useCurrentRound';
+import { useAnswersForRound } from './useAnswersForRound';
 
-export function useSubmitMarks(
-  state: QuestionAsked | QuestionAnswered,
-  round: Round,
-) {
-  const [answerSheet] = useContext(AnswerSheetContext);
-  const answers = answerSheet.rounds[round.roundNumber];
+export function useSubmitMarks() {
+  const state = useQuizState();
+  const round = useCurrentRound();
+  const { answers, playerName } = useAnswersForRound(round);
 
   const [submitMarks, { called: submitMarksCalled }] = useSubmitMarksMutation({
     variables: {
       input: {
         quizId: state.quizId,
-        playerName: answerSheet.playerName!,
+        playerName: playerName!,
         roundNumber: round.roundNumber,
         marks: answers?.map((answer) => answer?.mark ?? null) ?? [],
       },

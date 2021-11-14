@@ -13,7 +13,7 @@ interface QuestionFieldProps {
   markAnswer: (questionNumber: number, mark: number) => void;
 }
 
-export const QuestionField: React.FC<QuestionFieldProps> = ({
+export const QuestionBlock: React.FC<QuestionFieldProps> = ({
   question,
   answer,
   questionRef,
