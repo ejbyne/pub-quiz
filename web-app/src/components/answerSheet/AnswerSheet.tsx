@@ -5,8 +5,6 @@ import { SubmitAnswers } from './SubmitAnswers';
 import { SubmitMarks } from './SubmitMarks';
 import { QuestionBlock } from './QuestionBlock';
 import { useScrollToCurrentPosition } from '../../hooks/useScrollToCurrentPosition';
-import { useSubmitAnswers } from '../../hooks/useSubmitAnswers';
-import { useSubmitMarks } from '../../hooks/useSubmitMarks';
 import { useCurrentRound } from '../../hooks/useCurrentRound';
 import { useAnswersForRound } from '../../hooks/useAnswersForRound';
 import { useQuizState } from '../../hooks/useQuizState';
@@ -15,8 +13,6 @@ export const AnswerSheet: React.FC = () => {
   const state = useQuizState();
   const round = useCurrentRound();
   const { updateAnswerSheet, answers } = useAnswersForRound(round);
-  const { submitAnswers, submitAnswersCalled } = useSubmitAnswers();
-  const { submitMarks, submitMarksCalled } = useSubmitMarks();
   const { containerRef, questionRefs } = useScrollToCurrentPosition();
 
   const changeAnswer = (questionNumber: number, answer: string) =>
@@ -65,18 +61,10 @@ export const AnswerSheet: React.FC = () => {
         )}
       </div>
       {state.status === QuizStatus.RoundFinished && (
-        <SubmitAnswers
-          round={round}
-          submitAnswers={submitAnswers}
-          submitAnswersCalled={submitAnswersCalled}
-        />
+        <SubmitAnswers round={round} />
       )}
       {state.status === QuizStatus.QuestionAnswered && (
-        <SubmitMarks
-          submitMarks={submitMarks}
-          submitMarksCalled={submitMarksCalled}
-          answers={answers}
-        />
+        <SubmitMarks answers={answers} />
       )}
     </section>
   );
