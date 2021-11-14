@@ -1,9 +1,8 @@
 import React from 'react';
-import { Answer } from '@pub-quiz/backend/src/domain/types';
 import { useSubmitMarks } from '../../hooks/useSubmitMarks';
 
 interface SubmitMarksProps {
-  answers: Answer[];
+  answers: { answer?: string; mark?: number }[];
 }
 
 export const SubmitMarks: React.FC<SubmitMarksProps> = ({ answers }) => {
