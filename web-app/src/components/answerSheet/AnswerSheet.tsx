@@ -1,29 +1,23 @@
-import React, { useContext } from 'react';
-import {
-  QuestionAnswered,
-  QuestionAsked,
-  QuizStatus,
-} from '@pub-quiz/shared/src/graphql/types';
-import { QuizContext } from '@pub-quiz/shared/src/context/quizContext';
+import React from 'react';
+import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
 import { Question } from '@pub-quiz/shared/src/domain/quizTypes';
-import { AnswerSheetContext } from '@pub-quiz/shared/src/context/answerSheetContext';
 import { SubmitAnswers } from './SubmitAnswers';
 import { SubmitMarks } from './SubmitMarks';
-import { QuestionField } from './QuestionField';
-import { useAnswerSheetRefs } from '../../hooks/useAnswerSheetRefs';
+import { QuestionBlock } from './QuestionBlock';
+import { useScrollToCurrentPosition } from '../../hooks/useScrollToCurrentPosition';
 import { useSubmitAnswers } from '../../hooks/useSubmitAnswers';
 import { useSubmitMarks } from '../../hooks/useSubmitMarks';
+import { useCurrentRound } from '../../hooks/useCurrentRound';
+import { useAnswersForRound } from '../../hooks/useAnswersForRound';
+import { useQuizState } from '../../hooks/useQuizState';
 
 export const AnswerSheet: React.FC = () => {
-  const [quiz] = useContext(QuizContext);
-  const [answerSheet, updateAnswerSheet] = useContext(AnswerSheetContext);
-  const state = quiz.state as QuestionAsked | QuestionAnswered;
-  const round = quiz.rounds[state.roundSummary.roundNumber];
-  const answers = answerSheet.rounds[round.roundNumber];
-
-  const { containerRef, questionRefs } = useAnswerSheetRefs(round, state);
-  const { submitAnswers, submitAnswersCalled } = useSubmitAnswers(state, round);
-  const { submitMarks, submitMarksCalled } = useSubmitMarks(state, round);
+  const state = useQuizState();
+  const round = useCurrentRound();
+  const { updateAnswerSheet, answers } = useAnswersForRound(round);
+  const { submitAnswers, submitAnswersCalled } = useSubmitAnswers();
+  const { submitMarks, submitMarksCalled } = useSubmitMarks();
+  const { containerRef, questionRefs } = useScrollToCurrentPosition();
 
   const changeAnswer = (questionNumber: number, answer: string) =>
     updateAnswerSheet({
@@ -45,9 +39,6 @@ export const AnswerSheet: React.FC = () => {
       },
     });
 
-  const roundFinished = state.status === QuizStatus.RoundFinished;
-  const showAnswers = state.status === QuizStatus.QuestionAnswered;
-
   return (
     <section
       ref={containerRef}
@@ -61,25 +52,26 @@ export const AnswerSheet: React.FC = () => {
         {round.questions.map(
           (question?: Question) =>
             question && (
-              <QuestionField
+              <QuestionBlock
+                key={`question${question.number}`}
                 question={question}
-                answer={answers[question.number]}
+                answer={answers?.[question.number]}
                 questionRef={questionRefs[question.number]}
-                disabled={showAnswers}
+                disabled={state.status === QuizStatus.QuestionAnswered}
                 changeAnswer={changeAnswer}
                 markAnswer={markAnswer}
               />
             ),
         )}
       </div>
-      {roundFinished && (
+      {state.status === QuizStatus.RoundFinished && (
         <SubmitAnswers
           round={round}
           submitAnswers={submitAnswers}
           submitAnswersCalled={submitAnswersCalled}
         />
       )}
-      {showAnswers && (
+      {state.status === QuizStatus.QuestionAnswered && (
         <SubmitMarks
           submitMarks={submitMarks}
           submitMarksCalled={submitMarksCalled}

@@ -1,15 +1,12 @@
-import { Round } from '@pub-quiz/shared/src/domain/quizTypes';
-import {
-  QuestionAnswered,
-  QuestionAsked,
-  QuizStatus,
-} from '@pub-quiz/shared/src/graphql/types';
+import { QuizStatus } from '@pub-quiz/shared/src/graphql/types';
 import { RefObject, useEffect, useRef } from 'react';
+import { useQuizState } from './useQuizState';
+import { useCurrentRound } from './useCurrentRound';
 
-export const useAnswerSheetRefs = (
-  round: Round,
-  state: QuestionAsked | QuestionAnswered,
-) => {
+export const useScrollToCurrentPosition = () => {
+  const state = useQuizState();
+  const round = useCurrentRound();
+
   const containerRef = useRef<HTMLElement>(null);
   const questionRefs = [...Array(round.numberOfQuestions)].map(
     useRef,
