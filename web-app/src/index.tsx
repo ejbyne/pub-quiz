@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { AppContainer } from './components/AppContainer';
 import reportWebVitals from './reportWebVitals';
 import { Amplify } from 'aws-amplify';
+import { awsConfig } from '@pub-quiz/shared/src/awsConfig';
 
 Amplify.configure({
-  region: 'eu-central-1',
-  userPoolId: '***REMOVED***',
-  userPoolWebClientId: '***REMOVED***',
+  region: awsConfig.region,
+  userPoolId: awsConfig.userPoolId,
+  userPoolWebClientId: awsConfig.userPoolWebClientId,
 });
 
 ReactDOM.render(

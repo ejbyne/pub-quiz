@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# Pub quiz web app
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+Before running the below commands you will need to create a `.env` file containing the following environment variables:
+- `REACT_APP_GRAPHQL_API_KEY`
+- `REACT_APP_GRAPHQL_API_URL`
 
 ## Available Scripts
 
