@@ -1,6 +1,8 @@
-# Welcome to your CDK TypeScript project!
+# Pub quiz backend
 
-This is a blank project for TypeScript development with CDK.
+The serverless backend was built using AWS AppSync, Lambda, DynamoDB and Cognito.
+
+The infrastructure was created using AWS CDK.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
