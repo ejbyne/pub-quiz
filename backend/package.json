@@ -47,7 +47,7 @@
     "aws-sdk": "^2.700.0",
     "html-entities": "^1.4.0",
     "lodash": "^4.17.15",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "source-map-support": "^0.5.16",
     "uuid": "^8.1.0"
   }
